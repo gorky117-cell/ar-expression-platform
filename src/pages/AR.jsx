@@ -28,7 +28,9 @@ export default function AR() {
   }
 
   const overlayUrl = expr ? (expr.overlayImage || '/overlays/tree-birds.svg') : '/overlays/tree-birds.svg'
-  const arUrl = '/ar.html?overlay=' + encodeURIComponent(overlayUrl) + '&mood=' + (expr ? expr.mood : 'calm')
+  const mood = expr ? expr.mood : 'calm'
+  const caption = (expr && expr.caption) ? encodeURIComponent(expr.caption) : ''
+  const arUrl = '/ar.html?overlay=' + encodeURIComponent(overlayUrl) + '&mood=' + mood + (caption ? '&caption=' + caption : '')
 
   return (
     <div>

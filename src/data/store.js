@@ -58,4 +58,12 @@ export function addComment(id, text, author) {
   });
 }
 
+export function updateExpression(id, patch) {
+  const e = expressions.find((x) => x.id === id);
+  if (!e) return null;
+  if (patch.mood != null) e.mood = patch.mood;
+  if (patch.caption != null) e.caption = patch.caption;
+  return e;
+}
+
 export const MOODS = ['calm', 'happy', 'playful', 'inspired', 'peaceful'];

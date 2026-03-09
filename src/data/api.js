@@ -106,4 +106,14 @@ export async function addComment(id, text, author) {
   })
 }
 
+export async function updateExpression(id, patch) {
+  if (!supabase) return Promise.resolve(store.updateExpression(id, patch))
+  const upd = {}
+  if (patch.mood != null) upd.mood = patch.mood
+  if (patch.caption != null) upd.caption = patch.caption
+  const { error } = await supabase.from('expressions').update(upd).eq('id', id)
+  if (error) return Promise.resolve(null)
+  return getExpression(id)
+}
+
 export const MOODS = store.MOODS

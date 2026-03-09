@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getExpression, likeExpression, sendGreeting, addComment } from '../data/api'
+import { getExpression, likeExpression, sendGreeting, addComment, updateExpression } from '../data/api'
 
 export default function Expression() {
   const { id } = useParams()
   const [expr, setExpr] = useState(null)
   const [loading, setLoading] = useState(true)
   const [comment, setComment] = useState('')
+  const [voiceListening, setVoiceListening] = useState(false)
+  const [voiceError, setVoiceError] = useState('')
 
   useEffect(() => {
     getExpression(id).then((e) => {
@@ -26,6 +28,21 @@ export default function Expression() {
         refresh()
       })
     }
+  }
+
+  const onSetMoodByVoice = () => {
+    setVoiceError('')
+    setVoiceListening(true)
+    import('../utils/voice')
+      .then(({ startVoiceInput }) => startVoiceInput())
+      .then(({ mood, caption }) => {
+        const patch = {}
+        if (mood) patch.mood = mood
+        if (caption) patch.caption = caption
+        if (Object.keys(patch).length) return updateExpression(id, patch).then(refresh)
+      })
+      .catch((e) => setVoiceError(e.message || 'Voice failed'))
+      .finally(() => setVoiceListening(false))
   }
 
   if (loading) {
@@ -61,16 +78,31 @@ export default function Expression() {
           background: '#252530',
           backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
           backgroundSize: 'cover',
-          marginBottom: '1rem',
+          marginBottom: '0.5rem',
         }}
       />
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
+      {(expr.caption || expr.mood) && (
+        <p style={{ fontSize: '0.9rem', color: '#8888a0', marginBottom: '1rem' }}>
+          {expr.caption || expr.mood}
+        </p>
+      )}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <button onClick={onLike} style={actionBtn}>❤️ Like ({expr.likes || 0})</button>
         <button onClick={onGreeting} style={actionBtn}>👋 Greeting ({expr.greetings || 0})</button>
         <Link to={`/ar?expression=${id}`} style={{ ...actionBtn, display: 'inline-flex', alignItems: 'center' }}>
           📷 Open AR
         </Link>
+        <button
+          onClick={onSetMoodByVoice}
+          disabled={voiceListening}
+          style={{ ...actionBtn, opacity: voiceListening ? 0.7 : 1 }}
+        >
+          🎤 {voiceListening ? 'Listening…' : 'Set mood by voice'}
+        </button>
       </div>
+      {voiceError && (
+        <p style={{ fontSize: '0.85rem', color: '#e57373', marginBottom: '1rem' }}>{voiceError}</p>
+      )}
       <div>
         <h2 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Comments</h2>
         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>

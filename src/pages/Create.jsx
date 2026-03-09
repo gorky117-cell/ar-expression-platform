@@ -6,6 +6,7 @@ export default function Create() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [mood, setMood] = useState(MOODS[0])
+  const [caption, setCaption] = useState('')
   const [triggerUrl, setTriggerUrl] = useState('')
   const [overlayUrl, setOverlayUrl] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -17,6 +18,7 @@ export default function Create() {
       const expr = await addExpression({
         name: name || 'My Expression',
         mood,
+        caption: caption.trim() || undefined,
         triggerImage: triggerUrl || '/markers/hiro.png',
         overlayImage: overlayUrl || '/overlays/tree-birds.svg',
       })
@@ -50,6 +52,16 @@ export default function Create() {
               <option key={m} value={m}>{m}</option>
             ))}
           </select>
+        </label>
+        <label>
+          <span style={{ display: 'block', marginBottom: 4, fontSize: '0.9rem' }}>Caption (shows below image in AR)</span>
+          <input
+            type="text"
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder="Optional: e.g. Calm today"
+            style={inputStyle}
+          />
         </label>
         <label>
           <span style={{ display: 'block', marginBottom: 4, fontSize: '0.9rem' }}>Trigger image URL</span>
