@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <title>AR Expression</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    .instruction { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; background: rgba(0,0,0,0.6); padding: 10px 16px; border-radius: 8px; font-family: system-ui; font-size: 14px; z-index: 999; text-align: center; max-width: 90%; }
+  </style>
+</head>
+<body>
+  <div class="instruction">Point your camera at the Hiro marker. Tree and birds appear in AR.</div>
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono; maxDetectionRate: 60;">
+    <a-assets>
+      <img id="overlayTex" src="overlays/tree-birds.svg">
+      <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+    </a-assets>
+    <a-marker type="pattern" url="https://raw.githack.com/AR-js-org/AR.js/master/data/data/hiro.patt">
+      <a-plane position="0 0 0" rotation="-90 0 0" width="1" height="1" material="shader: flat; src: #overlayTex" animation="property: rotation; to: -90 5 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+      <a-plane position="0.3 0.2 0.1" rotation="-90 0 0" width="0.3" height="0.2" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: 0.5 0.4 0.1; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"></a-plane>
+      <a-plane position="-0.25 0.15 0.08" rotation="-90 0 0" width="0.2" height="0.15" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: -0.4 0.35 0.08; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-plane>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var overlayUrl = params.get('overlay');
+      if (overlayUrl) {
+        var img = document.getElementById('overlayTex');
+        if (img) img.src = overlayUrl;
+      }
+    })();
+  </script>
+</body>
+</html>
