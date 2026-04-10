@@ -12,7 +12,7 @@ description: How to work on the AR Expression Platform repo—stepwise, minimali
 ## 1. Before You Change Anything
 
 1. **Read project memory:** Open `memory.md` in the repo root. It holds: product vision, patent alignment, Fogg model, open-source stance, design principles, current state.
-2. **Identify the touchpoint:** Which screen or action are you changing? (Feed, Create, Expression detail, AR launch, like/greeting/comment, etc.)
+2. **Identify the touchpoint:** Which screen or action are you changing? (Feed, Create, Expression detail, AR launch, like/greeting/comment, voice mood, caption, etc.)
 
 ---
 
@@ -21,7 +21,7 @@ description: How to work on the AR Expression Platform repo—stepwise, minimali
 - **One clear step per screen:** Each view should have one primary action. Secondary actions (e.g. “Back to Feed”) stay visible but secondary.
 - **Refine, don’t ornament:** Prefer removing or simplifying over adding. If adding UI, ask: “Does this increase clarity, motivation, or ability?”
 - **Intuitive flows:**  
-  - Feed → tap expression → Expression detail → Like / Greeting / Comment / Open AR.  
+  - Feed → tap expression → Expression detail → Like / Greeting / Comment / Open AR / Set mood by voice.  
   - Create → form → submit → Expression detail.  
   - AR View → instructions + “Open AR experience” → `ar.html`.
 - Keep flows **minimal** and **predictable**.
@@ -48,7 +48,7 @@ For **every** user-facing change, check:
 
 - **Prefer open source** for new features (backend, AI, voice, etc.).
 - Before adding a dependency: check license, maintenance, and fit with our minimal stack.
-- **Current stack:** React, React Router, Vite, A-Frame, AR.js. Data: in-memory (persistence planned).
+- **Current stack:** React, React Router, Vite, A-Frame, AR.js, Supabase client (optional), compromise (voice/NLP chunk). Data: `api.js` → Supabase if `.env` set, else in-memory `store.js`.
 - Document in `memory.md` or README when we add a major new OSS component.
 
 ---
@@ -68,10 +68,12 @@ For **every** user-facing change, check:
 | App shell       | `src/App.jsx`, `src/main.jsx`, `index.html` |
 | Feed            | `src/pages/Home.jsx` |
 | Create          | `src/pages/Create.jsx` |
-| Expression      | `src/pages/Expression.jsx` |
+| Expression      | `src/pages/Expression.jsx` (dynamic `import('../utils/voice')` for voice) |
 | AR launcher     | `src/pages/AR.jsx` |
 | AR experience   | `public/ar.html` |
-| Data            | `src/data/store.js` |
+| Data API        | `src/data/api.js`, `src/data/store.js`, `src/data/supabase.js` |
+| Voice + NLP     | `src/utils/voice.js` |
+| DB schema       | `supabase/schema.sql`, `.env.example` |
 | Global styles   | `src/index.css` |
 | Memory / vision | `memory.md` |
 

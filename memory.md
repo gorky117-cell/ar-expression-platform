@@ -1,6 +1,9 @@
 # AR Expression Platform — Project Memory
 
-**Purpose:** Single source of truth for vision, patent alignment, principles, and constraints. Update this as the project evolves. Search this file for: patent, Fogg, open source, minimal, intuitive, wearable, AI, memory.
+**Purpose:** Single source of truth for vision, patent alignment, principles, and constraints. Update this as the project evolves. Search this file for: patent, Fogg, open source, minimal, intuitive, wearable, AI, memory, Supabase, voice, NLP.
+
+**GitHub:** https://github.com/gorky117-cell/ar-expression-platform  
+**Local path:** `D:\ar-expression-platform` (keep work on D drive when possible).
 
 ---
 
@@ -23,13 +26,13 @@
   - Expression via visual art, mood, message, gamified logic, narrative overlays.  
   - Voice/text personalization for wearer and viewer co-creation.  
   - Fogg Behavior Model for engagement.
-- **Future scope (patent):** AI stack (SML, VLM, LLM, Stable Diffusion), SNN, voice, persistent co-creation. Current repo is a **minimal MVP**; AI and persistence are planned, not yet implemented.
+- **MVP vs patent future:** Repo implements a **web MVP** (Feed, Create, Expression, AR, optional persistence, voice + lightweight NLP). Patent’s full AI stack (SML, VLM, LLM, Stable Diffusion, SNN, etc.) is **future scope** when backend/cloud is added.
 
 ---
 
 ## 3. Fogg Behavior Model (apply at every touchpoint)
 
-At **each** user action (Feed, Create, Expression detail, AR launch, like, greeting, comment, etc.) we want:
+At **each** user action (Feed, Create, Expression detail, AR launch, like, greeting, comment, voice, etc.) we want:
 
 - **Prompt:** Clear, visible trigger (e.g. button, link, instruction) so the user knows what to do.
 - **Motivation:** Copy and UI should reinforce curiosity, expression, or social reward (not generic “click here”).
@@ -44,31 +47,68 @@ Design and refine each screen/flow with these three in mind. Test: “Is the pro
 - **Minimalistic:** No ornamentation for its own sake. Every element should have a job (clarity, prompt, motivation, or ability).
 - **Intuitive:** Flows should feel obvious (e.g. Feed → Expression → AR; Create → Expression).
 - **Stepwise:** Break flows into clear steps; one primary action per view where possible.
-- **Exhaustive but organized:** Document every decision and pattern so that when someone (or an agent) searches, they find: open-source choices, Fogg application, and rationale.
+- **Mobile-first / web lite:** Test locally first; deploy later (e.g. Railway, Google Cloud, Vercel, Netlify).
+- **Exhaustive but organized:** Document decisions so agents and humans can search: open-source choices, Fogg, rationale.
 
 ---
 
-## 5. Open source and tech (utilize first)
+## 5. Open source and tech (current stack)
 
 - **Prefer open source** for all components where possible.
-- **Current stack:** React, React Router, Vite, A-Frame, AR.js (Hiro pattern marker). In-memory store (to be replaced with persistent backend).
-- **Candidates to evaluate:**  
-  - Backend/DB: Supabase, PocketBase, or self-hosted OSS.  
-  - AI (when we add): open-source SML/VLM/LLM, voice APIs.  
-  - AR: remain on A-Frame + AR.js unless we have a clear reason to switch.
-- Before adding a dependency, check: license, maintenance, and fit with minimalistic architecture.
+- **Frontend:** React 18, React Router 6, Vite 5.
+- **AR:** A-Frame + AR.js (Hiro pattern marker); scene in `public/ar.html` with `?overlay=`, `?mood=`, `?caption=`.
+- **Data:**  
+  - **`src/data/api.js`** — single API for the app.  
+  - **Supabase** when `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in `.env` (copy from `.env.example`). Run `supabase/schema.sql` in Supabase SQL Editor.  
+  - **In-memory fallback** in `src/data/store.js` when `.env` is missing (data resets on refresh).
+- **Voice + NLP:**  
+  - **Web Speech API** (browser) for speech-to-text.  
+  - **compromise** (npm) for normalization, keyword mood mapping, simple negation (`src/utils/voice.js`).  
+  - Voice module is **dynamically imported** from `Expression.jsx` so the main bundle stays smaller (separate chunk).
+- **Future:** Whisper/Coqui or LLM on Railway/Google Cloud can replace or augment browser voice/NLP.
+- **AR:** Stay on A-Frame + AR.js unless there is a strong reason to switch.
 
 ---
 
 ## 6. Current repo state (as of this memory)
 
-- **Implemented:** Feed, Create expression, Expression detail (like, greeting, comment), AR launcher page, standalone AR experience (`public/ar.html`) with tree + birds overlay and Hiro marker.
-- **Not implemented:** Persistent storage, AI-driven mood/caption/overlay, voice input, wearable-specific flows, Fogg-aware copy/UX audit.
-- **Refinement rule:** Every change (feature or fix) should **refine** the product: clearer prompts, better motivation, higher ability, or better alignment with patent and memory.
+**Implemented**
+
+- Feed (`Home`), Create expression, Expression detail (like, greeting, comment).
+- **Caption** optional on Create; shown below preview on Expression; passed to AR URL.
+- **Set mood by voice** on Expression (mic → transcript → mood/caption via NLP → `updateExpression`).
+- **Mood** dropdown on Create (hardwired list in `store.js` `MOODS`).
+- AR launcher (`AR.jsx`) loads expression and opens `ar.html` with overlay + mood + caption.
+- `public/ar.html` — Hiro marker, overlay texture, birds animation; top bar for caption/mood.
+- **Reactions in DB schema:** like, greeting, love, good, keep, comment (`supabase/schema.sql`); UI may not expose all reaction types yet.
+- **Git** — remote `origin` → `gorky117-cell/ar-expression-platform`; default branch often `master`.
+
+**Planned / not done yet**
+
+- Five overlay assets + picker (MVP target: max 5 overlays in `public/overlays/`).
+- Extra reaction buttons in UI (Love, Good, Keep) if desired.
+- Wearer vs Viewer modes, retailer/QR flows, image-as-trigger beyond Hiro.
+- Full patent AI stack on backend; Fogg copy audit pass on every screen.
+
+**Refinement rule:** Every change should **refine** the product: clearer prompts, better motivation, higher ability, or better alignment with patent and this file.
 
 ---
 
-## 7. Where this file lives and how to use it
+## 7. Local testing
+
+```bash
+cd D:\ar-expression-platform
+npm install
+npm run dev
+```
+
+- App: `http://localhost:5173/`
+- AR launcher: `http://localhost:5173/ar`
+- AR scene: opened via “Open AR experience” (e.g. `ar.html?overlay=...&mood=...&caption=...`).
+
+---
+
+## 8. Where this file lives and how to use it
 
 - **Path:** `memory.md` in project root.
-- **Use:** Read before major features or refactors. Update when vision, principles, or stack decisions change. Reference in SKILL.md so agents and contributors stay aligned.
+- **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`.cursor/skills/ar-expression-platform/SKILL.md`** for agent workflow and **README.md** for run commands.
