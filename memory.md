@@ -94,7 +94,51 @@ Design and refine each screen/flow with these three in mind. Test: “Is the pro
 
 ---
 
-## 7. Local testing
+## 7. Decision log
+
+Use this format for new product or architecture decisions:
+
+- **Status:** proposed | accepted | rejected | deprecated
+- **Decision:** one-line decision
+- **Why:** rationale and trade-offs
+- **Scope:** MVP only / production / module-specific
+- **Impacts:** files, flows, data model, UX, security
+- **Follow-ups:** next tasks, owner, due
+- **References:** commit, PR, docs links
+
+### 2026-03-09 — MVP trigger strategy
+
+- **Status:** accepted
+- **Decision:** Use Hiro-only detection for MVP; keep `triggerImage` as metadata.
+- **Why:** Fastest stable path for local testing and demo reliability.
+- **Scope:** MVP
+- **Impacts:** `public/ar.html`, `src/pages/AR.jsx`, expression model
+- **Follow-ups:** Evaluate custom marker/image-target detection later.
+- **References:** `memory.md`, `CODEX-HANDOFF.md`
+
+### 2026-03-09 — Supabase access policy for MVP
+
+- **Status:** accepted
+- **Decision:** Anonymous write access is allowed temporarily for MVP.
+- **Why:** Reduce setup friction and validate product loop quickly.
+- **Scope:** MVP/testing only
+- **Impacts:** `supabase/schema.sql`, data integrity/security risk
+- **Follow-ups:** Add auth, stricter RLS, and rate limiting before public launch.
+- **References:** `supabase/schema.sql`, `memory.md`, `CODEX-HANDOFF.md`
+
+### 2026-03-09 — Continuity source of truth
+
+- **Status:** accepted
+- **Decision:** Keep truth updated in `memory.md` and `CODEX-HANDOFF.md`.
+- **Why:** Reliable handoff between agents without repeated repo walkthroughs.
+- **Scope:** ongoing
+- **Impacts:** documentation discipline after each milestone
+- **Follow-ups:** Update both files in each docs-related PR/commit.
+- **References:** `memory.md`, `CODEX-HANDOFF.md`
+
+---
+
+## 8. Local testing
 
 ```bash
 cd D:\ar-expression-platform
@@ -108,7 +152,7 @@ npm run dev
 
 ---
 
-## 8. Where this file lives and how to use it
+## 9. Where this file lives and how to use it
 
 - **Path:** `memory.md` in project root.
 - **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`.cursor/skills/ar-expression-platform/SKILL.md`** for agent workflow and **README.md** for run commands.
