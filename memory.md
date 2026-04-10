@@ -114,7 +114,7 @@ Use this format for new product or architecture decisions:
 - **Scope:** MVP
 - **Impacts:** `public/ar.html`, `src/pages/AR.jsx`, expression model
 - **Follow-ups:** Evaluate custom marker/image-target detection later.
-- **References:** `memory.md`, `CODEX-HANDOFF.md`
+- **References:** `memory.md`, `PROJECT-PLAN.md`
 
 ### 2026-03-09 — Supabase access policy for MVP
 
@@ -124,17 +124,17 @@ Use this format for new product or architecture decisions:
 - **Scope:** MVP/testing only
 - **Impacts:** `supabase/schema.sql`, data integrity/security risk
 - **Follow-ups:** Add auth, stricter RLS, and rate limiting before public launch.
-- **References:** `supabase/schema.sql`, `memory.md`, `CODEX-HANDOFF.md`
+- **References:** `supabase/schema.sql`, `memory.md`, `PROJECT-PLAN.md`
 
 ### 2026-03-09 — Continuity source of truth
 
 - **Status:** accepted
-- **Decision:** Keep truth updated in `memory.md` and `CODEX-HANDOFF.md`.
+- **Decision:** Keep truth updated in `memory.md` and `PROJECT-PLAN.md`.
 - **Why:** Reliable handoff between agents without repeated repo walkthroughs.
 - **Scope:** ongoing
 - **Impacts:** documentation discipline after each milestone
 - **Follow-ups:** Update both files in each docs-related PR/commit.
-- **References:** `memory.md`, `CODEX-HANDOFF.md`
+- **References:** `memory.md`, `PROJECT-PLAN.md`
 
 ---
 
@@ -155,4 +155,4 @@ npm run dev
 ## 9. Where this file lives and how to use it
 
 - **Path:** `memory.md` in project root.
-- **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`.cursor/skills/ar-expression-platform/SKILL.md`** for agent workflow and **README.md** for run commands.
+- **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`PROJECT-PLAN.md`**, **`.cursor/skills/ar-expression-platform/SKILL.md`**, and **README.md** for continuity and run commands.
