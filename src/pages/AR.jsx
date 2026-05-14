@@ -34,7 +34,7 @@ export default function AR() {
 
   return (
     <div>
-      <Link to="/" style={{ display: 'inline-block', marginBottom: '1rem', color: '#7c5cff' }}>← Feed</Link>
+      <Link to="/feed" style={{ display: 'inline-block', marginBottom: '1rem', color: '#7c5cff' }}>← Feed</Link>
       <h1 style={{ marginBottom: '0.5rem', fontSize: '1.5rem' }}>AR View</h1>
       <p style={{ color: '#8888a0', marginBottom: '1.5rem' }}>
         Point your camera at the <strong>Hiro marker</strong> to see the overlay. Birds and tree sway in AR.

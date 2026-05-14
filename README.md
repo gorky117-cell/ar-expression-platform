@@ -5,7 +5,7 @@ Repo folder: **AR Expression Platform** (aligned with the provisional patent: AI
 
 ## URLs (D drive, local)
 
-- **App (after `npm run dev`):** http://localhost:61100
+- **App:** http://localhost:61100 opens **AR View** first (`/` redirects to `/ar`). Feed: http://localhost:61100/feed
 - **AR launcher:** http://localhost:61100/ar
 - **GitHub repo:** https://github.com/gorky117-cell/ar-expression-platform  
 - **Public deploy URL:** add when you deploy (e.g. Vercel / Netlify / Railway); not set in-repo yet.

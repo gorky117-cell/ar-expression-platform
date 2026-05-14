@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Create from './pages/Create'
 import AR from './pages/AR'
@@ -8,14 +8,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <nav style={navStyle}>
-        <Link to="/" style={brandStyle}>WearWave</Link>
-        <Link to="/" style={linkStyle}>Feed</Link>
+        <Link to="/ar" style={brandStyle}>WearWave</Link>
+        <Link to="/feed" style={linkStyle}>Feed</Link>
         <Link to="/create" style={linkStyle}>Create</Link>
         <Link to="/ar" style={linkStyle}>AR View</Link>
       </nav>
       <main style={{ padding: '1rem', maxWidth: 720, margin: '0 auto' }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/ar" replace />} />
+          <Route path="/feed" element={<Home />} />
           <Route path="/create" element={<Create />} />
           <Route path="/ar" element={<AR />} />
           <Route path="/expression/:id" element={<Expression />} />

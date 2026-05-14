@@ -34,7 +34,7 @@ npm install
 npm run dev
 ```
 
-- App: `http://localhost:61100/`
+- App: root `http://localhost:61100/` redirects to **AR** (`/ar`). Feed: `/feed`.
 - AR launcher: `http://localhost:61100/ar`
 
 ---

@@ -57,14 +57,14 @@ export default function Expression() {
     return (
       <div>
         <p>Expression not found.</p>
-        <Link to="/">Back to Feed</Link>
+        <Link to="/feed">Back to Feed</Link>
       </div>
     )
   }
 
   return (
     <div>
-      <Link to="/" style={{ display: 'inline-block', marginBottom: '1rem', color: '#7c5cff' }}>← Feed</Link>
+      <Link to="/feed" style={{ display: 'inline-block', marginBottom: '1rem', color: '#7c5cff' }}>← Feed</Link>
       <div style={{ marginBottom: '1rem' }}>
         <h1 style={{ fontSize: '1.5rem' }}>{expr.name}</h1>
         <span style={{ color: '#7c5cff', fontSize: '0.9rem' }}>{expr.mood}</span>
