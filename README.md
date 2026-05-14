@@ -24,9 +24,13 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:61100
+Vite **`open`** is enabled: `npm run dev` opens **http://localhost:61100/** in your default browser (WearWave).
 
-- **Feed** – List of expressions (like, greeting, comment counts).
+**Do not use `http://localhost:5173`** for WearWave—that port is usually a different project.
+
+**Cursor / VS Code:** `Terminal → Run Task… → WearWave: npm run dev`, or **Run → Start Debugging** → **WearWave: Chrome @ localhost:61100** (start dev server first if using Debug).
+
+- **Feed** – List of expressions at `/feed` (like, greeting, comment counts).
 - **Create** – Add new expression (name, mood, trigger URL, overlay URL).
 - **AR View** – Open the AR experience; use a phone or webcam. Print the [Hiro marker](https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/hiro.png) and point the camera at it.
 

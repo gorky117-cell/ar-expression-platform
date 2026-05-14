@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WearWave: npm run dev",
+      "type": "npm",
+      "script": "dev",
+      "detail": "Vite → http://localhost:61100/ (WearWave, not 5173)",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

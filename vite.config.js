@@ -6,5 +6,7 @@ export default defineConfig({
   server: {
     port: 61100,
     strictPort: true,
+    /** Opens the correct WearWave URL in the default browser (`npm run dev`). */
+    open: '/',
   },
 })
