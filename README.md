@@ -1,6 +1,14 @@
-# AR Expression Platform
+# WearWave
 
-Social expression and augmented reality platform (aligned with the provisional patent: AI-Driven AR and Social Expression via Wearable Prints).
+**WearWave** is the product name: social, engaging, wearable-first AR — solo-friendly and modern.  
+Repo folder: **AR Expression Platform** (aligned with the provisional patent: AI-Driven AR and Social Expression via Wearable Prints).
+
+## URLs (D drive, local)
+
+- **App (after `npm run dev`):** http://localhost:5173  
+- **AR launcher:** http://localhost:5173/ar  
+- **GitHub repo:** https://github.com/gorky117-cell/ar-expression-platform  
+- **Public deploy URL:** add when you deploy (e.g. Vercel / Netlify / Railway); not set in-repo yet.
 
 ## What it does
 

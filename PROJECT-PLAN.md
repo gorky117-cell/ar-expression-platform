@@ -1,12 +1,13 @@
-# AR Expression Platform — Project Plan
+# WearWave — Project Plan
 
-This file is a team-facing continuity brief (not tool-specific). Use it with `memory.md` and README to continue implementation without re-discovery.
+**Product name:** **WearWave** — social, engaging, wearable prints; solo-friendly, modern AR.  
+This file is a team-facing continuity brief. Use it with `memory.md` and README to continue implementation without re-discovery.
 
 ---
 
 ## Mission
 
-Build a minimal, intuitive, mobile-first **AR-first social layer** around physical prints (wearables, posters, accessories), aligned with the provisional patent direction.
+Build a minimal, intuitive, mobile-first **AR-first social layer** around physical prints (wearables, posters, accessories), aligned with the provisional patent direction — shipped as **WearWave**.
 
 - Physical print acts as AR trigger.
 - Wearer sets mood/caption/story.

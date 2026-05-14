@@ -1,5 +1,6 @@
-# AR Expression Platform — Project Memory
+# WearWave — Project Memory
 
+**Product name:** **WearWave** — social, engaging, wearable-first AR; modern, solo-friendly vibe.  
 **Purpose:** Single source of truth for vision, patent alignment, principles, and constraints. Update this as the project evolves. Search this file for: patent, Fogg, open source, minimal, intuitive, wearable, AI, memory, Supabase, voice, NLP.
 
 **GitHub:** https://github.com/gorky117-cell/ar-expression-platform  
@@ -105,6 +106,16 @@ Use this format for new product or architecture decisions:
 - **Impacts:** files, flows, data model, UX, security
 - **Follow-ups:** next tasks, owner, due
 - **References:** commit, PR, docs links
+
+### 2026-03-09 — Product name
+
+- **Status:** accepted
+- **Decision:** Public product name is **WearWave** (repo may still be named ar-expression-platform on GitHub).
+- **Why:** Short, modern, wearable + social “wave” of engagement; works for solo creators and viewers.
+- **Scope:** branding / UI copy
+- **Impacts:** `index.html`, `README.md`, `App.jsx`, `Home.jsx`, `public/ar.html`, `memory.md`, `PROJECT-PLAN.md`
+- **Follow-ups:** Domain + deploy URL when ready.
+- **References:** this commit
 
 ### 2026-03-09 — MVP trigger strategy
 

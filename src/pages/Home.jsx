@@ -23,9 +23,9 @@ export default function Home() {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>Expression Feed</h1>
-      <p style={{ color: '#8888a0', marginBottom: '1.5rem' }}>
-        Point your phone at a trigger to see AR. Tap an expression to react.
+      <h1 style={{ marginBottom: '0.25rem', fontSize: '1.5rem' }}>WearWave</h1>
+      <p style={{ color: '#8888a0', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
+        Social prints, solo vibes, modern AR. Tap an expression to react or open AR.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {expressions.map((e) => (

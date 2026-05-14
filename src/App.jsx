@@ -8,6 +8,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <nav style={navStyle}>
+        <Link to="/" style={brandStyle}>WearWave</Link>
         <Link to="/" style={linkStyle}>Feed</Link>
         <Link to="/create" style={linkStyle}>Create</Link>
         <Link to="/ar" style={linkStyle}>AR View</Link>
@@ -32,3 +33,10 @@ const navStyle = {
   borderBottom: '1px solid #2a2a35',
 }
 const linkStyle = { color: '#7c5cff', fontWeight: 600 }
+const brandStyle = {
+  color: '#f0f0f5',
+  fontWeight: 700,
+  fontSize: '1.05rem',
+  letterSpacing: '0.02em',
+  marginRight: '0.5rem',
+}
