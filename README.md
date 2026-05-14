@@ -24,9 +24,11 @@ npm install
 npm run dev
 ```
 
-Vite **`open`** is enabled: `npm run dev` opens **http://localhost:61100/** in your default browser (WearWave).
+Vite listens on **`61100`** only. **`npm run dev`** also runs a small launcher that waits until Vite is ready, then opens **http://localhost:61100/** in your system browser.
 
-**Do not use `http://localhost:5173`** for WearWave—that port is usually a different project.
+If you truly need bare Vite (no auto-open): **`npm run dev:vite`**.
+
+**Important:** **`http://localhost:5173`** may be another app (e.g. Simple Browser/bookmark)—close it or navigate to **`61100`**.
 
 **Cursor / VS Code:** `Terminal → Run Task… → WearWave: npm run dev`, or **Run → Start Debugging** → **WearWave: Chrome @ localhost:61100** (start dev server first if using Debug).
 
