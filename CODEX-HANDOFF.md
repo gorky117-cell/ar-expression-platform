@@ -81,7 +81,7 @@ public/ar.html  (standalone AR, not React)
 ## 6. Commands
 
 ```bash
-npm run dev      # http://localhost:5173
+npm run dev      # http://localhost:61100
 npm run build    # production bundle (check voice chunk splits correctly)
 npm run preview  # serve dist
 ```

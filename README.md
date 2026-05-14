@@ -5,8 +5,8 @@ Repo folder: **AR Expression Platform** (aligned with the provisional patent: AI
 
 ## URLs (D drive, local)
 
-- **App (after `npm run dev`):** http://localhost:5173  
-- **AR launcher:** http://localhost:5173/ar  
+- **App (after `npm run dev`):** http://localhost:61100
+- **AR launcher:** http://localhost:61100/ar
 - **GitHub repo:** https://github.com/gorky117-cell/ar-expression-platform  
 - **Public deploy URL:** add when you deploy (e.g. Vercel / Netlify / Railway); not set in-repo yet.
 
@@ -24,7 +24,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+Open http://localhost:61100
 
 - **Feed** – List of expressions (like, greeting, comment counts).
 - **Create** – Add new expression (name, mood, trigger URL, overlay URL).

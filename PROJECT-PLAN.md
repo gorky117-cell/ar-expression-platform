@@ -34,8 +34,8 @@ npm install
 npm run dev
 ```
 
-- App: `http://localhost:5173/`
-- AR launcher: `http://localhost:5173/ar`
+- App: `http://localhost:61100/`
+- AR launcher: `http://localhost:61100/ar`
 
 ---
 
