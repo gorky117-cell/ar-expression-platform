@@ -1,19 +1,31 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate, NavLink } from 'react-router-dom'
 import Home from './pages/Home'
 import Create from './pages/Create'
 import AR from './pages/AR'
 import Expression from './pages/Expression'
 
+function navLinkClass({ isActive }) {
+  return 'nav-link' + (isActive ? ' nav-link-active' : '')
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-      <nav style={navStyle}>
-        <Link to="/ar" style={brandStyle}>WearWave</Link>
-        <Link to="/feed" style={linkStyle}>Feed</Link>
-        <Link to="/create" style={linkStyle}>Create</Link>
-        <Link to="/ar" style={linkStyle}>AR View</Link>
+      <nav style={navStyle} className="nav-bar">
+        <Link to="/ar" className="nav-link nav-brand">
+          WearWave
+        </Link>
+        <NavLink to="/feed" className={navLinkClass}>
+          Feed
+        </NavLink>
+        <NavLink to="/create" className={navLinkClass}>
+          Create
+        </NavLink>
+        <NavLink to="/ar" className={navLinkClass}>
+          AR View
+        </NavLink>
       </nav>
-      <main style={{ padding: '1rem', maxWidth: 720, margin: '0 auto' }}>
+      <main className="page-shell page-main">
         <Routes>
           <Route path="/" element={<Navigate to="/ar" replace />} />
           <Route path="/feed" element={<Home />} />
@@ -29,15 +41,5 @@ export default function App() {
 const navStyle = {
   background: '#1a1a20',
   padding: '0.75rem 1rem',
-  display: 'flex',
-  gap: '1.5rem',
   borderBottom: '1px solid #2a2a35',
-}
-const linkStyle = { color: '#7c5cff', fontWeight: 600 }
-const brandStyle = {
-  color: '#f0f0f5',
-  fontWeight: 700,
-  fontSize: '1.05rem',
-  letterSpacing: '0.02em',
-  marginRight: '0.5rem',
 }

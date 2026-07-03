@@ -145,11 +145,29 @@ Use this format for new product or architecture decisions:
 - **Scope:** ongoing
 - **Impacts:** documentation discipline after each milestone
 - **Follow-ups:** Update both files in each docs-related PR/commit.
-- **References:** `memory.md`, `PROJECT-PLAN.md`
+### 2026-07-03 — Simplified MVP Hosting & Database Architecture
+
+- **Status:** accepted
+- **Decision:** Use local D drive for development, MongoDB M0 Free Tier for database, Vercel/Netlify for frontend hosting, and custom CNAME routing to `ar.aiforall.ltd`.
+- **Why:** To prevent any risk of out-of-pocket charges, billing, or GST taxes, while keeping the MVP loading speeds ultra-fast (under 1.5s) and practical for investor demos. Excludes complex hardware/wireless sensors from the initial POC to avoid over-engineering.
+- **Scope:** MVP Demo
+- **Impacts:** `api.js`, `Expression.jsx`, `AR.jsx`, `Create.jsx`, `index.css`
+- **Follow-ups:** Set up MongoDB local connection in `api.js` and deploy to `ar.aiforall.ltd`.
+- **References:** `implementation_plan.md`
 
 ---
 
-## 8. Local testing
+## 8. Implemented Features Log (July 2026 Update)
+
+- **Streetwear Feed UI:** Upgraded [Home.jsx](file:///d:/ar-expression-platform/src/pages/Home.jsx) with a dark theme (#0F0F12), violet branding header, and glassmorphic cards representing t-shirt graphics.
+- **Visual Overlay Ingestion:** Ingested 4 new SVG overlay assets: [happy.svg](file:///d:/ar-expression-platform/public/overlays/happy.svg), [playful.svg](file:///d:/ar-expression-platform/public/overlays/playful.svg), [inspired.svg](file:///d:/ar-expression-platform/public/overlays/inspired.svg), and [peaceful.svg](file:///d:/ar-expression-platform/public/overlays/peaceful.svg) inside `public/overlays/`.
+- **Visual Overlay Selector:** Added a horizontal selection grid inside [Create.jsx](file:///d:/ar-expression-platform/src/pages/Create.jsx) to select overlays with one tap.
+- **Tactile Voice Controls:** Upgraded [Expression.jsx](file:///d:/ar-expression-platform/src/pages/Expression.jsx) with a glassmorphic layout and a glowing, circular microphone button with pulse animations.
+- **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
+
+---
+
+## 9. Local testing
 
 ```bash
 cd D:\ar-expression-platform
@@ -163,7 +181,7 @@ npm run dev
 
 ---
 
-## 9. Where this file lives and how to use it
+## 10. Where this file lives and how to use it
 
 - **Path:** `memory.md` in project root.
-- **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`PROJECT-PLAN.md`**, **`.cursor/skills/ar-expression-platform/SKILL.md`**, and **README.md** for continuity and run commands.
+- **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`PROJECT-PLAN.md`** and **README.md** for continuity.

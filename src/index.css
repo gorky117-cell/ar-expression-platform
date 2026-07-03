@@ -48,3 +48,332 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* —— WearWave motion (web shell) —— */
+@keyframes ww-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ww-shimmer {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ww-cta-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 6px 28px -4px rgba(124, 92, 255, 0.45);
+  }
+}
+
+.page-shell {
+  animation: ww-fade-rise 0.5s ease-out both;
+}
+
+.page-main {
+  padding: 1.25rem 1rem 2rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-bar a {
+  transition: color 0.2s ease, transform 0.18s ease, opacity 0.2s ease;
+  text-decoration: none;
+}
+
+.nav-bar a:hover {
+  text-decoration: none;
+}
+
+.nav-bar .nav-brand {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  margin-right: 0.5rem;
+}
+
+.nav-link:not(.nav-brand) {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-link:not(.nav-brand).nav-link-active {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.nav-brand {
+  transition: letter-spacing 0.25s ease, color 0.2s ease;
+}
+
+.nav-brand:hover {
+  color: var(--accent) !important;
+  letter-spacing: 0.06em;
+}
+
+.nav-link:not(.nav-brand):hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.feed-stack .feed-card {
+  display: block;
+  transition: transform 0.22s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+  animation: ww-fade-rise 0.45s ease-out both;
+}
+
+.feed-stack .feed-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.feed-stack .feed-card:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.feed-stack .feed-card:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.feed-stack .feed-card:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.feed-stack .feed-card:nth-child(4) {
+  animation-delay: 0.19s;
+}
+.feed-stack .feed-card:nth-child(5) {
+  animation-delay: 0.24s;
+}
+.feed-stack .feed-card:nth-child(n + 6) {
+  animation-delay: 0.28s;
+}
+
+.btn-primary {
+  display: inline-block;
+  transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.2s ease, background 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  animation: ww-cta-glow 2.8s ease-in-out infinite;
+  text-decoration: none;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.ar-hero h1 {
+  animation: ww-fade-rise 0.5s ease-out 0.05s both;
+}
+
+.ar-hero .ar-sub {
+  animation: ww-fade-rise 0.52s ease-out 0.18s both;
+}
+
+.ar-hero .ar-copy {
+  animation: ww-fade-rise 0.5s ease-out 0.12s both;
+}
+
+.ar-hero .ar-cta {
+  animation: ww-fade-rise 0.55s ease-out 0.22s both;
+}
+
+.ar-shell {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.ar-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.35rem 1.4rem 1.15rem;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.32);
+}
+
+.ar-back {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.ar-back:hover {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.ar-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 0.65rem;
+}
+
+.ar-lede {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.ar-lede strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ar-subtle {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #7a7f90;
+  margin-bottom: 1.25rem;
+}
+
+.ar-step-hint {
+  font-size: 0.9375rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.ar-marker-section {
+  margin-bottom: 1.25rem;
+}
+
+.ar-marker-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.ar-marker-rows {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.ar-marker-row {
+  display: block;
+  padding: 0.7rem 0.95rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.ar-marker-row:hover {
+  background: rgba(124, 92, 255, 0.14);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.ar-marker-row + .ar-marker-row {
+  border-top: 1px solid var(--border);
+}
+
+.ar-panel .btn-primary.ar-cta {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 0.95rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.06rem;
+}
+
+.ar-footnote {
+  margin-top: 1.3rem;
+  padding-top: 1.05rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.45;
+}
+
+.ar-loading {
+  color: var(--text-muted);
+  padding-top: 0.5rem;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: ww-shimmer 1.1s ease-in-out infinite;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-shell,
+  .feed-stack .feed-card,
+  .ar-hero h1,
+  .ar-hero .ar-copy,
+  .ar-hero .ar-sub,
+  .ar-hero .ar-cta,
+  .btn-primary {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .btn-primary:hover {
+    animation: none !important;
+  }
+
+  .feed-stack .feed-card:hover {
+    transform: none;
+  }
+
+  .nav-link:not(.nav-brand):hover {
+    transform: none;
+  }
+
+  .nav-brand:hover {
+    letter-spacing: inherit !important;
+  }
+
+  .loading-dots::after {
+    animation: none !important;
+  }
+}

@@ -47,81 +47,228 @@ export default function Expression() {
 
   if (loading) {
     return (
-      <div>
-        <p style={{ color: '#8888a0' }}>Loading…</p>
+      <div className="page-shell page-main">
+        <p style={{ color: '#8888a0', textAlign: 'center' }} className="loading-dots">
+          Loading expression details…
+        </p>
       </div>
     )
   }
 
   if (!expr) {
     return (
-      <div>
-        <p>Expression not found.</p>
-        <Link to="/feed">Back to Feed</Link>
+      <div className="page-shell page-main">
+        <p style={{ color: '#e57373', marginBottom: '1rem' }}>Expression not found.</p>
+        <Link to="/feed" style={{ color: '#7c5cff', fontWeight: 600 }}>← Back to Feed</Link>
       </div>
     )
   }
 
   return (
-    <div>
-      <Link to="/feed" style={{ display: 'inline-block', marginBottom: '1rem', color: '#7c5cff' }}>← Feed</Link>
-      <div style={{ marginBottom: '1rem' }}>
-        <h1 style={{ fontSize: '1.5rem' }}>{expr.name}</h1>
-        <span style={{ color: '#7c5cff', fontSize: '0.9rem' }}>{expr.mood}</span>
-      </div>
+    <div className="page-shell page-main page-enter">
+      <Link to="/feed" style={{ display: 'inline-block', marginBottom: '1.5rem', color: '#7c5cff', fontWeight: 600 }}>
+        ← Back to Feed
+      </Link>
+
       <div
+        className="feed-card"
         style={{
-          width: '100%',
-          aspectRatio: '1',
-          maxWidth: 320,
-          borderRadius: 12,
-          background: '#252530',
-          backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
-          backgroundSize: 'cover',
-          marginBottom: '0.5rem',
+          background: 'rgba(26, 26, 32, 0.65)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '24px',
+          padding: '1.5rem',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          marginBottom: '2rem',
         }}
-      />
-      {(expr.caption || expr.mood) && (
-        <p style={{ fontSize: '0.9rem', color: '#8888a0', marginBottom: '1rem' }}>
-          {expr.caption || expr.mood}
-        </p>
-      )}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
-        <button onClick={onLike} style={actionBtn}>❤️ Like ({expr.likes || 0})</button>
-        <button onClick={onGreeting} style={actionBtn}>👋 Greeting ({expr.greetings || 0})</button>
-        <Link to={`/ar?expression=${id}`} style={{ ...actionBtn, display: 'inline-flex', alignItems: 'center' }}>
-          📷 Open AR
-        </Link>
-        <button
-          onClick={onSetMoodByVoice}
-          disabled={voiceListening}
-          style={{ ...actionBtn, opacity: voiceListening ? 0.7 : 1 }}
-        >
-          🎤 {voiceListening ? 'Listening…' : 'Set mood by voice'}
-        </button>
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+          <div>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+              {expr.name}
+            </h1>
+            <span
+              style={{
+                display: 'inline-block',
+                background: 'rgba(124, 92, 255, 0.12)',
+                border: '1px solid rgba(124, 92, 255, 0.3)',
+                color: '#cabeff',
+                padding: '2px 8px',
+                borderRadius: '9999px',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                marginTop: '0.25rem',
+                textTransform: 'uppercase',
+              }}
+            >
+              {expr.mood}
+            </span>
+          </div>
+          <Link
+            to={`/ar?expression=${id}`}
+            className="btn-primary"
+            style={{
+              padding: '0.6rem 1.25rem',
+              background: '#7c5cff',
+              color: '#fff',
+              borderRadius: '9999px',
+              fontWeight: 700,
+              fontSize: '0.85rem',
+              boxShadow: '0 4px 16px rgba(124, 92, 255, 0.25)',
+            }}
+          >
+            📷 Launch AR
+          </Link>
+        </div>
+
+        <div
+          style={{
+            width: '100%',
+            aspectRatio: '1',
+            maxWidth: 320,
+            borderRadius: 16,
+            background: '#15151e',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
+            backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            margin: '0 auto 1.25rem',
+          }}
+        />
+
+        {expr.caption && (
+          <div
+            style={{
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              padding: '0.75rem 1rem',
+              textAlign: 'center',
+              borderLeft: '3px solid #7c5cff',
+              marginBottom: '1.5rem',
+            }}
+          >
+            <p style={{ fontSize: '0.9rem', color: '#f0f0f5', fontStyle: 'italic', margin: 0 }}>
+              "{expr.caption}"
+            </p>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+          <button onClick={onLike} style={actionBtn}>
+            ❤️ Like ({expr.likes || 0})
+          </button>
+          <button onClick={onGreeting} style={actionBtn}>
+            👋 Wave ({expr.greetings || 0})
+          </button>
+        </div>
       </div>
-      {voiceError && (
-        <p style={{ fontSize: '0.85rem', color: '#e57373', marginBottom: '1rem' }}>{voiceError}</p>
-      )}
-      <div>
-        <h2 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Comments</h2>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+
+      {/* Wearer Mic Portal Section */}
+      <div
+        className="feed-card"
+        style={{
+          background: 'rgba(26, 26, 32, 0.55)',
+          borderRadius: '24px',
+          padding: '1.5rem',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          marginBottom: '2rem',
+          textAlign: 'center',
+        }}
+      >
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
+          Wearer Voice Control Portal
+        </h2>
+        <p style={{ fontSize: '0.8rem', color: '#8888a0', marginBottom: '1.25rem' }}>
+          Tap the microphone and describe your current mood to update your print's AR overlay.
+        </p>
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+          <button
+            onClick={onSetMoodByVoice}
+            disabled={voiceListening}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              background: voiceListening ? 'rgba(124, 92, 255, 0.35)' : 'rgba(124, 92, 255, 0.15)',
+              border: voiceListening ? '3px solid #7c5cff' : '2px solid rgba(124, 92, 255, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: voiceListening ? '0 0 24px rgba(124, 92, 255, 0.6)' : 'none',
+              animation: voiceListening ? 'pulse 1.5s infinite' : 'none',
+              transition: 'all 0.25s ease',
+            }}
+          >
+            <span style={{ fontSize: '2rem' }}>🎤</span>
+          </button>
+        </div>
+        <span style={{ fontSize: '0.85rem', color: voiceListening ? '#cabeff' : '#8888a0', fontWeight: 600 }}>
+          {voiceListening ? 'Listening... Speak now.' : 'Ready to listen'}
+        </span>
+
+        {voiceError && (
+          <p style={{ fontSize: '0.8rem', color: '#e57373', marginTop: '0.75rem' }}>
+            Error: {voiceError}
+          </p>
+        )}
+      </div>
+
+      {/* Social Comments Section */}
+      <div
+        className="feed-card"
+        style={{
+          background: 'rgba(26, 26, 32, 0.65)',
+          borderRadius: '24px',
+          padding: '1.5rem',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', marginBottom: '1rem' }}>
+          Social Memory Thread
+        </h2>
+        
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
           <input
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Add a comment..."
+            placeholder="Add a comment on this print..."
             style={inputStyle}
             onKeyDown={(e) => e.key === 'Enter' && onAddComment()}
           />
-          <button onClick={onAddComment} style={sendBtn}>Send</button>
+          <button onClick={onAddComment} style={sendBtn}>
+            Send
+          </button>
         </div>
-        <ul style={{ listStyle: 'none' }}>
-          {(expr.comments || []).map((c) => (
-            <li key={c.id} style={{ padding: '0.5rem 0', borderBottom: '1px solid #2a2a35', fontSize: '0.9rem' }}>
-              <strong>{c.author}</strong>: {c.text}
-            </li>
-          ))}
+
+        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {(expr.comments || []).length === 0 ? (
+            <p style={{ color: '#7a7f90', fontSize: '0.85rem', textAlign: 'center', padding: '1rem 0' }}>
+              No comments yet. Leave the first one!
+            </p>
+          ) : (
+            (expr.comments || []).map((c) => (
+              <li
+                key={c.id}
+                style={{
+                  paddingBottom: '0.75rem',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                  fontSize: '0.9rem',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+                  <strong style={{ color: '#cabeff' }}>{c.author}</strong>
+                  <span style={{ fontSize: '0.75rem', color: '#7a7f90' }}>
+                    {new Date(c.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+                <p style={{ color: '#f0f0f5', margin: 0 }}>{c.text}</p>
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </div>
@@ -129,25 +276,30 @@ export default function Expression() {
 }
 
 const actionBtn = {
-  padding: '0.5rem 1rem',
-  background: '#252530',
+  padding: '0.6rem 1.25rem',
+  background: 'rgba(255, 255, 255, 0.04)',
   color: '#f0f0f5',
-  borderRadius: 8,
-  fontWeight: 500,
-  border: '1px solid #2a2a35',
+  borderRadius: '9999px',
+  fontWeight: 600,
+  fontSize: '0.85rem',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  transition: 'all 0.2s ease',
 }
 const inputStyle = {
   flex: 1,
-  padding: '0.5rem',
+  padding: '0.75rem',
   borderRadius: 8,
-  border: '1px solid #2a2a35',
-  background: '#252530',
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  background: 'rgba(26, 26, 32, 0.7)',
   color: '#f0f0f5',
+  fontSize: '0.9rem',
 }
 const sendBtn = {
-  padding: '0.5rem 1rem',
+  padding: '0.75rem 1.25rem',
   background: '#7c5cff',
   color: '#fff',
   borderRadius: 8,
-  fontWeight: 600,
+  fontWeight: 700,
+  fontSize: '0.9rem',
+  boxShadow: '0 4px 16px rgba(124, 92, 255, 0.2)',
 }
