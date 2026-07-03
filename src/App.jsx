@@ -12,8 +12,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <nav style={navStyle} className="nav-bar">
-        <Link to="/ar" className="nav-link nav-brand">
-          WearWave
+        <Link to="/feed" className="nav-link nav-brand">
+          AR Social Expression
         </Link>
         <NavLink to="/feed" className={navLinkClass}>
           Feed
