@@ -153,6 +153,14 @@ Use this format for new product or architecture decisions:
 - **Scope:** MVP Demo
 - **Impacts:** `api.js`, `Expression.jsx`, `AR.jsx`, `Create.jsx`, `index.css`
 - **Follow-ups:** Set up MongoDB local connection in `api.js` and deploy to `ar.aiforall.ltd`.
+
+### 2026-07-11 — Mood-Grouped Reactions & Comments Tracking
+
+- **Status:** accepted
+- **Decision:** Capture and save the wearer's active mood at the exact moment a comment, like, or wave is created by a viewer.
+- **Why:** To fulfill Patent Claim 7 (Mood History & Persistent Memory) and allow wearers to see how viewers reacted to specific mood states.
+- **Scope:** MVP Demo
+- **Impacts:** `api.js`, `Expression.jsx`, `ar.html`
 - **References:** `implementation_plan.md`
 
 ---
