@@ -26,9 +26,17 @@
       <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
     <a-marker type="pattern" url="https://raw.githack.com/AR-js-org/AR.js/master/data/data/hiro.patt">
-      <a-plane position="0 0 0" rotation="-90 0 0" width="1" height="1" material="shader: flat; src: #overlayTex" animation="property: rotation; to: -90 5 0; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
-      <a-plane position="0.3 0.2 0.1" rotation="-90 0 0" width="0.3" height="0.2" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: 0.5 0.4 0.1; dir: alternate; dur: 1500; loop: true; easing: easeInOutSine"></a-plane>
-      <a-plane position="-0.25 0.15 0.08" rotation="-90 0 0" width="0.2" height="0.15" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: -0.4 0.35 0.08; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Grounding Shadow: Cast directly on the print (Z=0.01) -->
+      <a-circle position="0 0 0.01" rotation="-90 0 0" radius="0.45" material="shader: flat; color: #000000; transparent: true; opacity: 0.35"></a-circle>
+
+      <!-- Main Expression Overlay: Leaned forward (-75deg) and floating (Z=0.15) -->
+      <a-plane position="0 0 0.15" rotation="-75 0 0" width="0.9" height="0.9" material="shader: flat; src: #overlayTex; transparent: true;" animation="property: rotation; to: -70 4 2; dir: alternate; dur: 3500; loop: true; easing: easeInOutSine"></a-plane>
+      
+      <!-- Sub-Asset Layer 1: Floating high (Z=0.28) and drifting left -->
+      <a-plane position="0.3 0.2 0.28" rotation="-75 0 0" width="0.25" height="0.2" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: 0.42 0.32 0.28; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
+      
+      <!-- Sub-Asset Layer 2: Floating medium (Z=0.22) and drifting right -->
+      <a-plane position="-0.25 0.12 0.22" rotation="-75 0 0" width="0.18" height="0.13" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85" animation="property: position; to: -0.35 0.25 0.22; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-plane>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
