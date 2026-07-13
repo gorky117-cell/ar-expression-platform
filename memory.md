@@ -173,6 +173,15 @@ Use this format for new product or architecture decisions:
 - **Tactile Voice Controls:** Upgraded [Expression.jsx](file:///d:/ar-expression-platform/src/pages/Expression.jsx) with a glassmorphic layout and a glowing, circular microphone button with pulse animations.
 - **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
 
+### 2026-07-13 — DNS Subdomain Configuration & GoDaddy Settings
+
+- **Status:** accepted
+- **Decision:** Use GoDaddy account `gaurav@aiforall.ltd` to manage `aiforall.ltd` DNS. Map subdomain `ar.aiforall.ltd` via a CNAME record to the static external IP address of the GCP VM.
+- **Why:** Enables frictionless WebAR URLs for users scanning printed materials without modifying main root domain settings.
+- **Scope:** Deployment
+- **Impacts:** GoDaddy DNS Records, GCP VM networking
+- **References:** `implementation_plan.md`
+
 ---
 
 ## 9. Local testing
