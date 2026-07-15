@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     port: 61100,
     strictPort: true,
+    host: true,
     /** Browser is opened by `scripts/dev-open-61100.mjs` (runs on npm run dev). */
   },
 })
