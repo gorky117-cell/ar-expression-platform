@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 61100
 app.use(express.static(path.join(__dirname, 'dist')))
 
 // Handle SPA routing: serve index.html for all non-file routes
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
