@@ -176,11 +176,39 @@ Use this format for new product or architecture decisions:
 ### 2026-07-13 — DNS Subdomain Configuration & GoDaddy Settings
 
 - **Status:** accepted
-- **Decision:** Use GoDaddy account `gaurav@aiforall.ltd` to manage `aiforall.ltd` DNS. Map subdomain `ar.aiforall.ltd` via a CNAME record to the static external IP address of the GCP VM.
+- **Decision:** Use GoDaddy account to manage `aiforall.ltd` DNS. Map subdomain `ar.aiforall.ltd` via an A Record to the static external IP address `34.173.55.234` of the GCP VM.
 - **Why:** Enables frictionless WebAR URLs for users scanning printed materials without modifying main root domain settings.
 - **Scope:** Deployment
 - **Impacts:** GoDaddy DNS Records, GCP VM networking
 - **References:** `implementation_plan.md`
+
+### 2026-07-17 — Express 5 Wildcard Routing Fix
+
+- **Status:** accepted
+- **Decision:** Use native JavaScript RegExp object (`/.*/`) instead of string wildcards (`/*` or `*`) in the Express static server.
+- **Why:** Bypasses `path-to-regexp` compilation rules in Express v5, resolving the server crash error: `PathError: Missing parameter name at index 2: /*`.
+- **Scope:** Production / Server
+- **Impacts:** `server.js`
+
+### 2026-07-18 — VR/AR Headset Buttons Removal
+
+- **Status:** accepted
+- **Decision:** Add CSS overrides (`.a-enter-vr, .a-enter-vr-button, .a-enter-ar, .a-enter-ar-button { display: none !important; }`) and configure `vr-mode-ui="enabled: false"` on `<a-scene>` in `ar.html`.
+- **Why:** Forcefully hides default A-Frame VR and AR headset UI triggers, keeping the interface strictly in AR camera view and preventing mobile users from accidentally splitting their screens in half.
+- **Scope:** Production / Frontend
+- **Impacts:** `public/ar.html`
+
+---
+
+## 8. Implemented Features Log (July 2026 Update)
+
+- **Streetwear Feed UI:** Upgraded [Home.jsx](file:///d:/ar-expression-platform/src/pages/Home.jsx) with a dark theme (#0F0F12), violet branding header, and glassmorphic cards representing t-shirt graphics.
+- **Visual Overlay Ingestion:** Ingested 4 new SVG overlay assets: [happy.svg](file:///d:/ar-expression-platform/public/overlays/happy.svg), [playful.svg](file:///d:/ar-expression-platform/public/overlays/playful.svg), [inspired.svg](file:///d:/ar-expression-platform/public/overlays/inspired.svg), and [peaceful.svg](file:///d:/ar-expression-platform/public/overlays/peaceful.svg) inside `public/overlays/`.
+- **Visual Overlay Selector:** Added a horizontal selection grid inside [Create.jsx](file:///d:/ar-expression-platform/src/pages/Create.jsx) to select overlays with one tap.
+- **Tactile Voice Controls:** Upgraded [Expression.jsx](file:///d:/ar-expression-platform/src/pages/Expression.jsx) with a glassmorphic layout and a glowing, circular microphone button with pulse animations.
+- **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
+- **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar`.
+- **Mobile-AR Clean Interface:** Disabled default A-Frame split-screen Cardboard VR features, removing the headset buttons to enforce a distraction-free WebAR camera layout.
 
 ---
 
