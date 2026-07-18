@@ -82,7 +82,7 @@ export default function AR() {
           </p>
           <div className="ar-marker-rows" style={{ display: 'flex', flexDirection: 'column', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
             <a
-              href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/hiro.png"
+              href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png"
               target="_blank"
               rel="noopener noreferrer"
               className="ar-marker-row"
