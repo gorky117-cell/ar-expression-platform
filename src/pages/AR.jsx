@@ -27,10 +27,11 @@ export default function AR() {
     )
   }
 
+  const expressionId = expr ? expr.id : ''
   const overlayUrl = expr ? (expr.overlayImage || '/overlays/tree-birds.svg') : '/overlays/tree-birds.svg'
   const mood = expr ? expr.mood : 'calm'
   const caption = (expr && expr.caption) ? encodeURIComponent(expr.caption) : ''
-  const arUrl = '/ar.html?overlay=' + encodeURIComponent(overlayUrl) + '&mood=' + mood + (caption ? '&caption=' + caption : '')
+  const arUrl = '/ar.html?id=' + expressionId + '&overlay=' + encodeURIComponent(overlayUrl) + '&mood=' + mood + (caption ? '&caption=' + caption : '')
 
   return (
     <div className="page-shell page-main ar-hero ar-shell page-enter">

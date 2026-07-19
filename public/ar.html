@@ -2,63 +2,550 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, user-scalable=no" />
-  <title>AR Social Expression — AR</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>AR Social Expression — AR View</title>
+  
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  
+  <!-- AR.js -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  
+  <!-- Supabase JS Client via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    body { margin: 0; overflow: hidden; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
     /* Digital zoom scale trick to increase AR scanning range by 30% */
     video, #arjs-video {
       transform: scale(1.3) !important;
       transform-origin: center !important;
     }
-    .instruction { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: #fff; background: rgba(0,0,0,0.6); padding: 10px 16px; border-radius: 8px; font-family: system-ui; font-size: 14px; z-index: 999; text-align: center; max-width: 90%; }
-    .caption { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); color: #fff; background: rgba(0,0,0,0.5); padding: 8px 14px; border-radius: 8px; font-family: system-ui; font-size: 13px; z-index: 999; text-align: center; max-width: 85%; }
+    
+    /* Glassmorphism Floating UI */
+    .glass-ui {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 16px 20px;
+    }
+    
+    .ui-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+      width: 100%;
+    }
+    
+    /* Floating Title Card */
+    .expression-card {
+      pointer-events: auto;
+      background: rgba(18, 18, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 10px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 70%;
+    }
+    
+    .expression-title {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    
+    .expression-caption {
+      color: #8888a0;
+      font-size: 11px;
+      margin: 2px 0 0 0;
+      font-style: italic;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .btn-close {
+      pointer-events: auto;
+      background: rgba(30, 30, 40, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .ui-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: auto;
+      pointer-events: none;
+    }
+    
+    /* Left Panel: Real-time Comments Feed */
+    .comments-panel {
+      pointer-events: auto;
+      width: 250px;
+      max-height: 160px;
+      background: rgba(12, 12, 16, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    
+    .comments-panel::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .comment-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 6px;
+    }
+    
+    .comment-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .comment-author {
+      color: #fff;
+      font-weight: 800;
+      font-size: 10px;
+      display: block;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    
+    .comment-text {
+      color: #d1d4dc;
+      font-size: 11px;
+      margin-top: 1px;
+      display: block;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+    
+    /* Right Panel: Reaction Buttons */
+    .reaction-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      pointer-events: auto;
+    }
+    
+    .reaction-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .glass-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(30, 30, 40, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    
+    .glass-btn:active {
+      transform: scale(0.9);
+      background: rgba(30, 30, 40, 0.85);
+    }
+    
+    .count-badge {
+      color: #cabeff;
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 4px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      text-align: center;
+    }
+    
     /* Hide VR/AR headset buttons completely */
     .a-enter-vr, .a-enter-vr-button, .a-enter-ar, .a-enter-ar-button {
       display: none !important;
     }
+    
+    /* Input Comment Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .modal-content {
+      background: rgba(18, 18, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 24px;
+      width: 85%;
+      max-width: 320px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+    
+    .modal-title {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.01em;
+    }
+    
+    .modal-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: #fff;
+      font-size: 13px;
+      margin-bottom: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    
+    .modal-input:focus {
+      border-color: #7c5cff;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-family: inherit;
+    }
+    
+    .modal-btn-cancel {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    
+    .modal-btn-submit {
+      background: #7c5cff;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-  <div id="captionEl" class="caption" style="display: none;"></div>
-  <div class="instruction">Point your camera at the Hiro marker. Tree and birds appear in AR.</div>
+  
+  <!-- Overlay Controls (on top of Camera) -->
+  <div class="glass-ui">
+    <div class="ui-top">
+      <div class="expression-card">
+        <h2 id="expTitle" class="expression-title">Active Expression</h2>
+        <p id="expCaption" class="expression-caption">Initializing AR overlay…</p>
+      </div>
+      <a href="/feed" class="btn-close">✕</a>
+    </div>
+    
+    <div class="ui-bottom">
+      <!-- Scrolling comments feed -->
+      <div id="commentsFeed" class="comments-panel">
+        <p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">Loading updates…</p>
+      </div>
+      
+      <!-- Interactive Sidebar Buttons -->
+      <div class="reaction-panel">
+        <div class="reaction-wrapper">
+          <button onclick="handleLike()" class="glass-btn">❤️</button>
+          <div id="likeCount" class="count-badge">0</div>
+        </div>
+        <div class="reaction-wrapper">
+          <button onclick="handleWave()" class="glass-btn">👋</button>
+          <div id="waveCount" class="count-badge">0</div>
+        </div>
+        <div class="reaction-wrapper">
+          <button onclick="openCommentModal()" class="glass-btn">💬</button>
+          <div class="count-badge">Reply</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comment Submission Modal -->
+  <div id="commentModal" class="modal-overlay" onclick="closeCommentModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h3 class="modal-title">Leave a Comment</h3>
+      <input type="text" id="commentAuthorInput" class="modal-input" placeholder="Your name (optional)" maxlength="20" />
+      <textarea id="commentTextInput" class="modal-input" placeholder="Type your message..." rows="3" maxlength="120" style="resize:none;"></textarea>
+      <div class="modal-actions">
+        <button onclick="closeCommentModal()" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button id="submitCommentBtn" onclick="submitComment()" class="modal-btn modal-btn-submit">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- A-Frame WebAR Scene -->
   <a-scene embedded vr-mode-ui="enabled: false" arjs="sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 1280; displayHeight: 720; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3; maxDetectionRate: 60;">
     <a-assets>
       <img id="overlayTex" src="overlays/tree-birds.svg">
       <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
+    
     <a-marker preset="hiro">
       <!-- Grounding Shadow: Cast directly on the print (Z=0.01) -->
-      <a-circle position="0 0 0.01" rotation="-90 0 0" radius="0.45" material="shader: flat; color: #000000; transparent: true; opacity: 0.35"></a-circle>
+      <a-circle position="0 0 0.01" rotation="-90 0 0" radius="0.8" material="shader: flat; color: #000000; transparent: true; opacity: 0.35"></a-circle>
 
-      <!-- Main Expression Overlay: Leaned forward (-75deg) and floating (Z=0.15) -->
-      <a-plane position="0 0 0.15" rotation="-75 0 0" width="0.9" height="0.9" material="shader: flat; src: #overlayTex; transparent: true;" animation="property: rotation; to: -70 4 2; dir: alternate; dur: 3500; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Main Expression Overlay: Large size (1.6x1.6), Floating (Z=0.15 to 0.28) and rotating -->
+      <a-plane position="0 0 0.15" rotation="-75 0 0" width="1.6" height="1.6" material="shader: flat; src: #overlayTex; transparent: true;" 
+               animation="property: rotation; to: -70 4 2; dir: alternate; dur: 3500; loop: true; easing: easeInOutSine"
+               animation__float="property: position; to: 0 0.05 0.28; dir: alternate; dur: 4500; loop: true; easing: easeInOutSine"></a-plane>
       
-      <!-- Sub-Asset Layer 1: Floating high (Z=0.28) and drifting left -->
-      <a-plane position="0.3 0.2 0.28" rotation="-75 0 0" width="0.25" height="0.2" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" animation="property: position; to: 0.42 0.32 0.28; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Sub-Asset Layer 1: Floating high (Z=0.4) and drifting left -->
+      <a-plane position="0.5 0.3 0.4" rotation="-75 0 0" width="0.45" height="0.36" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" 
+               animation="property: position; to: 0.7 0.5 0.4; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
       
-      <!-- Sub-Asset Layer 2: Floating medium (Z=0.22) and drifting right -->
-      <a-plane position="-0.25 0.12 0.22" rotation="-75 0 0" width="0.18" height="0.13" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85" animation="property: position; to: -0.35 0.25 0.22; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Sub-Asset Layer 2: Floating medium (Z=0.3) and drifting right -->
+      <a-plane position="-0.4 0.2 0.3" rotation="-75 0 0" width="0.32" height="0.23" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85" 
+               animation="property: position; to: -0.55 0.4 0.3; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-plane>
     </a-marker>
+    
     <a-entity camera></a-entity>
   </a-scene>
+
+  <!-- Script Logic -->
   <script>
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var overlayUrl = params.get('overlay');
-      if (overlayUrl) {
-        var img = document.getElementById('overlayTex');
-        if (img) img.src = overlayUrl;
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const overlayUrl = params.get('overlay');
+    const mood = params.get('mood') || 'calm';
+    const caption = params.get('caption');
+    
+    // Inject visual overlay immediately from query params
+    if (overlayUrl) {
+      document.getElementById('overlayTex').src = overlayUrl;
+    }
+    
+    // Set static UI text immediately
+    const titleEl = document.getElementById('expTitle');
+    const captionEl = document.getElementById('expCaption');
+    
+    if (caption) {
+      captionEl.textContent = `"${decodeURIComponent(caption)}"`;
+    } else {
+      captionEl.textContent = `Vibe: ${mood.toUpperCase()}`;
+    }
+
+    let supabaseClient = null;
+
+    // Load Supabase credentials and initialize client
+    async function initSupabase() {
+      try {
+        const res = await fetch('/api/config');
+        const config = await res.json();
+        if (config.supabaseUrl && config.supabaseKey) {
+          supabaseClient = supabase.createClient(config.supabaseUrl, config.supabaseKey);
+          
+          if (id) {
+            // Load custom expression name if DB connected
+            const { data: expr } = await supabaseClient.from('expressions').select('name').eq('id', id).single();
+            if (expr && expr.name) {
+              titleEl.textContent = expr.name;
+            }
+            
+            // Poll comments and reactions
+            pollData();
+            setInterval(pollData, 3000);
+          } else {
+            document.getElementById('commentsFeed').innerHTML = '<p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">No expression ID provided.</p>';
+          }
+        } else {
+          showOfflineFallback();
+        }
+      } catch (err) {
+        console.error('Failed to init Supabase:', err);
+        showOfflineFallback();
       }
-      var caption = params.get('caption') || params.get('mood');
-      var el = document.getElementById('captionEl');
-      if (el && caption) {
-        el.textContent = decodeURIComponent(caption);
-        el.style.display = 'block';
+    }
+
+    function showOfflineFallback() {
+      document.getElementById('commentsFeed').innerHTML = '<p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">Running in offline fallback mode.</p>';
+    }
+
+    async function pollData() {
+      if (!supabaseClient || !id) return;
+      try {
+        const { data: reactions, error } = await supabaseClient
+          .from('reactions')
+          .select('*')
+          .eq('expression_id', id);
+        
+        if (error) throw error;
+        
+        const likes = reactions.filter(r => r.kind === 'like').length;
+        const greetings = reactions.filter(r => r.kind === 'greeting').length;
+        const comments = reactions.filter(r => r.kind === 'comment')
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        
+        document.getElementById('likeCount').textContent = likes;
+        document.getElementById('waveCount').textContent = greetings;
+        
+        const feed = document.getElementById('commentsFeed');
+        if (comments.length === 0) {
+          feed.innerHTML = '<p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">No comments yet. Be the first!</p>';
+        } else {
+          feed.innerHTML = comments.map(c => `
+            <div class="comment-item">
+              <strong class="comment-author">${escapeHtml(c.author || 'Viewer')}</strong>
+              <span class="comment-text">${escapeHtml(c.text || '')}</span>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Polling error:', err);
       }
-    })();
+    }
+
+    async function handleLike() {
+      if (!supabaseClient || !id) return;
+      try {
+        const el = document.getElementById('likeCount');
+        el.textContent = parseInt(el.textContent) + 1;
+        await supabaseClient.from('reactions').insert({ expression_id: id, kind: 'like' });
+        pollData();
+      } catch (err) {
+        console.error('Like failed:', err);
+      }
+    }
+
+    async function handleWave() {
+      if (!supabaseClient || !id) return;
+      try {
+        const el = document.getElementById('waveCount');
+        el.textContent = parseInt(el.textContent) + 1;
+        await supabaseClient.from('reactions').insert({ expression_id: id, kind: 'greeting' });
+        pollData();
+      } catch (err) {
+        console.error('Wave failed:', err);
+      }
+    }
+
+    function openCommentModal() {
+      document.getElementById('commentModal').classList.add('active');
+    }
+
+    function closeCommentModal(event) {
+      if (!event || event.target === document.getElementById('commentModal') || event.target.classList.contains('modal-btn-cancel')) {
+        document.getElementById('commentModal').classList.remove('active');
+      }
+    }
+
+    async function submitComment() {
+      const author = document.getElementById('commentAuthorInput').value.trim() || 'Viewer';
+      const text = document.getElementById('commentTextInput').value.trim();
+      if (!text) return;
+      
+      if (!supabaseClient || !id) return;
+      try {
+        const btn = document.getElementById('submitCommentBtn');
+        btn.disabled = true;
+        btn.textContent = 'Posting...';
+
+        await supabaseClient.from('reactions').insert({
+          expression_id: id,
+          kind: 'comment',
+          author,
+          text
+        });
+        
+        closeCommentModal();
+        document.getElementById('commentTextInput').value = '';
+        btn.disabled = false;
+        btn.textContent = 'Post';
+        pollData();
+      } catch (err) {
+        console.error('Post failed:', err);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Run init
+    initSupabase();
   </script>
 </body>
 </html>
