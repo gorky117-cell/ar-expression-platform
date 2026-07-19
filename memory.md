@@ -209,6 +209,9 @@ Use this format for new product or architecture decisions:
 - **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
 - **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar`.
 - **Mobile-AR Clean Interface:** Disabled default A-Frame split-screen Cardboard VR features, removing the headset buttons to enforce a distraction-free WebAR camera layout.
+- **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar.html` on top of the webcam feed.
+- **Transparent 3D Spacing & Floating:** Fixed A-Frame plane height calculations to render relative to the Y-axis (vertical offset above the marker) and removed solid SVG box backgrounds for true transparency.
+- **Secure VM Git Syncing:** Configured Linux SSH folder permissions and agent identities on the GCP instance, allowing frictionless `git fetch && git reset --hard` deployments.
 
 ---
 
