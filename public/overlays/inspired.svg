@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <rect width="200" height="200" fill="#ddd6fe" opacity="0.1"/>
   <!-- Central Crystal Octahedron -->
   <polygon points="100,20 150,100 100,120" fill="#a78bfa" opacity="0.9"/>
   <polygon points="100,20 50,100 100,120" fill="#c084fc" opacity="0.8"/>
