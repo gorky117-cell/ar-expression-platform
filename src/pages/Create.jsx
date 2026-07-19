@@ -55,7 +55,6 @@ export default function Create() {
           </span>
           <input
             type="text"
-            required
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Cyberpunk Hoodie"
