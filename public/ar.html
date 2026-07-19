@@ -365,21 +365,21 @@
     </a-assets>
     
     <a-marker preset="hiro">
-      <!-- Grounding Shadow: Cast directly on the print (Z=0.01) -->
-      <a-circle position="0 0 0.01" rotation="-90 0 0" radius="0.8" material="shader: flat; color: #000000; transparent: true; opacity: 0.35"></a-circle>
+      <!-- Grounding Shadow: Cast directly on the print (Y=0.01) -->
+      <a-circle position="0 0.01 0" rotation="-90 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
 
-      <!-- Main Expression Overlay: Large size (1.6x1.6), Floating (Z=0.15 to 0.28) and rotating -->
-      <a-plane position="0 0 0.15" rotation="-75 0 0" width="1.6" height="1.6" material="shader: flat; src: #overlayTex; transparent: true;" 
-               animation="property: rotation; to: -70 4 2; dir: alternate; dur: 3500; loop: true; easing: easeInOutSine"
-               animation__float="property: position; to: 0 0.05 0.28; dir: alternate; dur: 4500; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Main Expression Overlay: Large, readable size (1.2x1.2), Floating vertically along Y-axis and tilting -->
+      <a-plane position="0 0.2 0" rotation="-75 0 0" width="1.2" height="1.2" material="shader: flat; src: #overlayTex; transparent: true;" 
+               animation__rotate="property: rotation; to: -70 4 2; dir: alternate; dur: 3500; loop: true; easing: easeInOutSine"
+               animation__float="property: position; to: 0 0.38 0; dir: alternate; dur: 4500; loop: true; easing: easeInOutSine"></a-plane>
       
-      <!-- Sub-Asset Layer 1: Floating high (Z=0.4) and drifting left -->
-      <a-plane position="0.5 0.3 0.4" rotation="-75 0 0" width="0.45" height="0.36" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" 
-               animation="property: position; to: 0.7 0.5 0.4; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Sub-Asset Layer 1: Floating high (Y=0.55) and drifting left/right -->
+      <a-plane position="0.35 0.45 -0.15" rotation="-75 0 0" width="0.3" height="0.24" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9" 
+               animation__drift1="property: position; to: 0.5 0.6 -0.15; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
       
-      <!-- Sub-Asset Layer 2: Floating medium (Z=0.3) and drifting right -->
-      <a-plane position="-0.4 0.2 0.3" rotation="-75 0 0" width="0.32" height="0.23" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85" 
-               animation="property: position; to: -0.55 0.4 0.3; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Sub-Asset Layer 2: Floating medium (Y=0.45) and drifting left/right -->
+      <a-plane position="-0.3 0.35 0.15" rotation="-75 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85" 
+               animation__drift2="property: position; to: -0.42 0.5 0.15; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-plane>
     </a-marker>
     
     <a-entity camera></a-entity>
