@@ -7,6 +7,7 @@ export default function Expression() {
   const [expr, setExpr] = useState(null)
   const [loading, setLoading] = useState(true)
   const [comment, setComment] = useState('')
+  const [viewMode, setViewMode] = useState('art')
   const [voiceListening, setVoiceListening] = useState(false)
   const [voiceError, setVoiceError] = useState('')
 
@@ -121,21 +122,93 @@ export default function Expression() {
           </Link>
         </div>
 
-        <div
-          style={{
-            width: '100%',
-            aspectRatio: '1',
-            maxWidth: 320,
-            borderRadius: 16,
-            background: '#15151e',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
-            backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
-            backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            margin: '0 auto 1.25rem',
-          }}
-        />
+        {/* Tab Selector */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+          <button
+            onClick={() => setViewMode('art')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              border: '1px solid ' + (viewMode === 'art' ? '#7c5cff' : 'rgba(255,255,255,0.1)'),
+              background: viewMode === 'art' ? 'rgba(124,92,255,0.15)' : 'transparent',
+              color: viewMode === 'art' ? '#cabeff' : '#8888a0',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            🎨 Artwork Design
+          </button>
+          <button
+            onClick={() => setViewMode('scan')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              border: '1px solid ' + (viewMode === 'scan' ? '#7c5cff' : 'rgba(255,255,255,0.1)'),
+              background: viewMode === 'scan' ? 'rgba(124,92,255,0.15)' : 'transparent',
+              color: viewMode === 'scan' ? '#cabeff' : '#8888a0',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            📷 AR Scan Target
+          </button>
+        </div>
+
+        {/* Display Content */}
+        {viewMode === 'art' ? (
+          <div
+            style={{
+              width: '100%',
+              aspectRatio: '1',
+              maxWidth: 320,
+              borderRadius: 16,
+              background: '#15151e',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              margin: '0 auto 1.25rem',
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              aspectRatio: '1',
+              maxWidth: 320,
+              borderRadius: 16,
+              background: '#fff',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              backgroundImage: 'url(https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png)',
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              margin: '0 auto 1.25rem',
+              position: 'relative',
+            }}
+          >
+            {/* Embedded custom graphic in the center of the Hiro marker */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '25%',
+                left: '25%',
+                width: '50%',
+                height: '50%',
+                backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                opacity: 0.85, // semi-transparent so the underlying pattern remains visible and scannable
+              }}
+            />
+          </div>
+        )}
 
         {expr.caption && (
           <div
