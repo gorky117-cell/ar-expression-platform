@@ -186,9 +186,6 @@ export default function Expression() {
               border: '1px solid rgba(255, 255, 255, 0.05)',
               margin: '0 auto 1.25rem',
               position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               overflow: 'hidden',
             }}
           >
@@ -199,7 +196,7 @@ export default function Expression() {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
+                display: 'block',
               }}
             />
             {/* Embedded custom graphic in the center of the Hiro marker */}
