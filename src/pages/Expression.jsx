@@ -184,14 +184,24 @@ export default function Expression() {
               borderRadius: 16,
               background: '#fff',
               border: '1px solid rgba(255, 255, 255, 0.05)',
-              backgroundImage: 'url(https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png)',
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
               margin: '0 auto 1.25rem',
               position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
             }}
           >
+            {/* Perfectly centered Hiro Marker image */}
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/48/Hiro_marker_ARjs.png"
+              alt="Hiro Marker"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
+            />
             {/* Embedded custom graphic in the center of the Hiro marker */}
             <div
               style={{
@@ -204,7 +214,7 @@ export default function Expression() {
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
-                opacity: 0.85, // semi-transparent so the underlying pattern remains visible and scannable
+                opacity: 0.9,
               }}
             />
           </div>
