@@ -424,10 +424,12 @@
       }
     }
     
-    // Set dynamic URL on the a-nft element immediately
+    // Set dynamic URL on the a-nft element immediately using fully qualified absolute path
     const nftTrigger = document.getElementById('nftTrigger');
     if (nftTrigger) {
-      nftTrigger.setAttribute('url', `/data/nft/${templateName}`);
+      const absoluteUrl = window.location.origin + '/data/nft/' + templateName;
+      console.log('Setting absolute NFT descriptor URL:', absoluteUrl);
+      nftTrigger.setAttribute('url', absoluteUrl);
     }
 
     function injectAnimations() {
