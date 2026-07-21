@@ -178,9 +178,9 @@ export default function Expression() {
         ) : (
           <div
             style={{
-              width: '100%',
-              aspectRatio: '1',
-              maxWidth: 320,
+              width: 320,
+              height: 320,
+              maxWidth: '100%',
               borderRadius: 16,
               background: '#fff',
               border: '1px solid rgba(255, 255, 255, 0.05)',
