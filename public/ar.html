@@ -389,48 +389,58 @@
     const mood = (params.get('mood') || 'calm').toLowerCase();
     const caption = params.get('caption');
     
-    // Dynamically inject A-Frame animations based on mood
-    const mainPlane = document.getElementById('mainOverlay');
-    const b1 = document.getElementById('bird1');
-    const b2 = document.getElementById('bird2');
-    
-    if (mood === 'playful') {
-      // Playful: Bouncy float, elastic scale pulse, and wobbly rotation
-      mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.45 0; dir: alternate; dur: 1500; loop: true; easing: easeInOutQuad');
-      mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 -12 0; to: -75 12 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
-      mainPlane.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 1.1 1.1 1.1; dir: alternate; dur: 750; loop: true; easing: easeInOutSine');
+    function injectAnimations() {
+      const mainPlane = document.getElementById('mainOverlay');
+      const b1 = document.getElementById('bird1');
+      const b2 = document.getElementById('bird2');
       
-      b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.52 0.62 -0.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
-      b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.45 0.5 0.15; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine');
-    } else if (mood === 'happy') {
-      // Happy: High-frequency scaling (breathing) and energetic float
-      mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.4 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutQuad');
-      mainPlane.setAttribute('animation__scale', 'property: scale; from: 0.95 0.95 0.95; to: 1.15 1.15 1.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
-      mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 0 -4; to: -75 0 4; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
-      
-      b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.5 0.6 -0.15; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
-      b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.42 0.5 0.15; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
-    } else if (mood === 'inspired') {
-      // Inspired: Twist/yaw and vertical float
-      mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.15 0; to: 0 0.35 0; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
-      mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -78 -8 5; to: -68 8 -5; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
-      
-      b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.46 0.58 -0.15; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine');
-      b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.38 0.48 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
-    } else if (mood === 'peaceful' || mood === 'calm' || mood === 'relaxed') {
-      // Peaceful: Very slow, gentle drift
-      mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.28 0; dir: alternate; dur: 5500; loop: true; easing: easeInOutSine');
-      mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -76 -2 1; to: -72 2 -1; dir: alternate; dur: 4800; loop: true; easing: easeInOutSine');
-      
-      b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.45 0.52 -0.15; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
-      b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.36 0.42 0.15; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
+      if (!mainPlane || !b1 || !b2) return;
+
+      if (mood === 'playful') {
+        // Playful: Bouncy float, elastic scale pulse, and wobbly rotation
+        mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.45 0; dir: alternate; dur: 1500; loop: true; easing: easeInOutQuad');
+        mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 -12 0; to: -75 12 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
+        mainPlane.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 1.1 1.1 1.1; dir: alternate; dur: 750; loop: true; easing: easeInOutSine');
+        
+        b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.52 0.62 -0.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
+        b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.45 0.5 0.15; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine');
+      } else if (mood === 'happy') {
+        // Happy: High-frequency scaling (breathing) and energetic float
+        mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.4 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutQuad');
+        mainPlane.setAttribute('animation__scale', 'property: scale; from: 0.95 0.95 0.95; to: 1.15 1.15 1.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
+        mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 0 -4; to: -75 0 4; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
+        
+        b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.5 0.6 -0.15; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
+        b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.42 0.5 0.15; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
+      } else if (mood === 'inspired') {
+        // Inspired: Twist/yaw and vertical float
+        mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.15 0; to: 0 0.35 0; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
+        mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -78 -8 5; to: -68 8 -5; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
+        
+        b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.46 0.58 -0.15; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine');
+        b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.38 0.48 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
+      } else if (mood === 'peaceful' || mood === 'calm' || mood === 'relaxed') {
+        // Peaceful: Very slow, gentle drift
+        mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.28 0; dir: alternate; dur: 5500; loop: true; easing: easeInOutSine');
+        mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -76 -2 1; to: -72 2 -1; dir: alternate; dur: 4800; loop: true; easing: easeInOutSine');
+        
+        b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.45 0.52 -0.15; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
+        b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.36 0.42 0.15; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
+      } else {
+        // Default: Steady gentle floating
+        mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.35 0; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine');
+        mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 -4 2; to: -70 4 -2; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
+        
+        b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.48 0.58 -0.15; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine');
+        b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.4 0.48 0.15; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine');
+      }
+    }
+
+    const scene = document.querySelector('a-scene');
+    if (scene.hasLoaded) {
+      injectAnimations();
     } else {
-      // Default: Steady gentle floating
-      mainPlane.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.35 0; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine');
-      mainPlane.setAttribute('animation__rotate', 'property: rotation; from: -75 -4 2; to: -70 4 -2; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
-      
-      b1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.48 0.58 -0.15; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine');
-      b2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.4 0.48 0.15; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine');
+      scene.addEventListener('loaded', injectAnimations);
     }
 
     // Inject visual overlay immediately from query params
