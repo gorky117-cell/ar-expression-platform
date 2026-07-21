@@ -9,7 +9,7 @@
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
   <!-- AR.js -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
   
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -25,6 +25,28 @@
     video, #arjs-video {
       transform: scale(1.3) !important;
       transform-origin: center !important;
+    }
+
+    /* Style for AR.js default NFT loader */
+    .arjs-loader {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(18, 18, 24, 0.95) !important;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .arjs-loader div {
+      text-align: center;
+      font-size: 1.2em;
+      color: white;
+      font-weight: 500;
+      letter-spacing: 0.05em;
     }
     
     /* Glassmorphism Floating UI */
@@ -309,7 +331,9 @@
   </style>
 </head>
 <body>
-  
+  <div class="arjs-loader">
+    <div>Loading AR experience, please wait...</div>
+  </div>
   <!-- Overlay Controls (on top of Camera) -->
   <div class="glass-ui">
     <div class="ui-top">
@@ -360,7 +384,6 @@
   <!-- A-Frame WebAR Scene -->
   <a-scene 
     vr-mode-ui="enabled: false;"
-    renderer="logarithmicDepthBuffer: true;"
     embedded 
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
     <a-assets>
