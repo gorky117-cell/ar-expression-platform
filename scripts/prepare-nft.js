@@ -28,9 +28,9 @@ async function run() {
     const pngPath = path.join(overlaysDir, `${t.name}.png`);
     
     console.log(`\n--- Converting ${t.file} to high-res PNG ---`);
-    // Convert SVG to high-res PNG (1000px width/height) with white background for AR.js tracking contrast
+    // Convert SVG to high-res PNG (1000px width/height) with dark background (#121218) to match the Web UI
     await sharp(svgPath)
-      .resize(1000, 1000, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
+      .resize(1000, 1000, { fit: 'contain', background: { r: 18, g: 18, b: 24, alpha: 1 } })
       .png()
       .toFile(pngPath);
       
