@@ -557,8 +557,10 @@
         const comments = reactions.filter(r => r.kind === 'comment')
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         
-        document.getElementById('likeCount').textContent = likes;
-        document.getElementById('waveCount').textContent = greetings;
+        const likeEl = document.getElementById('likeCount');
+        const greetEl = document.getElementById('greetCount');
+        if (likeEl) likeEl.textContent = likes;
+        if (greetEl) greetEl.textContent = greetings;
         
         const feed = document.getElementById('commentsFeed');
         if (comments.length === 0) {
