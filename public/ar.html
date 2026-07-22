@@ -471,12 +471,25 @@
       apply(mainPlaneNft, b1Nft, b2Nft);
     }
 
+    const hideLoader = () => {
+      const loader = document.getElementById('loader');
+      if (loader && loader.style.display !== 'none') {
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 500);
+      }
+    };
+
     const scene = document.querySelector('a-scene');
-    if (scene.hasLoaded) {
-      injectAnimations();
-    } else {
-      scene.addEventListener('loaded', injectAnimations);
+    if (scene) {
+      scene.addEventListener('arReady', hideLoader);
+      scene.addEventListener('loaded', () => {
+        injectAnimations();
+        setTimeout(hideLoader, 1000);
+      });
     }
+
+    // Safety fallback: dismiss loader after 2.5s so user is never stuck
+    setTimeout(hideLoader, 2500);
 
     // Inject visual overlay immediately from query params
     if (overlayUrl) {
