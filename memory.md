@@ -198,13 +198,13 @@ Use this format for new product or architecture decisions:
 - **Scope:** Production / Frontend
 - **Impacts:** `public/ar.html`
 
-### 2026-07-21 — Markerless Natural Feature Tracking (NFT) Implementation
+### 2026-07-22 — MindAR Neural Machine-Learning Image Tracking Migration
 
 - **Status:** accepted
-- **Decision:** Switch script to stable version-pinned `aframe-ar-nft.js` (3.4.5), add automatic descriptor generation scripts, remove `<a-marker>` triggers to prevent scene conflicts, and implement dynamic absolute paths for descriptor workers.
-- **Why:** Replaces rigid Hiro markers with a true markerless streetwear experience where the wearer's physical shirt print (the artwork tree, bubbles, Zen lines, etc.) is tracked directly by the viewer's camera, resolving mobile camera initialization and 404 resource crashes.
+- **Decision:** Switch WebAR engine from legacy AR.js SURF NFT to MindAR 1.2.5 (TensorFlow.js neural feature tracking). Automated `.mind` descriptor compilation via Puppeteer script (`scripts/compile-mind.cjs`).
+- **Why:** MindAR uses neural feature detection that tracks clean 2D vector artwork directly (with ZERO markers, ZERO borders, and ZERO tags) without requiring photographic textures or high-entropy corners like legacy SURF algorithms.
 - **Scope:** Production / Frontend / Tooling
-- **Impacts:** `public/ar.html`, `scripts/prepare-nft.js`
+- **Impacts:** `public/ar.html`, `public/data/targets/tree-birds.mind`, `scripts/compile-mind.cjs`
 
 ---
 
@@ -220,7 +220,7 @@ Use this format for new product or architecture decisions:
 - **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar.html` on top of the webcam feed.
 - **Transparent 3D Spacing & Floating:** Fixed A-Frame plane height calculations to render relative to the Y-axis (vertical offset above the marker) and removed solid SVG box backgrounds for true transparency.
 - **Secure VM Git Syncing:** Configured Linux SSH folder permissions and agent identities on the GCP instance, allowing frictionless `git fetch && git reset --hard` deployments.
-- **Markerless Natural Feature Tracking (NFT):** Upgraded `ar.html` to stable AR.js version 3.4.5 image tracking. Created a Node compiler script `scripts/prepare-nft.js` to pre-generate `.iset`, `.fset`, and `.fset3` descriptor databases for all 5 template designs, enabling the phone camera to scan printed graphics directly without black Hiro borders.
+- **MindAR Neural Image Tracking:** Migrated `ar.html` to MindAR (TF.js). Target descriptor compilation is automated via `scripts/compile-mind.cjs`, enabling pure 100% markerless tracking on clean original vector artwork directly (zero Hiro tags, zero scan badges).
 
 ---
 
