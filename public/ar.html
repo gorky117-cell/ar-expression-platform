@@ -8,8 +8,8 @@
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
-  <!-- AR.js -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
+  <!-- AR.js Pattern Marker Engine -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -27,7 +27,7 @@
       transform-origin: center !important;
     }
 
-    /* Style for AR.js default NFT loader */
+    /* Style for AR.js loader */
     .arjs-loader {
       height: 100%;
       width: 100%;
@@ -98,29 +98,39 @@
       color: #8888a0;
       font-size: 11px;
       margin: 2px 0 0 0;
-      font-style: italic;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     
-    .btn-close {
+    .expression-vibe-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 8px;
+      background: rgba(124, 92, 255, 0.25);
+      border: 1px solid rgba(124, 92, 255, 0.4);
+      border-radius: 20px;
+      color: #a78bfa;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .close-btn {
       pointer-events: auto;
-      background: rgba(30, 30, 40, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #fff;
       width: 36px;
       height: 36px;
       border-radius: 50%;
+      background: rgba(18, 18, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      font-weight: 700;
+      cursor: pointer;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
     
     .ui-bottom {
@@ -128,202 +138,172 @@
       justify-content: space-between;
       align-items: flex-end;
       width: 100%;
-      margin-top: auto;
       pointer-events: none;
     }
     
-    /* Left Panel: Real-time Comments Feed */
-    .comments-panel {
+    /* Comments Feed Drawer */
+    .comments-drawer {
       pointer-events: auto;
-      width: 250px;
-      max-height: 160px;
-      background: rgba(12, 12, 16, 0.6);
+      background: rgba(18, 18, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
-      padding: 12px;
+      padding: 12px 14px;
+      max-width: 60%;
+      max-height: 180px;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .comments-list {
       overflow-y: auto;
-      scrollbar-width: none;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 120px;
+      padding-right: 4px;
     }
-    
-    .comments-panel::-webkit-scrollbar {
-      display: none;
-    }
-    
+
     .comment-item {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding-bottom: 6px;
-    }
-    
-    .comment-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    
-    .comment-author {
-      color: #fff;
-      font-weight: 800;
-      font-size: 10px;
-      display: block;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-    
-    .comment-text {
-      color: #d1d4dc;
       font-size: 11px;
-      margin-top: 1px;
-      display: block;
-      word-break: break-word;
       line-height: 1.3;
+      color: #e2e8f0;
+      word-break: break-word;
+    }
+    .comment-author {
+      font-weight: 700;
+      color: #a78bfa;
+      margin-right: 4px;
     }
     
-    /* Right Panel: Reaction Buttons */
-    .reaction-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      align-items: center;
+    /* Social Action Sidebar */
+    .action-sidebar {
       pointer-events: auto;
-    }
-    
-    .reaction-wrapper {
       display: flex;
       flex-direction: column;
+      gap: 12px;
       align-items: center;
     }
     
-    .glass-btn {
-      width: 48px;
-      height: 48px;
+    .action-btn {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: rgba(30, 30, 40, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      color: #fff;
-      font-size: 20px;
+      background: rgba(18, 18, 24, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      color: #fff;
       cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      transition: transform 0.15s ease, background 0.15s ease;
+      position: relative;
     }
-    
-    .glass-btn:active {
+
+    .action-btn:active {
       transform: scale(0.9);
-      background: rgba(30, 30, 40, 0.85);
+    }
+
+    .action-btn.liked {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.5);
     }
     
-    .count-badge {
-      color: #cabeff;
-      font-size: 11px;
-      font-weight: 800;
-      margin-top: 4px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-      text-align: center;
+    .action-icon {
+      font-size: 18px;
     }
     
-    /* Hide VR/AR headset buttons completely */
-    .a-enter-vr, .a-enter-vr-button, .a-enter-ar, .a-enter-ar-button {
-      display: none !important;
+    .action-count {
+      font-size: 9px;
+      font-weight: 700;
+      color: #a78bfa;
+      position: absolute;
+      bottom: -16px;
     }
-    
-    /* Input Comment Modal */
+
+    /* Modal Styling */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
+      z-index: 200;
+      display: none;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    .modal-content {
-      background: rgba(18, 18, 26, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 24px;
-      width: 85%;
-      max-width: 320px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-      transform: scale(0.9);
-      transition: transform 0.3s ease;
+      align-items: center;
+      padding: 20px;
       box-sizing: border-box;
     }
-    
-    .modal-overlay.active .modal-content {
-      transform: scale(1);
+
+    .modal-content {
+      background: #181820;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
     }
-    
+
     .modal-title {
+      margin: 0;
       color: #fff;
-      font-size: 16px;
-      font-weight: 800;
-      margin: 0 0 16px 0;
-      letter-spacing: -0.01em;
+      font-size: 15px;
+      font-weight: 700;
     }
-    
+
     .modal-input {
       width: 100%;
-      box-sizing: border-box;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 11px 14px;
+      background: #0f0f14;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 12px;
       color: #fff;
       font-size: 13px;
-      margin-bottom: 12px;
+      box-sizing: border-box;
       outline: none;
-      font-family: inherit;
     }
-    
+
     .modal-input:focus {
       border-color: #7c5cff;
     }
-    
+
     .modal-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
+      margin-top: 4px;
     }
-    
+
     .modal-btn {
-      padding: 10px 20px;
-      border-radius: 9999px;
-      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       border: none;
       outline: none;
       font-family: inherit;
     }
-    
+
     .modal-btn-cancel {
       background: rgba(255,255,255,0.08);
       color: #fff;
     }
-    
+
     .modal-btn-submit {
       background: #7c5cff;
       color: #fff;
@@ -345,30 +325,33 @@
       <div class="expression-card">
         <h2 id="expTitle" class="expression-title">Active Expression</h2>
         <p id="expCaption" class="expression-caption">Initializing AR overlay…</p>
+        <div id="expVibe" class="expression-vibe-badge">CALM</div>
       </div>
-      <a href="/feed" class="btn-close">✕</a>
+      <a href="/feed" class="close-btn" title="Back to Feed">✕</a>
     </div>
     
     <div class="ui-bottom">
-      <!-- Scrolling comments feed -->
-      <div id="commentsFeed" class="comments-panel">
-        <p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">Loading updates…</p>
+      <!-- Live Comments Feed -->
+      <div class="comments-drawer">
+        <div id="commentsList" class="comments-list">
+          <div class="comment-item"><span class="comment-author">System</span>Point camera at the AR corner tag</div>
+        </div>
       </div>
       
-      <!-- Interactive Sidebar Buttons -->
-      <div class="reaction-panel">
-        <div class="reaction-wrapper">
-          <button onclick="handleLike()" class="glass-btn">❤️</button>
-          <div id="likeCount" class="count-badge">0</div>
-        </div>
-        <div class="reaction-wrapper">
-          <button onclick="handleWave()" class="glass-btn">👋</button>
-          <div id="waveCount" class="count-badge">0</div>
-        </div>
-        <div class="reaction-wrapper">
-          <button onclick="openCommentModal()" class="glass-btn">💬</button>
-          <div class="count-badge">Reply</div>
-        </div>
+      <!-- Interactive Action Buttons -->
+      <div class="action-sidebar">
+        <button id="likeBtn" class="action-btn" onclick="handleLike(event)">
+          <span class="action-icon">❤️</span>
+          <span id="likeCount" class="action-count">0</span>
+        </button>
+        <button id="greetBtn" class="action-btn" onclick="handleGreet(event)">
+          <span class="action-icon">👋</span>
+          <span id="greetCount" class="action-count">0</span>
+        </button>
+        <button class="action-btn" onclick="openCommentModal(event)">
+          <span class="action-icon">💬</span>
+          <span style="font-size: 8px; color: #8888a0; position: absolute; bottom: -16px;">Reply</span>
+        </button>
       </div>
     </div>
   </div>
@@ -393,20 +376,9 @@
     const overlayUrl = params.get('overlay');
     const mood = (params.get('mood') || 'calm').toLowerCase();
     const caption = params.get('caption');
-    
-    // Extract template name from overlayUrl to set the NFT URL
-    let templateName = 'tree-birds';
-    if (overlayUrl) {
-      const match = overlayUrl.match(/\/overlays\/([^.]+)\./);
-      if (match && match[1]) {
-        templateName = match[1];
-      }
-    }
-    const absoluteNftUrl = window.location.origin + '/data/nft/' + templateName;
-    console.log('Synchronous NFT descriptor URL:', absoluteNftUrl);
   </script>
 
-  <!-- A-Frame WebAR Scene -->
+  <!-- A-Frame WebAR Scene with High-Speed Pattern Marker -->
   <a-scene 
     vr-mode-ui="enabled: false;"
     renderer="alpha: true; antialias: true;"
@@ -417,11 +389,9 @@
       <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
 
-    <!-- Markerless Image Tracking Target (Natural Feature Tracking) -->
-    <script>
-      document.write('<a-nft id="nftTrigger" type="nft" url="' + absoluteNftUrl + '" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">');
-    </script>
-      <a-entity position="100 150 0" scale="150 150 150">
+    <!-- Instant Pattern Marker (Tracks corner Hiro Tag, offsets 3D overlay directly over the tree) -->
+    <a-marker preset="hiro" id="nftTrigger">
+      <a-entity position="-1.2 0.2 -0.8" scale="1.8 1.8 1.8">
         <!-- Grounding Shadow -->
         <a-circle position="0 0.01 0" rotation="-90 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
 
@@ -434,14 +404,13 @@
         <!-- Sub-Asset Layer 2 -->
         <a-plane id="bird2Nft" position="-0.3 0.35 0.15" rotation="-75 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85"></a-plane>
       </a-entity>
-    </a-nft>
+    </a-marker>
     
     <a-entity camera></a-entity>
   </a-scene>
 
   <!-- Script Logic -->
   <script>
-
     function injectAnimations() {
       const mainPlaneNft = document.getElementById('mainOverlayNft');
       const b1Nft = document.getElementById('bird1Nft');
