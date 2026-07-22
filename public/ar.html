@@ -402,18 +402,18 @@
 
     <!-- MindAR Image Target 0 (Tracks original clean tree image directly) -->
     <a-entity mindar-image-target="targetIndex: 0" id="nftTrigger">
-      <a-entity position="0 0 0" scale="1 1 1">
+      <a-entity position="0 0 0.05" scale="1 1 1">
         <!-- Grounding Shadow -->
-        <a-circle position="0 0.01 0" rotation="-90 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
+        <a-circle position="0 0 0.01" rotation="0 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
 
         <!-- Main Expression Overlay -->
-        <a-plane id="mainOverlayNft" position="0 0.2 0" rotation="-75 0 0" width="1.2" height="1.2" material="shader: flat; src: #overlayTex; transparent: true;"></a-plane>
+        <a-plane id="mainOverlayNft" position="0 0 0.05" rotation="0 0 0" width="1.2" height="1.2" material="shader: flat; src: #overlayTex; transparent: true;"></a-plane>
         
         <!-- Sub-Asset Layer 1 -->
-        <a-plane id="bird1Nft" position="0.35 0.45 -0.15" rotation="-75 0 0" width="0.3" height="0.24" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9"></a-plane>
+        <a-plane id="bird1Nft" position="0.35 0.35 0.1" rotation="0 0 0" width="0.3" height="0.24" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9"></a-plane>
         
         <!-- Sub-Asset Layer 2 -->
-        <a-plane id="bird2Nft" position="-0.3 0.35 0.15" rotation="-75 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85"></a-plane>
+        <a-plane id="bird2Nft" position="-0.3 0.25 0.1" rotation="0 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85"></a-plane>
       </a-entity>
     </a-entity>
   </a-scene>
@@ -430,41 +430,41 @@
         
         if (mood === 'playful') {
           // Playful: Bouncy float, elastic scale pulse, and wobbly rotation
-          p.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.45 0; dir: alternate; dur: 1500; loop: true; easing: easeInOutQuad');
-          p.setAttribute('animation__rotate', 'property: rotation; from: -75 -12 0; to: -75 12 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__float', 'property: position; from: 0 0 0.05; to: 0 0.1 0.15; dir: alternate; dur: 1500; loop: true; easing: easeInOutQuad');
+          p.setAttribute('animation__rotate', 'property: rotation; from: 0 0 -12; to: 0 0 12; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
           p.setAttribute('animation__scale', 'property: scale; from: 1 1 1; to: 1.1 1.1 1.1; dir: alternate; dur: 750; loop: true; easing: easeInOutSine');
           
-          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.52 0.62 -0.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
-          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.45 0.5 0.15; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine');
+          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.35 0.1; to: 0.5 0.48 0.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
+          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.25 0.1; to: -0.42 0.38 0.15; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine');
         } else if (mood === 'happy') {
           // Happy: High-frequency scaling (breathing) and energetic float
-          p.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.4 0; dir: alternate; dur: 1800; loop: true; easing: easeInOutQuad');
+          p.setAttribute('animation__float', 'property: position; from: 0 0 0.05; to: 0 0.08 0.12; dir: alternate; dur: 1800; loop: true; easing: easeInOutQuad');
           p.setAttribute('animation__scale', 'property: scale; from: 0.95 0.95 0.95; to: 1.15 1.15 1.15; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine');
-          p.setAttribute('animation__rotate', 'property: rotation; from: -75 0 -4; to: -75 0 4; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__rotate', 'property: rotation; from: 0 0 -6; to: 0 0 6; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
           
-          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.5 0.6 -0.15; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
-          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.42 0.5 0.15; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
+          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.35 0.1; to: 0.48 0.45 0.15; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine');
+          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.25 0.1; to: -0.4 0.35 0.15; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine');
         } else if (mood === 'inspired') {
           // Inspired: Twist/yaw and vertical float
-          p.setAttribute('animation__float', 'property: position; from: 0 0.15 0; to: 0 0.35 0; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
-          p.setAttribute('animation__rotate', 'property: rotation; from: -78 -8 5; to: -68 8 -5; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__float', 'property: position; from: 0 0 0.05; to: 0 0.1 0.12; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__rotate', 'property: rotation; from: 0 0 -8; to: 0 0 8; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
           
-          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.46 0.58 -0.15; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine');
-          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.38 0.48 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
+          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.35 0.1; to: 0.45 0.45 0.15; dir: alternate; dur: 2800; loop: true; easing: easeInOutSine');
+          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.25 0.1; to: -0.38 0.35 0.15; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
         } else if (mood === 'peaceful' || mood === 'calm' || mood === 'relaxed') {
           // Peaceful: Very slow, gentle drift
-          p.setAttribute('animation__float', 'property: position; from: 0 0.18 0; to: 0 0.28 0; dir: alternate; dur: 5500; loop: true; easing: easeInOutSine');
-          p.setAttribute('animation__rotate', 'property: rotation; from: -76 -2 1; to: -72 2 -1; dir: alternate; dur: 4800; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__float', 'property: position; from: 0 0 0.05; to: 0 0.05 0.1; dir: alternate; dur: 5500; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__rotate', 'property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 4800; loop: true; easing: easeInOutSine');
           
-          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.45 0.52 -0.15; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
-          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.36 0.42 0.15; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
+          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.35 0.1; to: 0.42 0.4 0.12; dir: alternate; dur: 3800; loop: true; easing: easeInOutSine');
+          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.25 0.1; to: -0.35 0.3 0.12; dir: alternate; dur: 4200; loop: true; easing: easeInOutSine');
         } else {
           // Default: Steady gentle floating
-          p.setAttribute('animation__float', 'property: position; from: 0 0.2 0; to: 0 0.35 0; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine');
-          p.setAttribute('animation__rotate', 'property: rotation; from: -75 -4 2; to: -70 4 -2; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__float', 'property: position; from: 0 0 0.05; to: 0 0.08 0.12; dir: alternate; dur: 3200; loop: true; easing: easeInOutSine');
+          p.setAttribute('animation__rotate', 'property: rotation; from: 0 0 -4; to: 0 0 4; dir: alternate; dur: 3000; loop: true; easing: easeInOutSine');
           
-          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.45 -0.15; to: 0.48 0.58 -0.15; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine');
-          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.35 0.15; to: -0.4 0.48 0.15; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine');
+          b_1.setAttribute('animation__drift1', 'property: position; from: 0.35 0.35 0.1; to: 0.45 0.45 0.15; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine');
+          b_2.setAttribute('animation__drift2', 'property: position; from: -0.3 0.25 0.1; to: -0.38 0.35 0.15; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine');
         }
       };
 
@@ -478,6 +478,20 @@
         setTimeout(() => { loader.style.display = 'none'; }, 500);
       }
     };
+
+    const targetEntity = document.getElementById('nftTrigger');
+    if (targetEntity) {
+      targetEntity.addEventListener('targetFound', () => {
+        console.log('MindAR Target Found!');
+        const captionEl = document.getElementById('expCaption');
+        if (captionEl) captionEl.textContent = '✨ AR Overlay Active!';
+      });
+      targetEntity.addEventListener('targetLost', () => {
+        console.log('MindAR Target Lost!');
+        const captionEl = document.getElementById('expCaption');
+        if (captionEl) captionEl.textContent = `Vibe: ${mood.toUpperCase()}`;
+      });
+    }
 
     const scene = document.querySelector('a-scene');
     if (scene) {
