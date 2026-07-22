@@ -386,6 +386,26 @@
     </div>
   </div>
 
+  <!-- Pre-calculate URL parameters before scene parsing -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const overlayUrl = params.get('overlay');
+    const mood = (params.get('mood') || 'calm').toLowerCase();
+    const caption = params.get('caption');
+    
+    // Extract template name from overlayUrl to set the NFT URL
+    let templateName = 'tree-birds';
+    if (overlayUrl) {
+      const match = overlayUrl.match(/\/overlays\/([^.]+)\./);
+      if (match && match[1]) {
+        templateName = match[1];
+      }
+    }
+    const absoluteNftUrl = window.location.origin + '/data/nft/' + templateName;
+    console.log('Synchronous NFT descriptor URL:', absoluteNftUrl);
+  </script>
+
   <!-- A-Frame WebAR Scene -->
   <a-scene 
     vr-mode-ui="enabled: false;"
@@ -398,15 +418,9 @@
     </a-assets>
 
     <!-- Markerless Image Tracking Target (Natural Feature Tracking) -->
-    <a-nft
-      id="nftTrigger"
-      type="nft"
-      url="/data/nft/tree-birds"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
+    <script>
+      document.write('<a-nft id="nftTrigger" type="nft" url="' + absoluteNftUrl + '" smooth="true" smoothCount="10" smoothTolerance=".01" smoothThreshold="5">');
+    </script>
       <a-entity position="100 150 0" scale="150 150 150">
         <!-- Grounding Shadow -->
         <a-circle position="0 0.01 0" rotation="-90 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
@@ -427,28 +441,6 @@
 
   <!-- Script Logic -->
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const overlayUrl = params.get('overlay');
-    const mood = (params.get('mood') || 'calm').toLowerCase();
-    const caption = params.get('caption');
-    
-    // Extract template name from overlayUrl to set the NFT URL
-    let templateName = 'tree-birds';
-    if (overlayUrl) {
-      const match = overlayUrl.match(/\/overlays\/([^.]+)\./);
-      if (match && match[1]) {
-        templateName = match[1];
-      }
-    }
-    
-    // Set dynamic URL on the a-nft element immediately using fully qualified absolute path
-    const nftTrigger = document.getElementById('nftTrigger');
-    if (nftTrigger) {
-      const absoluteUrl = window.location.origin + '/data/nft/' + templateName;
-      console.log('Setting absolute NFT descriptor URL:', absoluteUrl);
-      nftTrigger.setAttribute('url', absoluteUrl);
-    }
 
     function injectAnimations() {
       const mainPlaneNft = document.getElementById('mainOverlayNft');
