@@ -328,6 +328,11 @@
       background: #7c5cff;
       color: #fff;
     }
+
+    /* Force WebGL canvas transparency to expose camera stream underneath */
+    a-scene, canvas.a-canvas {
+      background: transparent !important;
+    }
   </style>
 </head>
 <body>
@@ -384,6 +389,7 @@
   <!-- A-Frame WebAR Scene -->
   <a-scene 
     vr-mode-ui="enabled: false;"
+    renderer="alpha: true; antialias: true;"
     embedded 
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
     <a-assets>
