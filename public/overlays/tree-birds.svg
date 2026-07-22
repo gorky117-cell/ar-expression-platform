@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <!-- Solid Dark Theme Background -->
+  <!-- Solid Dark Background -->
   <rect width="400" height="400" fill="#121218"/>
 
-  <!-- Clean Original Tree Artwork (Centered) -->
-  <rect x="170" y="240" width="60" height="130" rx="4" fill="#5D4037"/>
+  <!-- Original Simple Tree Artwork -->
+  <rect x="170" y="240" width="60" height="130" fill="#5D4037"/>
   <ellipse cx="200" cy="160" rx="110" ry="130" fill="#2E7D32"/>
   <ellipse cx="200" cy="140" rx="90" ry="110" fill="#388E3C"/>
   <ellipse cx="200" cy="120" rx="70" ry="90" fill="#43A047"/>
@@ -17,7 +17,7 @@
   <path d="M140 110 Q150 100 160 110" stroke="#1a1a20" stroke-width="3" fill="none"/>
   <path d="M230 130 Q240 120 250 130" stroke="#1a1a20" stroke-width="3" fill="none"/>
 
-  <!-- Streetwear Corner AR Authenticator Tag (Mathematically Precise Hiro Marker) -->
+  <!-- Streetwear Corner AR Authenticator Tag (Hiro Marker) -->
   <g transform="translate(305, 305)">
     <!-- Outer Black Border -->
     <rect x="0" y="0" width="80" height="80" fill="#000000" rx="4"/>
