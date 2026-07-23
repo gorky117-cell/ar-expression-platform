@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
   <title>AR Social Expression — AR View</title>
 
-  <!-- A-Frame 1.4.2 -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- A-Frame 1.3.0 (Official Stable Pair for AR.js) -->
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 
-  <!-- AR.js Pattern Marker Engine (jsDelivr CDN) -->
+  <!-- AR.js Pattern Marker Engine -->
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
 
   <!-- Supabase JS Client via CDN -->
@@ -407,24 +407,17 @@
         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
 
-    <!-- Instant Corner Pattern Marker (Hiro tag in bottom-right corner) -->
+    <!-- Instant Official Hiro Pattern Marker -->
     <a-marker preset="hiro" id="nftTrigger">
-      <!-- 3D Animated Layers directly over Marker -->
-      <a-entity position="0 0 0">
-        <!-- Floating Ground Ring -->
-        <a-circle position="0 0 0.01" rotation="0 0 0" radius="0.5"
-          material="shader: flat; color: #7C5CFF; transparent: true; opacity: 0.5"></a-circle>
-        <!-- Floating Animated Bird 1 directly above tag -->
-        <a-plane id="bird1Nft" position="0 0.4 0.1" rotation="0 0 0" width="0.6" height="0.5"
-          material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
-      </a-entity>
+      <!-- Ground Glowing Energy Ring -->
+      <a-torus position="0 0 0" rotation="90 0 0" radius="0.6" radius-tubular="0.03" material="color: #7C5CFF; metalness: 0.8; roughness: 0.2" animation="property: rotation; to: 90 360 0; dur: 4000; loop: true; easing: linear"></a-torus>
 
-      <!-- 3D Animated Layers offset over Tree Artwork -->
-      <a-entity position="-1.5 0 0">
-        <!-- Floating Animated Bird 2 floating over tree -->
-        <a-plane id="bird2Nft" position="0 0.5 0.1" rotation="0 0 0" width="0.6" height="0.5"
-          material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
-      </a-entity>
+      <!-- Center Glowing 3D Gem Sphere -->
+      <a-sphere position="0 0.4 0" radius="0.25" material="color: #34d399; roughness: 0.1; metalness: 0.8; wireframe: false" animation="property: position; from: 0 0.3 0; to: 0 0.5 0; dir: alternate; dur: 1200; loop: true; easing: easeInOutSine"></a-sphere>
+
+      <!-- Floating 3D Animated Planes -->
+      <a-plane id="bird1Nft" position="0.5 0.5 0" rotation="0 0 0" width="0.5" height="0.4" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
+      <a-plane id="bird2Nft" position="-0.5 0.6 0" rotation="0 0 0" width="0.4" height="0.3" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
     </a-marker>
 
     <a-entity camera></a-entity>
