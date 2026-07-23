@@ -7,7 +7,7 @@ export default function Expression() {
   const [expr, setExpr] = useState(null)
   const [loading, setLoading] = useState(true)
   const [comment, setComment] = useState('')
-  const [viewMode, setViewMode] = useState('art')
+  const [viewMode, setViewMode] = useState('scan')
   const [voiceListening, setVoiceListening] = useState(false)
   const [voiceError, setVoiceError] = useState('')
 
