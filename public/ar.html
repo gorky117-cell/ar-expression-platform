@@ -8,8 +8,8 @@
   <!-- A-Frame 1.4.2 -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
-  <!-- AR.js Pattern Marker Engine -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <!-- AR.js Pattern Marker Engine (jsDelivr CDN) -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
   
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -399,8 +399,8 @@
       <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
 
-    <!-- Instant Corner Pattern Marker (Hiro tag in bottom-right corner) -->
-    <a-marker preset="hiro" id="nftTrigger">
+    <!-- Instant Corner Pattern Marker (Local Pattern File) -->
+    <a-marker type="pattern" url="/markers/hiro.patt" id="nftTrigger">
       <!-- 3D Animated Layers directly over Marker -->
       <a-entity position="0 0 0">
         <!-- Floating Ground Ring -->
