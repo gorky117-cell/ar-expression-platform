@@ -475,9 +475,10 @@
     // Dismiss loader after 1.5s
     setTimeout(hideLoader, 1500);
 
-    // Inject visual overlay immediately from query params
+    // Inject visual overlay if element exists
     if (overlayUrl) {
-      document.getElementById('overlayTex').src = overlayUrl;
+      const overlayEl = document.getElementById('overlayTex');
+      if (overlayEl) overlayEl.src = overlayUrl;
     }
 
     // Set static UI text immediately
