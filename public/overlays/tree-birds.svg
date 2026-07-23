@@ -17,20 +17,4 @@
   <path d="M120 90 Q130 80 140 90" stroke="#1a1a20" stroke-width="3" fill="none"/>
   <path d="M210 110 Q220 100 230 110" stroke="#1a1a20" stroke-width="3" fill="none"/>
 
-  <!-- Small Sleek Official Hiro Marker Tag in Bottom-Right Corner -->
-  <g transform="translate(290, 290)">
-    <!-- White outer border badge -->
-    <rect x="0" y="0" width="100" height="100" rx="8" fill="#FFFFFF"/>
-    <!-- Black Hiro Marker Outer Square -->
-    <rect x="10" y="10" width="80" height="80" fill="#000000"/>
-    <!-- White Inner Square -->
-    <rect x="30" y="30" width="40" height="40" fill="#FFFFFF"/>
-    <!-- Official Hiro Black Inner Symbol Matrix -->
-    <rect x="38" y="30" width="24" height="10" fill="#000000"/>
-    <rect x="30" y="40" width="10" height="20" fill="#000000"/>
-    <rect x="40" y="40" width="20" height="10" fill="#000000"/>
-    <rect x="60" y="50" width="10" height="20" fill="#000000"/>
-    <!-- Scan Label -->
-    <text x="50" y="-5" text-anchor="middle" fill="#A78BFA" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="1">SCAN AR</text>
-  </g>
 </svg>
