@@ -2,64 +2,25 @@
   <!-- Solid Dark Theme Background -->
   <rect width="400" height="400" fill="#121218"/>
 
-  <!-- Outer Decorative Geometric Frame (Integrated Artwork Element) -->
-  <rect x="20" y="20" width="360" height="360" rx="16" fill="none" stroke="#7C5CFF" stroke-width="3" stroke-dasharray="12 8" opacity="0.6"/>
-  <circle cx="20" cy="20" r="6" fill="#7C5CFF"/>
-  <circle cx="380" cy="20" r="6" fill="#7C5CFF"/>
-  <circle cx="20" cy="380" r="6" fill="#7C5CFF"/>
-  <circle cx="380" cy="380" r="6" fill="#7C5CFF"/>
+  <!-- Sleek Outer Poster Frame & Corner Keypoint Dots (Option 1) -->
+  <rect x="16" y="16" width="368" height="368" rx="12" fill="none" stroke="#7C5CFF" stroke-width="2.5" opacity="0.85"/>
+  <circle cx="16" cy="16" r="5" fill="#7C5CFF"/>
+  <circle cx="384" cy="16" r="5" fill="#7C5CFF"/>
+  <circle cx="16" cy="384" r="5" fill="#7C5CFF"/>
+  <circle cx="384" cy="384" r="5" fill="#7C5CFF"/>
 
-  <!-- Textured Tree Trunk with Wood Grain Lines -->
-  <rect x="170" y="230" width="60" height="140" fill="#5D4037" rx="6"/>
-  <path d="M185 240 L185 360 M200 240 L200 360 M215 240 L215 360" stroke="#3E2723" stroke-width="3" stroke-dasharray="6 4"/>
+  <!-- Pure Original Simple Tree Artwork -->
+  <rect x="170" y="240" width="60" height="130" fill="#5D4037"/>
+  <ellipse cx="200" cy="160" rx="110" ry="130" fill="#2E7D32"/>
+  <ellipse cx="200" cy="140" rx="90" ry="110" fill="#388E3C"/>
+  <ellipse cx="200" cy="120" rx="70" ry="90" fill="#43A047"/>
 
-  <!-- Main Multi-Layered Tree Canopy -->
-  <ellipse cx="200" cy="160" rx="120" ry="140" fill="#1B5E20"/>
-  <ellipse cx="200" cy="145" rx="100" ry="120" fill="#2E7D32"/>
-  <ellipse cx="200" cy="130" rx="80" ry="100" fill="#388E3C"/>
-  <ellipse cx="200" cy="110" rx="60" ry="75" fill="#43A047"/>
-
-  <!-- High-Contrast Branch Network (Provides 100+ Sharp Feature Keypoints) -->
-  <path d="M200 240 Q180 200 140 180 M200 220 Q220 180 260 160 M200 190 Q170 150 130 130 M200 170 Q230 130 270 110 M200 140 L200 80" stroke="#1A331E" stroke-width="5" stroke-linecap="round" fill="none"/>
-  
-  <!-- Detailed Leaf Clusters & Geometric Accents -->
-  <g fill="#34D399" opacity="0.95">
-    <!-- Left Branch Leaf Cluster -->
-    <circle cx="140" cy="180" r="14"/>
-    <circle cx="125" cy="170" r="10"/>
-    <circle cx="155" cy="175" r="10"/>
-    <!-- Right Branch Leaf Cluster -->
-    <circle cx="260" cy="160" r="14"/>
-    <circle cx="275" cy="150" r="10"/>
-    <circle cx="245" cy="155" r="10"/>
-    <!-- Upper Left Cluster -->
-    <circle cx="130" cy="130" r="14"/>
-    <circle cx="115" cy="120" r="10"/>
-    <!-- Upper Right Cluster -->
-    <circle cx="270" cy="110" r="14"/>
-    <circle cx="285" cy="100" r="10"/>
-    <!-- Top Crown Cluster -->
-    <circle cx="200" cy="75" r="16"/>
-    <circle cx="185" cy="65" r="11"/>
-    <circle cx="215" cy="65" r="11"/>
-  </g>
-
-  <!-- Decorative High-Contrast Geometric Starbursts & Constellation Dots -->
-  <g fill="#A78BFA">
-    <!-- Starburst 1 -->
-    <polygon points="80,80 84,70 94,66 84,62 80,52 76,62 66,66 76,70"/>
-    <!-- Starburst 2 -->
-    <polygon points="320,90 324,80 334,76 324,72 320,62 316,72 306,76 316,80"/>
-    <!-- Starburst 3 -->
-    <polygon points="70,300 73,292 81,289 73,286 70,278 67,286 59,289 67,292"/>
-    <!-- Starburst 4 -->
-    <polygon points="330,310 333,302 341,299 333,296 330,288 327,296 319,299 327,302"/>
-  </g>
+  <!-- 3 Accent Circles -->
+  <circle cx="150" cy="110" r="24" fill="#34d399" opacity="0.95"/>
+  <circle cx="240" cy="130" r="20" fill="#34d399" opacity="0.95"/>
+  <circle cx="190" cy="80" r="16" fill="#34d399" opacity="0.95"/>
 
   <!-- Eye-like curves -->
-  <path d="M165 140 Q175 130 185 140" stroke="#1A1A20" stroke-width="4" fill="none" stroke-linecap="round"/>
-  <path d="M215 140 Q225 130 235 140" stroke="#1A1A20" stroke-width="4" fill="none" stroke-linecap="round"/>
-
-  <!-- Title Text Label at Bottom -->
-  <text x="200" y="375" text-anchor="middle" fill="#A78BFA" font-family="sans-serif" font-size="12" font-weight="bold" letter-spacing="3">TREE OF ZEN • AR ACTIVE</text>
+  <path d="M140 110 Q150 100 160 110" stroke="#1a1a20" stroke-width="3" fill="none"/>
+  <path d="M230 130 Q240 120 250 130" stroke="#1a1a20" stroke-width="3" fill="none"/>
 </svg>
