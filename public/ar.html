@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
   <title>AR Social Expression — AR View</title>
-  
+
   <!-- A-Frame 1.4.2 -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  
+
   <!-- AR.js Pattern Marker Engine (jsDelivr CDN) -->
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
-  
+
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100vw;
@@ -24,9 +26,12 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #121218 !important;
     }
-    
+
     /* Full-viewport camera video & WebGL canvas setup (eliminates white bottom space on mobile) */
-    video, #arjs-video, canvas, .a-canvas {
+    video,
+    #arjs-video,
+    canvas,
+    .a-canvas {
       position: fixed !important;
       top: 0 !important;
       left: 0 !important;
@@ -58,7 +63,7 @@
       font-weight: 500;
       letter-spacing: 0.05em;
     }
-    
+
     /* Glassmorphism Floating UI */
     .glass-ui {
       position: fixed;
@@ -74,7 +79,7 @@
       box-sizing: border-box;
       padding: 16px 20px;
     }
-    
+
     .ui-top {
       display: flex;
       justify-content: space-between;
@@ -82,7 +87,7 @@
       pointer-events: none;
       width: 100%;
     }
-    
+
     /* Floating Title Card */
     .expression-card {
       pointer-events: auto;
@@ -92,10 +97,10 @@
       -webkit-backdrop-filter: blur(20px);
       border-radius: 16px;
       padding: 10px 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       max-width: 70%;
     }
-    
+
     .expression-title {
       color: #fff;
       font-size: 14px;
@@ -103,13 +108,13 @@
       margin: 0;
       letter-spacing: -0.01em;
     }
-    
+
     .expression-caption {
       color: #8888a0;
       font-size: 11px;
       margin: 2px 0 0 0;
     }
-    
+
     .expression-vibe-badge {
       display: inline-block;
       margin-top: 6px;
@@ -140,9 +145,9 @@
       cursor: pointer;
       text-decoration: none;
       font-size: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
-    
+
     .ui-bottom {
       display: flex;
       justify-content: space-between;
@@ -150,7 +155,7 @@
       width: 100%;
       pointer-events: none;
     }
-    
+
     /* Comments Feed Drawer */
     .comments-drawer {
       pointer-events: auto;
@@ -165,7 +170,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
     .comments-list {
@@ -183,12 +188,13 @@
       color: #e2e8f0;
       word-break: break-word;
     }
+
     .comment-author {
       font-weight: 700;
       color: #a78bfa;
       margin-right: 4px;
     }
-    
+
     /* Social Action Sidebar */
     .action-sidebar {
       pointer-events: auto;
@@ -197,7 +203,7 @@
       gap: 12px;
       align-items: center;
     }
-    
+
     .action-btn {
       width: 44px;
       height: 44px;
@@ -212,7 +218,7 @@
       justify-content: center;
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transition: transform 0.15s ease, background 0.15s ease;
       position: relative;
     }
@@ -225,11 +231,11 @@
       background: rgba(239, 68, 68, 0.25);
       border-color: rgba(239, 68, 68, 0.5);
     }
-    
+
     .action-icon {
       font-size: 18px;
     }
-    
+
     .action-count {
       font-size: 9px;
       font-weight: 700;
@@ -265,7 +271,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
     }
 
     .modal-title {
@@ -310,7 +316,7 @@
     }
 
     .modal-btn-cancel {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
     }
 
@@ -320,11 +326,13 @@
     }
 
     /* Force WebGL canvas transparency to expose camera stream underneath */
-    a-scene, canvas {
+    a-scene,
+    canvas {
       background: transparent !important;
     }
   </style>
 </head>
+
 <body>
   <div id="loader" class="arjs-loader">
     <div>Loading AR experience...</div>
@@ -339,7 +347,7 @@
       </div>
       <a href="/feed" class="close-btn" title="Back to Feed">✕</a>
     </div>
-    
+
     <div class="ui-bottom">
       <!-- Live Comments Feed -->
       <div class="comments-drawer">
@@ -347,7 +355,7 @@
           <div class="comment-item"><span class="comment-author">System</span>Point camera at the AR corner tag</div>
         </div>
       </div>
-      
+
       <!-- Interactive Action Buttons -->
       <div class="action-sidebar">
         <button id="likeBtn" class="action-btn" onclick="handleLike(event)">
@@ -370,8 +378,10 @@
   <div id="commentModal" class="modal-overlay" onclick="closeCommentModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <h3 class="modal-title">Leave a Comment</h3>
-      <input type="text" id="commentAuthorInput" class="modal-input" placeholder="Your name (optional)" maxlength="20" />
-      <textarea id="commentTextInput" class="modal-input" placeholder="Type your message..." rows="3" maxlength="120" style="resize:none;"></textarea>
+      <input type="text" id="commentAuthorInput" class="modal-input" placeholder="Your name (optional)"
+        maxlength="20" />
+      <textarea id="commentTextInput" class="modal-input" placeholder="Type your message..." rows="3" maxlength="120"
+        style="resize:none;"></textarea>
       <div class="modal-actions">
         <button onclick="closeCommentModal()" class="modal-btn modal-btn-cancel">Cancel</button>
         <button id="submitCommentBtn" onclick="submitComment()" class="modal-btn modal-btn-submit">Post</button>
@@ -389,14 +399,12 @@
   </script>
 
   <!-- A-Frame WebAR Scene with High-Speed Corner Pattern Marker -->
-  <a-scene 
-    vr-mode-ui="enabled: false;"
-    renderer="alpha: true; antialias: true;"
-    embedded 
+  <a-scene vr-mode-ui="enabled: false;" renderer="alpha: true; antialias: true;" embedded
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-    
+
     <a-assets>
-      <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+      <img id="birdTex"
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
 
     <!-- Instant Corner Pattern Marker (Hiro tag in bottom-right corner) -->
@@ -404,18 +412,21 @@
       <!-- 3D Animated Layers directly over Marker -->
       <a-entity position="0 0 0">
         <!-- Floating Ground Ring -->
-        <a-circle position="0 0 0.01" rotation="0 0 0" radius="0.5" material="shader: flat; color: #7C5CFF; transparent: true; opacity: 0.5"></a-circle>
+        <a-circle position="0 0 0.01" rotation="0 0 0" radius="0.5"
+          material="shader: flat; color: #7C5CFF; transparent: true; opacity: 0.5"></a-circle>
         <!-- Floating Animated Bird 1 directly above tag -->
-        <a-plane id="bird1Nft" position="0 0.4 0.1" rotation="0 0 0" width="0.6" height="0.5" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane id="bird1Nft" position="0 0.4 0.1" rotation="0 0 0" width="0.6" height="0.5"
+          material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
       <!-- 3D Animated Layers offset over Tree Artwork -->
       <a-entity position="-1.5 0 0">
         <!-- Floating Animated Bird 2 floating over tree -->
-        <a-plane id="bird2Nft" position="0 0.5 0.1" rotation="0 0 0" width="0.6" height="0.5" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane id="bird2Nft" position="0 0.5 0.1" rotation="0 0 0" width="0.6" height="0.5"
+          material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
     </a-marker>
-    
+
     <a-entity camera></a-entity>
   </a-scene>
 
@@ -468,11 +479,11 @@
     if (overlayUrl) {
       document.getElementById('overlayTex').src = overlayUrl;
     }
-    
+
     // Set static UI text immediately
     const titleEl = document.getElementById('expTitle');
     const captionEl = document.getElementById('expCaption');
-    
+
     if (caption) {
       captionEl.textContent = `"${decodeURIComponent(caption)}"`;
     } else {
@@ -488,14 +499,14 @@
         const config = await res.json();
         if (config.supabaseUrl && config.supabaseKey) {
           supabaseClient = supabase.createClient(config.supabaseUrl, config.supabaseKey);
-          
+
           if (id) {
             // Load custom expression name if DB connected
             const { data: expr } = await supabaseClient.from('expressions').select('name').eq('id', id).single();
             if (expr && expr.name) {
               titleEl.textContent = expr.name;
             }
-            
+
             // Poll comments and reactions
             pollData();
             setInterval(pollData, 3000);
@@ -522,19 +533,19 @@
           .from('reactions')
           .select('*')
           .eq('expression_id', id);
-        
+
         if (error) throw error;
-        
+
         const likes = reactions.filter(r => r.kind === 'like').length;
         const greetings = reactions.filter(r => r.kind === 'greeting').length;
         const comments = reactions.filter(r => r.kind === 'comment')
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        
+
         const likeEl = document.getElementById('likeCount');
         const greetEl = document.getElementById('greetCount');
         if (likeEl) likeEl.textContent = likes;
         if (greetEl) greetEl.textContent = greetings;
-        
+
         const feed = document.getElementById('commentsFeed');
         if (comments.length === 0) {
           feed.innerHTML = '<p style="color:#7a7f90; font-size:11px; margin:0; font-style:italic;">No comments yet. Be the first!</p>';
@@ -589,7 +600,7 @@
       const author = document.getElementById('commentAuthorInput').value.trim() || 'Viewer';
       const text = document.getElementById('commentTextInput').value.trim();
       if (!text) return;
-      
+
       if (!supabaseClient || !id) return;
       try {
         const btn = document.getElementById('submitCommentBtn');
@@ -602,7 +613,7 @@
           author,
           text
         });
-        
+
         closeCommentModal();
         document.getElementById('commentTextInput').value = '';
         btn.disabled = false;
@@ -621,4 +632,5 @@
     initSupabase();
   </script>
 </body>
+
 </html>
