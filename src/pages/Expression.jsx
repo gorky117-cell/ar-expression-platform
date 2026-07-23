@@ -168,7 +168,7 @@ export default function Expression() {
               borderRadius: 16,
               background: '#15151e',
               border: '1px solid rgba(255, 255, 255, 0.05)',
-              backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
+              backgroundImage: expr.overlayImage ? `url(${expr.overlayImage}?v=${Date.now()})` : undefined,
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
