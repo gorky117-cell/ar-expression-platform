@@ -409,15 +409,17 @@
 
     <!-- Instant Official Hiro Pattern Marker -->
     <a-marker preset="hiro" id="nftTrigger">
-      <!-- Ground Glowing Energy Ring -->
-      <a-torus position="0 0 0" rotation="90 0 0" radius="0.6" radius-tubular="0.03" material="color: #7C5CFF; metalness: 0.8; roughness: 0.2" animation="property: rotation; to: 90 360 0; dur: 4000; loop: true; easing: linear"></a-torus>
+      <!-- Ground Glowing Purple Energy Ring -->
+      <a-torus position="0 0 0" rotation="90 0 0" radius="0.8" radius-tubular="0.04" material="color: #7C5CFF; metalness: 0.8; roughness: 0.2" animation="property: rotation; to: 90 360 0; dur: 3500; loop: true; easing: linear"></a-torus>
 
-      <!-- Center Glowing 3D Gem Sphere -->
-      <a-sphere position="0 0.4 0" radius="0.25" material="color: #34d399; roughness: 0.1; metalness: 0.8; wireframe: false" animation="property: position; from: 0 0.3 0; to: 0 0.5 0; dir: alternate; dur: 1200; loop: true; easing: easeInOutSine"></a-sphere>
+      <!-- Glowing Green 3D Gem Sphere -->
+      <a-sphere position="0 0.3 0" radius="0.35" material="color: #34d399; roughness: 0.1; metalness: 0.8" animation="property: position; from: 0 0.2 0; to: 0 0.45 0; dir: alternate; dur: 1400; loop: true; easing: easeInOutSine"></a-sphere>
 
-      <!-- Floating 3D Animated Planes -->
-      <a-plane id="bird1Nft" position="0.5 0.5 0" rotation="0 0 0" width="0.5" height="0.4" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
-      <a-plane id="bird2Nft" position="-0.5 0.6 0" rotation="0 0 0" width="0.4" height="0.3" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
+      <!-- Center Large Floating 3D Animated Bird 1 -->
+      <a-plane id="bird1Nft" position="0 0.7 0.1" rotation="0 0 0" width="1.2" height="0.9" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.98"></a-plane>
+      
+      <!-- Center Upper Floating 3D Animated Bird 2 -->
+      <a-plane id="bird2Nft" position="0 1.2 0.2" rotation="0 0 0" width="0.9" height="0.7" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.95"></a-plane>
     </a-marker>
 
     <a-entity camera></a-entity>
