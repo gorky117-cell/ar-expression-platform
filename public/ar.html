@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
   <title>AR Social Expression — AR View</title>
   
-  <!-- A-Frame 1.5.0 -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- A-Frame 1.4.2 -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   
-  <!-- MindAR Image Tracking Engine -->
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <!-- AR.js Pattern Marker Engine -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   
   <!-- Supabase JS Client via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,10 +19,13 @@
       margin: 0;
       overflow: hidden;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #121218 !important;
     }
     
-    /* Digital zoom scale trick to increase AR scanning range */
-    video, canvas {
+    /* Digital zoom scale trick to increase AR scanning range by 30% */
+    video, #arjs-video {
+      transform: scale(1.3) !important;
+      transform-origin: center !important;
       object-fit: cover !important;
     }
 
@@ -317,7 +320,7 @@
 </head>
 <body>
   <div id="loader" class="arjs-loader">
-    <div>Initializing MindAR engine...</div>
+    <div>Loading AR experience...</div>
   </div>
   <!-- Overlay Controls (on top of Camera) -->
   <div class="glass-ui">
@@ -334,7 +337,7 @@
       <!-- Live Comments Feed -->
       <div class="comments-drawer">
         <div id="commentsList" class="comments-list">
-          <div class="comment-item"><span class="comment-author">System</span>Point camera at the original tree print</div>
+          <div class="comment-item"><span class="comment-author">System</span>Point camera at the AR corner tag</div>
         </div>
       </div>
       
@@ -376,46 +379,38 @@
     const overlayUrl = params.get('overlay');
     const mood = (params.get('mood') || 'calm').toLowerCase();
     const caption = params.get('caption');
-    
-    let templateName = 'tree-birds';
-    if (overlayUrl) {
-      const match = overlayUrl.match(/\/overlays\/([^.]+)\./);
-      if (match && match[1]) templateName = match[1];
-    }
-    const targetMindUrl = '/data/targets/' + templateName + '.mind';
   </script>
 
-  <!-- A-Frame WebAR Scene with MindAR Machine-Learning Tracking -->
+  <!-- A-Frame WebAR Scene with High-Speed Corner Pattern Marker (Option 2) -->
   <a-scene 
-    mindar-image="imageTargetSrc: /data/targets/tree-birds.mind; autoStart: true; uiLoading: no; uiError: no; uiScanning: no;"
     vr-mode-ui="enabled: false;"
-    device-orientation-permission-ui="enabled: false;"
     renderer="alpha: true; antialias: true;"
-    embedded>
+    embedded 
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
     
     <a-assets>
       <img id="overlayTex" src="overlays/tree-birds.svg">
       <img id="birdTex" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2334d399' opacity='0.9'/%3E%3Cellipse cx='32' cy='28' rx='8' ry='10' fill='%23fff'/%3E%3Cpath d='M20 32 Q32 24 44 32' stroke='%231a1a20' stroke-width='2' fill='none'/%3E%3C/svg%3E">
     </a-assets>
 
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-    <!-- MindAR Image Target 0 (Tracks original clean tree image directly) -->
-    <a-entity mindar-image-target="targetIndex: 0" id="nftTrigger">
-      <a-entity position="0 0 0.05" scale="1 1 1">
+    <!-- Instant Corner Pattern Marker (Option 2: Hiro tag in bottom right corner, offset overlay directly over tree) -->
+    <a-marker preset="hiro" id="nftTrigger">
+      <a-entity position="-1.2 0.2 -0.8" scale="1.8 1.8 1.8">
         <!-- Grounding Shadow -->
-        <a-circle position="0 0 0.01" rotation="0 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
+        <a-circle position="0 0.01 0" rotation="-90 0 0" radius="0.6" material="shader: flat; color: #000000; transparent: true; opacity: 0.3"></a-circle>
 
         <!-- Main Expression Overlay -->
-        <a-plane id="mainOverlayNft" position="0 0 0.05" rotation="0 0 0" width="1.2" height="1.2" material="shader: flat; src: #overlayTex; transparent: true;"></a-plane>
+        <a-plane id="mainOverlayNft" position="0 0.2 0" rotation="-75 0 0" width="1.2" height="1.2" material="shader: flat; src: #overlayTex; transparent: true;"></a-plane>
         
         <!-- Sub-Asset Layer 1 -->
-        <a-plane id="bird1Nft" position="0.35 0.35 0.1" rotation="0 0 0" width="0.3" height="0.24" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9"></a-plane>
+        <a-plane id="bird1Nft" position="0.35 0.45 -0.15" rotation="-75 0 0" width="0.3" height="0.24" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.9"></a-plane>
         
         <!-- Sub-Asset Layer 2 -->
-        <a-plane id="bird2Nft" position="-0.3 0.25 0.1" rotation="0 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85"></a-plane>
+        <a-plane id="bird2Nft" position="-0.3 0.35 0.15" rotation="-75 0 0" width="0.22" height="0.16" material="shader: flat; src: #birdTex; transparent: true; opacity: 0.85"></a-plane>
       </a-entity>
-    </a-entity>
+    </a-marker>
+    
+    <a-entity camera></a-entity>
   </a-scene>
 
   <!-- Script Logic -->
@@ -481,13 +476,13 @@
 
     const targetEntity = document.getElementById('nftTrigger');
     if (targetEntity) {
-      targetEntity.addEventListener('targetFound', () => {
-        console.log('MindAR Target Found!');
+      targetEntity.addEventListener('markerFound', () => {
+        console.log('Marker Found!');
         const captionEl = document.getElementById('expCaption');
         if (captionEl) captionEl.textContent = '✨ AR Overlay Active!';
       });
-      targetEntity.addEventListener('targetLost', () => {
-        console.log('MindAR Target Lost!');
+      targetEntity.addEventListener('markerLost', () => {
+        console.log('Marker Lost!');
         const captionEl = document.getElementById('expCaption');
         if (captionEl) captionEl.textContent = `Vibe: ${mood.toUpperCase()}`;
       });
@@ -495,15 +490,14 @@
 
     const scene = document.querySelector('a-scene');
     if (scene) {
-      scene.addEventListener('arReady', hideLoader);
       scene.addEventListener('loaded', () => {
         injectAnimations();
-        setTimeout(hideLoader, 1000);
+        setTimeout(hideLoader, 500);
       });
     }
 
-    // Safety fallback: dismiss loader after 2.5s so user is never stuck
-    setTimeout(hideLoader, 2500);
+    // Dismiss loader after 1.5s
+    setTimeout(hideLoader, 1500);
 
     // Inject visual overlay immediately from query params
     if (overlayUrl) {

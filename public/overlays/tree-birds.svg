@@ -2,25 +2,33 @@
   <!-- Solid Dark Theme Background -->
   <rect width="400" height="400" fill="#121218"/>
 
-  <!-- Sleek Outer Poster Frame & Corner Keypoint Dots (Option 1) -->
-  <rect x="16" y="16" width="368" height="368" rx="12" fill="none" stroke="#7C5CFF" stroke-width="2.5" opacity="0.85"/>
-  <circle cx="16" cy="16" r="5" fill="#7C5CFF"/>
-  <circle cx="384" cy="16" r="5" fill="#7C5CFF"/>
-  <circle cx="16" cy="384" r="5" fill="#7C5CFF"/>
-  <circle cx="384" cy="384" r="5" fill="#7C5CFF"/>
-
   <!-- Pure Original Simple Tree Artwork -->
-  <rect x="170" y="240" width="60" height="130" fill="#5D4037"/>
-  <ellipse cx="200" cy="160" rx="110" ry="130" fill="#2E7D32"/>
-  <ellipse cx="200" cy="140" rx="90" ry="110" fill="#388E3C"/>
-  <ellipse cx="200" cy="120" rx="70" ry="90" fill="#43A047"/>
+  <rect x="150" y="220" width="60" height="130" fill="#5D4037"/>
+  <ellipse cx="180" cy="140" rx="110" ry="130" fill="#2E7D32"/>
+  <ellipse cx="180" cy="120" rx="90" ry="110" fill="#388E3C"/>
+  <ellipse cx="180" cy="100" rx="70" ry="90" fill="#43A047"/>
 
   <!-- 3 Accent Circles -->
-  <circle cx="150" cy="110" r="24" fill="#34d399" opacity="0.95"/>
-  <circle cx="240" cy="130" r="20" fill="#34d399" opacity="0.95"/>
-  <circle cx="190" cy="80" r="16" fill="#34d399" opacity="0.95"/>
+  <circle cx="130" cy="90" r="24" fill="#34d399" opacity="0.95"/>
+  <circle cx="220" cy="110" r="20" fill="#34d399" opacity="0.95"/>
+  <circle cx="170" cy="60" r="16" fill="#34d399" opacity="0.95"/>
 
   <!-- Eye-like curves -->
-  <path d="M140 110 Q150 100 160 110" stroke="#1a1a20" stroke-width="3" fill="none"/>
-  <path d="M230 130 Q240 120 250 130" stroke="#1a1a20" stroke-width="3" fill="none"/>
+  <path d="M120 90 Q130 80 140 90" stroke="#1a1a20" stroke-width="3" fill="none"/>
+  <path d="M210 110 Q220 100 230 110" stroke="#1a1a20" stroke-width="3" fill="none"/>
+
+  <!-- Small Sleek Hiro Marker Tag in Bottom-Right Corner (Option 2) -->
+  <g transform="translate(295, 295)">
+    <!-- White outer border badge -->
+    <rect x="0" y="0" width="90" height="90" rx="8" fill="#FFFFFF"/>
+    <!-- Black Hiro Marker Frame -->
+    <rect x="5" y="5" width="80" height="80" fill="#000000"/>
+    <rect x="25" y="25" width="40" height="40" fill="#FFFFFF"/>
+    <!-- Hiro Inner Symbol Patterns -->
+    <rect x="35" y="35" width="20" height="20" fill="#000000"/>
+    <rect x="30" y="25" width="10" height="10" fill="#000000"/>
+    <rect x="45" y="50" width="10" height="10" fill="#000000"/>
+    <!-- Scan Label -->
+    <text x="45" y="-4" text-anchor="middle" fill="#A78BFA" font-family="sans-serif" font-size="9" font-weight="bold" letter-spacing="1">SCAN AR</text>
+  </g>
 </svg>
