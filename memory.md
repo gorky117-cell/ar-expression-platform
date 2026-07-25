@@ -206,6 +206,13 @@ Use this format for new product or architecture decisions:
 - **Scope:** Production / Frontend / Tooling
 - **Impacts:** `public/ar.html`, `public/data/targets/tree-birds.mind`, `scripts/compile-mind.cjs`
 
+### 2026-07-25 — Pure Markerless MindAR Engine Deployment & Local Worker Script Hosting
+
+- **Status:** accepted
+- **Decision:** Implemented Option 1 (Pure Markerless Natural Feature Tracking) for 100% clean artwork without markers/tags. Built dedicated viewer `ar-mind.html` and compiled MindAR descriptor `cosmic-butterfly.mind` (188 KB) with 150+ natural feature keypoints. Hosted MindAR script locally at `/js/mindar-image-aframe.prod.js` to eliminate mobile browser Web Worker CORS blocking.
+- **Why:** Local script hosting guarantees zero CDN CORS worker blocks on iOS Safari and Android Chrome, enabling 60 FPS body-hinged 3D wing flapping animations to map natively on clean artwork targets in camera view.
+- **Impacts:** `public/ar-mind.html`, `public/js/mindar-image-aframe.prod.js`, `public/overlays/cosmic-butterfly.svg`, `public/data/targets/cosmic-butterfly.mind`
+
 ---
 
 ## 8. Implemented Features Log (July 2026 Update)
