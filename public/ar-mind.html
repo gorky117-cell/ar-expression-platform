@@ -71,14 +71,14 @@
       <!-- Outer Glowing Constellation Aura -->
       <a-circle position="0 0 0.01" radius="0.8" material="shader: flat; color: #7C5CFF; transparent: true; opacity: 0.4" animation="property: scale; from: 0.9 0.9 0.9; to: 1.25 1.25 1.25; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-circle>
 
-      <!-- Left Wing Pivot (Body Hinge Hinge Offset at X=0, Y=0, Z=0.08) -->
-      <a-entity id="leftWingPivot" position="0 0 0.08">
+      <!-- Left Wing Pivot (Body Hinge at X=0, Y=0, Z=0.08) -->
+      <a-entity id="leftWingPivot" position="0 0 0.08" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 650; loop: true; easing: easeInOutSine">
         <!-- Left Wing Plane -->
         <a-plane position="-0.3 0 0" width="0.6" height="0.8" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- Right Wing Pivot (Body Hinge Hinge Offset at X=0, Y=0, Z=0.08) -->
-      <a-entity id="rightWingPivot" position="0 0 0.08">
+      <!-- Right Wing Pivot (Body Hinge at X=0, Y=0, Z=0.08) -->
+      <a-entity id="rightWingPivot" position="0 0 0.08" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 650; loop: true; easing: easeInOutSine">
         <!-- Right Wing Plane -->
         <a-plane position="0.3 0 0" width="0.6" height="0.8" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
@@ -93,24 +93,6 @@
   </a-scene>
 
   <script>
-    // Smooth 60 FPS Wing Flapping Animation Ticker
-    let flapTime = 0;
-    function flapWings() {
-      flapTime += 0.09;
-      // Flap angle swings between -50° and +50°
-      const leftAngle = Math.sin(flapTime) * 45;
-      const rightAngle = -Math.sin(flapTime) * 45;
-
-      const leftPivot = document.getElementById('leftWingPivot');
-      const rightPivot = document.getElementById('rightWingPivot');
-
-      if (leftPivot) leftPivot.setAttribute('rotation', `0 ${leftAngle} 0`);
-      if (rightPivot) rightPivot.setAttribute('rotation', `0 ${rightAngle} 0`);
-
-      requestAnimationFrame(flapWings);
-    }
-    flapWings();
-
     const targetEntity = document.getElementById('mindTarget');
     if (targetEntity) {
       targetEntity.addEventListener('targetFound', () => {
