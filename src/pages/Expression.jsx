@@ -105,8 +105,8 @@ export default function Expression() {
               {expr.mood}
             </span>
           </div>
-          <Link
-            to={`/ar?expression=${id}`}
+          <a
+            href={expr.arViewerUrl || `/ar.html?id=${id}&overlay=${encodeURIComponent(expr.overlayImage)}&mood=${expr.mood}`}
             className="btn-primary"
             style={{
               padding: '0.6rem 1.25rem',
@@ -116,10 +116,11 @@ export default function Expression() {
               fontWeight: 700,
               fontSize: '0.85rem',
               boxShadow: '0 4px 16px rgba(124, 92, 255, 0.25)',
+              textDecoration: 'none',
             }}
           >
             📷 Launch AR
-          </Link>
+          </a>
         </div>
 
         {/* Tab Selector */}

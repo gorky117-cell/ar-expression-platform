@@ -13,6 +13,20 @@ let expressions = [
       { id: 'c1', text: 'Love the birds!', author: 'Viewer', at: Date.now() - 3600000 },
     ],
   },
+  {
+    id: '2',
+    name: 'Cosmic Butterfly',
+    mood: 'inspired',
+    triggerImage: '/overlays/cosmic-butterfly.svg',
+    overlayImage: '/overlays/cosmic-butterfly.svg',
+    arViewerUrl: '/ar-mind.html',
+    createdAt: Date.now() - 43200000,
+    likes: 5,
+    greetings: 3,
+    comments: [
+      { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
+    ],
+  },
 ];
 
 export function getExpressions() {
