@@ -12,10 +12,21 @@ export default function Expression() {
   const [voiceError, setVoiceError] = useState('')
 
   useEffect(() => {
-    getExpression(id).then((e) => {
-      setExpr(e)
-      setLoading(false)
-    })
+    let mounted = true
+    const loadData = () => {
+      getExpression(id).then((e) => {
+        if (mounted) {
+          setExpr(e)
+          setLoading(false)
+        }
+      })
+    }
+    loadData()
+    const interval = setInterval(loadData, 1500)
+    return () => {
+      mounted = false
+      clearInterval(interval)
+    }
   }, [id])
 
   const refresh = () => getExpression(id).then(setExpr)

@@ -264,7 +264,18 @@
         if (config.supabaseUrl && config.supabaseKey) {
           supabaseClient = supabase.createClient(config.supabaseUrl, config.supabaseKey);
           pollData();
-          setInterval(pollData, 3000);
+          setInterval(pollData, 1500);
+
+          try {
+            supabaseClient
+              .channel('public:reactions')
+              .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reactions' }, () => {
+                pollData();
+              })
+              .subscribe();
+          } catch (e) {
+            console.log('Realtime sub notice:', e);
+          }
         }
       } catch (err) {
         console.error('Supabase init error:', err);
