@@ -14,7 +14,7 @@ let expressions = [
     ],
   },
   {
-    id: '2',
+    id: 'cosmic-butterfly',
     name: 'Cosmic Butterfly',
     mood: 'inspired',
     triggerImage: '/overlays/cosmic-butterfly.svg',

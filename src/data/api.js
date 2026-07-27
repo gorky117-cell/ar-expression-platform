@@ -19,11 +19,11 @@ function rowToExpression(row, reactions = []) {
   const keep = reactions.filter((r) => r.kind === 'keep').length
   return {
     id: String(row.id),
-    name: row.name || (row.id === '2' ? 'Cosmic Butterfly' : 'My Expression'),
-    mood: row.mood || (row.id === '2' ? 'inspired' : 'calm'),
-    triggerImage: row.trigger_image || (row.id === '2' ? '/overlays/cosmic-butterfly.svg' : '/markers/hiro.png'),
-    overlayImage: row.overlay_image || (row.id === '2' ? '/overlays/cosmic-butterfly.svg' : '/overlays/tree-birds.svg'),
-    arViewerUrl: row.id === '2' ? '/ar-mind.html' : (row.ar_viewer_url || null),
+    name: row.name || 'My Expression',
+    mood: row.mood || 'calm',
+    triggerImage: row.trigger_image || '/markers/hiro.png',
+    overlayImage: row.overlay_image || '/overlays/tree-birds.svg',
+    arViewerUrl: row.ar_viewer_url || null,
     caption: row.caption,
     isLive: row.is_live !== false,
     createdAt: new Date(row.created_at || Date.now()).getTime(),
@@ -52,32 +52,41 @@ export async function getExpressions() {
   }, {})
   
   const fetched = rows.map((row) => rowToExpression(row, byExpr[row.id] || []))
-  // Ensure default expressions 1 and 2 exist in the returned list
-  for (const defItem of defaultList) {
-    if (!fetched.some((f) => String(f.id) === String(defItem.id))) {
-      fetched.push(defItem)
-    }
+  
+  // Ensure Cosmic Butterfly card is always present at top of list
+  const cosmicItem = defaultList.find((item) => item.id === 'cosmic-butterfly')
+  if (cosmicItem && !fetched.some((f) => f.id === 'cosmic-butterfly')) {
+    fetched.unshift(cosmicItem)
   }
+  
   return fetched
 }
 
 export async function getExpression(id) {
   const storeItem = store.getExpression(id)
+  if (id === 'cosmic-butterfly' || id === '2') {
+    return Promise.resolve(storeItem || {
+      id: 'cosmic-butterfly',
+      name: 'Cosmic Butterfly',
+      mood: 'inspired',
+      triggerImage: '/overlays/cosmic-butterfly.svg',
+      overlayImage: '/overlays/cosmic-butterfly.svg',
+      arViewerUrl: '/ar-mind.html',
+      createdAt: Date.now() - 43200000,
+      likes: 5,
+      greetings: 3,
+      comments: [
+        { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
+      ],
+    })
+  }
   if (!supabase) return Promise.resolve(storeItem)
   const { data: row, error } = await supabase.from('expressions').select('*').eq('id', id).single()
   if (error || !row) {
     return Promise.resolve(storeItem)
   }
   const { data: reactions } = await supabase.from('reactions').select('*').eq('expression_id', id)
-  const expr = rowToExpression(row, reactions || [])
-  if (String(id) === '2') {
-    expr.name = 'Cosmic Butterfly'
-    expr.mood = 'inspired'
-    expr.triggerImage = '/overlays/cosmic-butterfly.svg'
-    expr.overlayImage = '/overlays/cosmic-butterfly.svg'
-    expr.arViewerUrl = '/ar-mind.html'
-  }
-  return expr
+  return rowToExpression(row, reactions || [])
 }
 
 export async function addExpression(expr) {
