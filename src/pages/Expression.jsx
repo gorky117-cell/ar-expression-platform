@@ -160,63 +160,50 @@ export default function Expression() {
         </div>
 
         {/* Display Content */}
-        {viewMode === 'art' ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 1.25rem',
+          }}
+        >
           <div
             style={{
               width: '100%',
+              maxWidth: 450,
               aspectRatio: '1',
-              maxWidth: 320,
-              borderRadius: 16,
-              background: '#15151e',
-              border: '1px solid rgba(255, 255, 255, 0.05)',
-              backgroundImage: expr.overlayImage ? `url(${expr.overlayImage}?v=${Date.now()})` : undefined,
-              backgroundSize: 'contain',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              margin: '0 auto 1.25rem',
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: 320,
-              height: 320,
-              maxWidth: '100%',
-              borderRadius: 16,
-              background: '#fff',
-              border: '1px solid rgba(255, 255, 255, 0.05)',
-              margin: '0 auto 1.25rem',
-              position: 'relative',
+              borderRadius: 20,
               overflow: 'hidden',
+              background: '#0B0B12',
+              boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+              border: '2px solid rgba(124, 92, 255, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
             }}
           >
-            {/* Perfectly centered Hiro Marker image */}
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/4/48/Hiro_marker_ARjs.png"
-              alt="Hiro Marker"
+              src={expr.overlayImage || '/overlays/cosmic-butterfly.svg'}
+              alt={expr.name}
               style={{
                 width: '100%',
                 height: '100%',
+                objectFit: 'contain',
                 display: 'block',
               }}
             />
-            {/* Embedded custom graphic in the center of the Hiro marker */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '25%',
-                left: '25%',
-                width: '50%',
-                height: '50%',
-                backgroundImage: expr.overlayImage ? `url(${expr.overlayImage})` : undefined,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                opacity: 0.9,
-              }}
-            />
           </div>
-        )}
+
+          <p style={{ color: '#8888a0', fontSize: '0.8rem', marginTop: '0.75rem', textAlign: 'center' }}>
+            {viewMode === 'scan'
+              ? '✨ Point your phone camera directly at this target image to trigger 3D AR'
+              : '🎨 Clean artwork design (Pure Markerless Target)'
+            }
+          </p>
+        </div>
 
         {expr.caption && (
           <div

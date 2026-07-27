@@ -59,7 +59,7 @@
     <div style="color: #a78bfa; font-size: 12px; margin-top: 2px;" id="expCaption">✨ Point camera at clean butterfly artwork</div>
   </div>
 
-  <a-scene mindar-image="imageTargetSrc: /data/targets/cosmic-butterfly.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+  <a-scene mindar-image="imageTargetSrc: /data/targets/cosmic-butterfly.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
     <a-assets>
       <img id="butterflyTex" src="/overlays/cosmic-butterfly.svg">
     </a-assets>
