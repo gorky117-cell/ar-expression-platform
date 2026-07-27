@@ -27,9 +27,19 @@
       background-color: #121218 !important;
     }
 
-    /* Full-viewport camera video & WebGL canvas setup (eliminates white bottom space on mobile) */
+    /* Camera Video Stream Layer (Background) */
     video,
-    #arjs-video,
+    #arjs-video {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      z-index: -2 !important;
+    }
+
+    /* WebGL A-Frame Canvas Layer (Foreground 3D Overlay) */
     canvas,
     .a-canvas {
       position: fixed !important;
@@ -38,7 +48,8 @@
       width: 100vw !important;
       height: 100vh !important;
       object-fit: cover !important;
-      z-index: 0 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
     }
 
     /* Style for AR loader */
