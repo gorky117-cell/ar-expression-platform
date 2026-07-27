@@ -224,18 +224,15 @@
 
     <!-- Target 0 Anchor: Point camera at the 100% clean cosmic butterfly image -->
     <a-entity mindar-image-target="targetIndex: 0" id="mindTarget">
-      <!-- 1. Floating 3D Live Comment Text Banner Floating in Space -->
-      <a-text id="ar3DCommentText" value="💬 Pure Markerless Tracking Active!" position="0 0.85 0.2" align="center" color="#34d399" scale="0.95 0.95 0.95" animation="property: position; from: 0 0.85 0.2; to: 0 0.95 0.25; dir: alternate; dur: 1200; loop: true; easing: easeInOutSine"></a-text>
-
-      <!-- 2. Center Butterfly Body Base (Stationary Artwork Base) -->
+      <!-- 1. Center Butterfly Body Base (Stationary Artwork Base) -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
 
-      <!-- 3. Realistic 3D Flapping Left Wing Hinge (Controlled 45° Flap Rotation) -->
+      <!-- 2. Realistic 3D Flapping Left Wing Hinge (Controlled 45° Flap Rotation) -->
       <a-entity id="leftWingPivot" position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane position="-0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- 4. Realistic 3D Flapping Right Wing Hinge (Controlled 45° Flap Rotation) -->
+      <!-- 3. Realistic 3D Flapping Right Wing Hinge (Controlled 45° Flap Rotation) -->
       <a-entity id="rightWingPivot" position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
@@ -291,12 +288,6 @@
           document.getElementById('waveCount').textContent = waves;
 
           if (comments.length > 0) {
-            const latest = comments[comments.length - 1];
-            const ar3DText = document.getElementById('ar3DCommentText');
-            if (ar3DText && latest.text) {
-              ar3DText.setAttribute('value', '💬 ' + latest.text);
-            }
-
             document.getElementById('commentsFeed').innerHTML = comments.slice().reverse().map(c => `
               <div class="comment-item">
                 <strong class="comment-author">${escapeHtml(c.author || 'Viewer')}:</strong>
