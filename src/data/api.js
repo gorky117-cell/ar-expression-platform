@@ -63,30 +63,58 @@ export async function getExpressions() {
 }
 
 export async function getExpression(id) {
-  const storeItem = store.getExpression(id)
-  if (id === 'cosmic-butterfly' || id === '2') {
-    return Promise.resolve(storeItem || {
-      id: 'cosmic-butterfly',
-      name: 'Cosmic Butterfly',
-      mood: 'inspired',
-      triggerImage: '/overlays/cosmic-butterfly.svg',
-      overlayImage: '/overlays/cosmic-butterfly.svg',
-      arViewerUrl: '/ar-mind.html',
-      createdAt: Date.now() - 43200000,
-      likes: 5,
-      greetings: 3,
-      comments: [
-        { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
-      ],
-    })
+  const storeItem = store.getExpression(id) || {
+    id: 'cosmic-butterfly',
+    name: 'Cosmic Butterfly',
+    mood: 'inspired',
+    triggerImage: '/overlays/cosmic-butterfly.svg',
+    overlayImage: '/overlays/cosmic-butterfly.svg',
+    arViewerUrl: '/ar-mind.html',
+    createdAt: Date.now() - 43200000,
+    likes: 5,
+    greetings: 3,
+    comments: [
+      { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
+    ],
   }
+
   if (!supabase) return Promise.resolve(storeItem)
-  const { data: row, error } = await supabase.from('expressions').select('*').eq('id', id).single()
-  if (error || !row) {
+
+  const queryIds = (id === 'cosmic-butterfly' || id === '2') ? ['2', 'cosmic-butterfly'] : [String(id)]
+
+  const { data: reactions, error } = await supabase
+    .from('reactions')
+    .select('*')
+    .in('expression_id', queryIds)
+
+  if (error || !reactions) {
     return Promise.resolve(storeItem)
   }
-  const { data: reactions } = await supabase.from('reactions').select('*').eq('expression_id', id)
-  return rowToExpression(row, reactions || [])
+
+  const baseLikes = 5
+  const baseGreetings = 3
+  const dbLikes = reactions.filter((r) => r.kind === 'like').length
+  const dbGreetings = reactions.filter((r) => r.kind === 'greeting').length
+  const dbComments = reactions
+    .filter((r) => r.kind === 'comment')
+    .map((r) => ({
+      id: r.id,
+      text: r.text || '',
+      author: r.author || 'Viewer',
+      at: new Date(r.created_at || Date.now()).getTime(),
+    }))
+
+  const allComments = [
+    { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
+    ...dbComments,
+  ]
+
+  return {
+    ...storeItem,
+    likes: baseLikes + dbLikes,
+    greetings: baseGreetings + dbGreetings,
+    comments: allComments,
+  }
 }
 
 export async function addExpression(expr) {
@@ -107,19 +135,22 @@ export async function addExpression(expr) {
 }
 
 export async function likeExpression(id) {
-  if (!supabase) return store.likeExpression(id)
-  await supabase.from('reactions').insert({ expression_id: id, kind: 'like' })
+  const targetId = (id === 'cosmic-butterfly') ? '2' : id
+  if (!supabase) return store.likeExpression(targetId)
+  await supabase.from('reactions').insert({ expression_id: targetId, kind: 'like' })
 }
 
 export async function sendGreeting(id) {
-  if (!supabase) return store.sendGreeting(id)
-  await supabase.from('reactions').insert({ expression_id: id, kind: 'greeting' })
+  const targetId = (id === 'cosmic-butterfly') ? '2' : id
+  if (!supabase) return store.sendGreeting(targetId)
+  await supabase.from('reactions').insert({ expression_id: targetId, kind: 'greeting' })
 }
 
 export async function addReaction(id, kind, opts = {}) {
+  const targetId = (id === 'cosmic-butterfly') ? '2' : id
   if (!supabase) return
   await supabase.from('reactions').insert({
-    expression_id: id,
+    expression_id: targetId,
     kind,
     author: opts.author || 'Viewer',
     text: opts.text || null,
@@ -127,9 +158,10 @@ export async function addReaction(id, kind, opts = {}) {
 }
 
 export async function addComment(id, text, author) {
-  if (!supabase) return store.addComment(id, text, author)
+  const targetId = (id === 'cosmic-butterfly') ? '2' : id
+  if (!supabase) return store.addComment(targetId, text, author)
   await supabase.from('reactions').insert({
-    expression_id: id,
+    expression_id: targetId,
     kind: 'comment',
     text: text || '',
     author: author || 'Viewer',

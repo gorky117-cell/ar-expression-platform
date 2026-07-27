@@ -254,7 +254,7 @@
       });
     }
 
-    const expressionId = 'cosmic-butterfly';
+    const expressionId = '2';
     let supabaseClient = null;
 
     async function initSupabase() {
@@ -277,7 +277,7 @@
         const { data: reactions } = await supabaseClient
           .from('reactions')
           .select('*')
-          .eq('expression_id', expressionId);
+          .in('expression_id', ['2', 'cosmic-butterfly']);
 
         if (reactions) {
           const likes = reactions.filter(r => r.kind === 'like').length + 5;
