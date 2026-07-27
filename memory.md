@@ -244,7 +244,14 @@ Use this format for new product or architecture decisions:
 
 ---
 
-## 9. Local testing
+## 9. Next Steps Tomorrow (Agenda)
+
+1. **VM Database Connection Trace:** Inspect Docker container environment variables and Nginx CORS headers on GCP VM instance to verify Supabase table insert policies (`public.reactions`).
+2. **Cross-Device Persistence Audit:** Test real-time Supabase inserts directly via curl / API endpoint on VM to ensure comments and likes seamlessly persist across mobile networks and laptop browsers.
+
+---
+
+## 10. Local testing
 
 ```bash
 cd D:\ar-expression-platform
@@ -258,7 +265,7 @@ npm run dev
 
 ---
 
-## 10. Where this file lives and how to use it
+## 11. Where this file lives and how to use it
 
 - **Path:** `memory.md` in project root.
 - **Use:** Read before major features or refactors. Update when vision, principles, or stack change. Pair with **`PROJECT-PLAN.md`** and **README.md** for continuity.
