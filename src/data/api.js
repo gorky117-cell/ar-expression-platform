@@ -18,14 +18,15 @@ function rowToExpression(row, reactions = []) {
   const good = reactions.filter((r) => r.kind === 'good').length
   const keep = reactions.filter((r) => r.kind === 'keep').length
   return {
-    id: row.id,
-    name: row.name || 'My Expression',
-    mood: row.mood || 'calm',
-    triggerImage: row.trigger_image || '/markers/hiro.png',
-    overlayImage: row.overlay_image || '/overlays/tree-birds.svg',
+    id: String(row.id),
+    name: row.name || (row.id === '2' ? 'Cosmic Butterfly' : 'My Expression'),
+    mood: row.mood || (row.id === '2' ? 'inspired' : 'calm'),
+    triggerImage: row.trigger_image || (row.id === '2' ? '/overlays/cosmic-butterfly.svg' : '/markers/hiro.png'),
+    overlayImage: row.overlay_image || (row.id === '2' ? '/overlays/cosmic-butterfly.svg' : '/overlays/tree-birds.svg'),
+    arViewerUrl: row.id === '2' ? '/ar-mind.html' : (row.ar_viewer_url || null),
     caption: row.caption,
     isLive: row.is_live !== false,
-    createdAt: new Date(row.created_at).getTime(),
+    createdAt: new Date(row.created_at || Date.now()).getTime(),
     likes,
     greetings,
     love,
@@ -36,10 +37,11 @@ function rowToExpression(row, reactions = []) {
 }
 
 export async function getExpressions() {
-  if (!supabase) return Promise.resolve(store.getExpressions())
+  const defaultList = store.getExpressions()
+  if (!supabase) return Promise.resolve(defaultList)
   const { data: rows, error } = await supabase.from('expressions').select('*').order('created_at', { ascending: false })
-  if (error) return Promise.resolve(store.getExpressions())
-  const ids = (rows || []).map((r) => r.id)
+  if (error || !rows) return Promise.resolve(defaultList)
+  const ids = rows.map((r) => r.id)
   const { data: reactions } = ids.length
     ? await supabase.from('reactions').select('*').in('expression_id', ids)
     : { data: [] }
@@ -48,15 +50,34 @@ export async function getExpressions() {
     acc[r.expression_id].push(r)
     return acc
   }, {})
-  return (rows || []).map((row) => rowToExpression(row, byExpr[row.id] || []))
+  
+  const fetched = rows.map((row) => rowToExpression(row, byExpr[row.id] || []))
+  // Ensure default expressions 1 and 2 exist in the returned list
+  for (const defItem of defaultList) {
+    if (!fetched.some((f) => String(f.id) === String(defItem.id))) {
+      fetched.push(defItem)
+    }
+  }
+  return fetched
 }
 
 export async function getExpression(id) {
-  if (!supabase) return Promise.resolve(store.getExpression(id))
+  const storeItem = store.getExpression(id)
+  if (!supabase) return Promise.resolve(storeItem)
   const { data: row, error } = await supabase.from('expressions').select('*').eq('id', id).single()
-  if (error || !row) return Promise.resolve(null)
+  if (error || !row) {
+    return Promise.resolve(storeItem)
+  }
   const { data: reactions } = await supabase.from('reactions').select('*').eq('expression_id', id)
-  return rowToExpression(row, reactions || [])
+  const expr = rowToExpression(row, reactions || [])
+  if (String(id) === '2') {
+    expr.name = 'Cosmic Butterfly'
+    expr.mood = 'inspired'
+    expr.triggerImage = '/overlays/cosmic-butterfly.svg'
+    expr.overlayImage = '/overlays/cosmic-butterfly.svg'
+    expr.arViewerUrl = '/ar-mind.html'
+  }
+  return expr
 }
 
 export async function addExpression(expr) {
