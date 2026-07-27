@@ -22,7 +22,7 @@ export default function Expression() {
       })
     }
     loadData()
-    const interval = setInterval(loadData, 1500)
+    const interval = setInterval(loadData, 500)
     return () => {
       mounted = false
       clearInterval(interval)
