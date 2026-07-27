@@ -608,23 +608,27 @@
       const text = document.getElementById('commentTextInput').value.trim();
       if (!text) return;
 
+      // Optimistic 0ms instant real-time DOM render
+      const feed = document.getElementById('commentsFeed');
+      const emptyP = feed.querySelector('p');
+      if (emptyP) emptyP.remove();
+
+      const newItem = document.createElement('div');
+      newItem.className = 'comment-item';
+      newItem.innerHTML = `<strong class="comment-author">${escapeHtml(author)}:</strong> <span class="comment-text">${escapeHtml(text)}</span>`;
+      feed.insertBefore(newItem, feed.firstChild);
+
+      document.getElementById('commentTextInput').value = '';
+      closeCommentModal();
+
       if (!supabaseClient || !id) return;
       try {
-        const btn = document.getElementById('submitCommentBtn');
-        btn.disabled = true;
-        btn.textContent = 'Posting...';
-
         await supabaseClient.from('reactions').insert({
           expression_id: id,
           kind: 'comment',
           author,
           text
         });
-
-        closeCommentModal();
-        document.getElementById('commentTextInput').value = '';
-        btn.disabled = false;
-        btn.textContent = 'Post';
         pollData();
       } catch (err) {
         console.error('Post failed:', err);

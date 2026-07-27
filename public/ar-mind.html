@@ -333,10 +333,13 @@
       if (!text) return;
 
       const feed = document.getElementById('commentsFeed');
+      const emptyMsg = feed.querySelector('p');
+      if (emptyMsg) emptyMsg.remove();
+
       const newItem = document.createElement('div');
       newItem.className = 'comment-item';
       newItem.innerHTML = `<strong class="comment-author">${escapeHtml(author)}:</strong> <span>${escapeHtml(text)}</span>`;
-      feed.appendChild(newItem);
+      feed.insertBefore(newItem, feed.firstChild);
 
       if (supabaseClient) {
         await supabaseClient.from('reactions').insert({

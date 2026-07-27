@@ -213,6 +213,17 @@ Use this format for new product or architecture decisions:
 - **Why:** Local script hosting guarantees zero CDN CORS worker blocks on iOS Safari and Android Chrome, enabling 60 FPS body-hinged 3D wing flapping animations to map natively on clean artwork targets in camera view.
 - **Impacts:** `public/ar-mind.html`, `public/js/mindar-image-aframe.prod.js`, `public/overlays/cosmic-butterfly.svg`, `public/data/targets/cosmic-butterfly.mind`
 
+### 2026-07-27 — WebGL Camera Layer Stacking & Controlled 3D Wing Flapping Optimization
+
+- **Status:** accepted
+- **Decision:**
+  1. Separated CSS stacking layers in `ar-mind.html` and `ar.html`: `video` stream placed at `z-index: -2 !important`, and WebGL canvas placed at `z-index: 1 !important`.
+  2. Implemented 0ms optimistic real-time comment rendering in `submitComment()` to instantly display viewer comments at top of feed.
+  3. Cleaned 3D A-Frame scene by removing expanding body spheres/dots, implementing body-hinged 3D left/right wing flap animations (`butterfly-left-wing.svg` and `butterfly-right-wing.svg`) at a controlled 45° rotation rhythm (`550ms` pulse) over the clean target.
+  4. Added full interactive social bar (❤️ Likes, 👋 Waves, 💬 Comments modal) directly to `ar-mind.html`.
+- **Why:** Resolved mobile browser WebGL canvas occluding bug where camera video stream blocked WebGL drawing output. Provides immediate 0ms real-time feedback for comments while giving users an unencumbered, elegant 3D wing flapping animation over target prints.
+- **Impacts:** `public/ar-mind.html`, `public/ar.html`, `src/data/api.js`, `public/overlays/butterfly-left-wing.svg`, `public/overlays/butterfly-right-wing.svg`
+
 ---
 
 ## 8. Implemented Features Log (July 2026 Update)
@@ -224,10 +235,12 @@ Use this format for new product or architecture decisions:
 - **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
 - **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar`.
 - **Mobile-AR Clean Interface:** Disabled default A-Frame split-screen Cardboard VR features, removing the headset buttons to enforce a distraction-free WebAR camera layout.
-- **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar.html` on top of the webcam feed.
+- **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar.html` and `ar-mind.html` on top of the webcam feed.
 - **Transparent 3D Spacing & Floating:** Fixed A-Frame plane height calculations to render relative to the Y-axis (vertical offset above the marker) and removed solid SVG box backgrounds for true transparency.
 - **Secure VM Git Syncing:** Configured Linux SSH folder permissions and agent identities on the GCP instance, allowing frictionless `git fetch && git reset --hard` deployments.
-- **MindAR Neural Image Tracking:** Migrated `ar.html` to MindAR (TF.js). Target descriptor compilation is automated via `scripts/compile-mind.cjs`, enabling pure 100% markerless tracking on clean original vector artwork directly (zero Hiro tags, zero scan badges).
+- **MindAR Neural Image Tracking:** Migrated `ar.html` and `ar-mind.html` to MindAR (TF.js). Target descriptor compilation is automated via `scripts/compile-mind.cjs`, enabling pure 100% markerless tracking on clean original vector artwork directly (zero Hiro tags, zero scan badges).
+- **Optimistic 0ms Real-Time Social Commenting:** Integrated optimistic DOM prepending for social comments so viewer responses render instantly in 0ms without waiting for backend network roundtrips.
+- **Pure 3D Wing Flapping WebAR Engine:** Built dedicated body-hinged wing flap planes for Cosmic Butterfly with controlled 45° rotation pulses and interactive reaction controls.
 
 ---
 
