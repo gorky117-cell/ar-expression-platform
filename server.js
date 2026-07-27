@@ -35,8 +35,8 @@ app.use(express.static(path.join(__dirname, 'dist')))
 // Expose Supabase credentials for the static HTML page (ar.html)
 app.get('/api/config', (req, res) => {
   res.json({
-    supabaseUrl: process.env.VITE_SUPABASE_URL || '',
-    supabaseKey: process.env.VITE_SUPABASE_ANON_KEY || '',
+    supabaseUrl: process.env.VITE_SUPABASE_URL || 'https://pbfhgpitghiwkelhzssz.supabase.co',
+    supabaseKey: process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_9UC-fIvJNypRa6oIpZBXlw_dHpB9OUm',
   })
 })
 

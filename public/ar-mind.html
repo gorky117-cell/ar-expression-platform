@@ -259,10 +259,19 @@
 
     async function initSupabase() {
       try {
-        const res = await fetch('/api/config');
-        const config = await res.json();
-        if (config.supabaseUrl && config.supabaseKey) {
-          supabaseClient = supabase.createClient(config.supabaseUrl, config.supabaseKey);
+        let sbUrl = 'https://pbfhgpitghiwkelhzssz.supabase.co';
+        let sbKey = 'sb_publishable_9UC-fIvJNypRa6oIpZBXlw_dHpB9OUm';
+        try {
+          const res = await fetch('/api/config');
+          const config = await res.json();
+          if (config.supabaseUrl && config.supabaseKey) {
+            sbUrl = config.supabaseUrl;
+            sbKey = config.supabaseKey;
+          }
+        } catch (e) {}
+
+        if (window.supabase) {
+          supabaseClient = window.supabase.createClient(sbUrl, sbKey);
           pollData();
           setInterval(pollData, 500); // 500ms ultra-fast free tier sync
         }
