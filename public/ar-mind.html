@@ -12,6 +12,9 @@
   <!-- MindAR Engine for Pure Markerless Image Tracking (Hosted Locally) -->
   <script src="/js/mindar-image-aframe.prod.js"></script>
 
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     html,
     body {
@@ -61,53 +64,181 @@
       padding: 12px 16px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Social Bottom Actions Bar */
+    .ar-social-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: 12px;
+      background: rgba(18, 18, 24, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .ar-action-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .ar-action-btn:active {
+      transform: scale(0.94);
+      background: #7c5cff;
+    }
+
+    /* Comments Modal */
+    .comment-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .comment-modal.active {
+      display: flex;
+    }
+
+    .comment-card {
+      background: #181820;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      color: #fff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .comment-feed {
+      max-height: 180px;
+      overflow-y: auto;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comment-item {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+
+    .comment-author {
+      color: #38bdf8;
+      font-weight: 700;
+      margin-right: 6px;
     }
   </style>
 </head>
 
 <body>
+  <!-- Top UI Header -->
   <div class="ui-header">
-    <div style="font-weight: 800; font-size: 16px;" id="expTitle">Cosmic Butterfly</div>
-    <div style="color: #a78bfa; font-size: 12px; margin-top: 2px;" id="expCaption">✨ Point camera at clean butterfly artwork</div>
+    <div>
+      <div style="font-weight: 800; font-size: 16px;" id="expTitle">Cosmic Butterfly</div>
+      <div style="color: #a78bfa; font-size: 12px; margin-top: 2px;" id="expCaption">✨ Point camera at clean butterfly artwork</div>
+    </div>
+    <a href="/feed" style="color: #7c5cff; font-weight: 700; font-size: 12px; text-decoration: none; background: rgba(124, 92, 255, 0.15); padding: 6px 12px; border-radius: 9999px; border: 1px solid rgba(124, 92, 255, 0.3);">Feed</a>
+  </div>
+
+  <!-- Bottom Social Action Bar -->
+  <div class="ar-social-bar">
+    <button class="ar-action-btn" onclick="handleLike()">
+      ❤️ <span id="likeCount">5</span>
+    </button>
+    <button class="ar-action-btn" onclick="handleWave()">
+      👋 <span id="waveCount">3</span>
+    </button>
+    <button class="ar-action-btn" onclick="openCommentModal()">
+      💬 Comments
+    </button>
+  </div>
+
+  <!-- Comments Modal -->
+  <div class="comment-modal" id="commentModal" onclick="closeCommentModal(event)">
+    <div class="comment-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800;">Viewer Comments</h3>
+        <button onclick="closeCommentModal()" style="background: none; border: none; color: #8888a0; font-size: 1.2rem; cursor: pointer;">✕</button>
+      </div>
+
+      <div class="comment-feed" id="commentsFeed">
+        <div class="comment-item">
+          <strong class="comment-author">WebAR Fans:</strong>
+          <span>Pure markerless tracking is amazing!</span>
+        </div>
+      </div>
+
+      <input type="text" id="commentAuthorInput" placeholder="Your Name" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 8px; box-sizing: border-box;" />
+      <textarea id="commentTextInput" placeholder="Write a comment..." rows="2" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 12px; box-sizing: border-box; resize: none;"></textarea>
+
+      <button id="submitCommentBtn" onclick="submitComment()" style="width: 100%; padding: 10px; background: #7c5cff; color: #fff; border: none; border-radius: 9999px; font-weight: 700; cursor: pointer;">
+        Post Comment
+      </button>
+    </div>
   </div>
 
   <a-scene mindar-image="imageTargetSrc: /data/targets/cosmic-butterfly.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 10;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
     <a-assets>
       <img id="butterflyTex" src="/overlays/cosmic-butterfly.svg">
+      <img id="leftWingTex" src="/overlays/butterfly-left-wing.svg">
+      <img id="rightWingTex" src="/overlays/butterfly-right-wing.svg">
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Lighting for rich 3D metallic highlights -->
     <a-entity light="type: ambient; color: #ffffff; intensity: 0.95;"></a-entity>
     <a-entity light="type: directional; color: #a78bfa; intensity: 1.5;" position="1 2 3"></a-entity>
 
     <!-- Target 0 Anchor: Point camera at the 100% clean cosmic butterfly image -->
     <a-entity mindar-image-target="targetIndex: 0" id="mindTarget">
-      <!-- 3D Floating Banner Badge -->
-      <a-text value="✨ 3D COSMIC AR ACTIVE ✨" position="0 1.1 0.3" align="center" color="#34d399" scale="1.4 1.4 1.4"></a-text>
+      <!-- 1. Center Butterfly Base Plane (Clean Single Butterfly Graphic) -->
+      <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95" animation="property: scale; from: 0.98 0.98 0.98; to: 1.05 1.05 1.05; dir: alternate; dur: 1000; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- Giant Spinning 3D Neon Torus Knot -->
-      <a-torus-knot position="0 0 0.35" radius="0.55" radius-tubular="0.04" material="color: #F472B6; metalness: 0.9; roughness: 0.1" animation="property: rotation; to: 360 360 0; dur: 3500; loop: true; easing: linear"></a-torus-knot>
+      <!-- 2. Dynamic 3D Flapping Left Wing Overlay Layer -->
+      <a-plane position="-0.25 0 0.08" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.9" animation="property: rotation; from: 0 0 0; to: 0 35 0; dir: alternate; dur: 650; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- Outer Giant Rotating Green Energy Ring -->
-      <a-torus position="0 0 0.15" radius="1.1" radius-tubular="0.05" material="color: #34D399; metalness: 0.9; roughness: 0.1" animation="property: rotation; to: 0 0 360; dur: 2500; loop: true; easing: linear"></a-torus>
+      <!-- 3. Dynamic 3D Flapping Right Wing Overlay Layer -->
+      <a-plane position="0.25 0 0.08" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.9" animation="property: rotation; from: 0 0 0; to: 0 -35 0; dir: alternate; dur: 650; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- Left Wing Pivot (Body Hinge at X=0, Y=0, Z=0.1) -->
-      <a-entity id="leftWingPivot" position="0 0 0.1" animation="property: rotation; from: 0 0 0; to: 0 50 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <!-- Left Wing Plane (2x Larger for High Visibility) -->
-        <a-plane position="-0.5 0 0" width="1.0" height="1.3" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
-      </a-entity>
+      <!-- 4. Pulsing 3D Glowing Core Gem over Butterfly Body -->
+      <a-sphere position="0 0 0.12" radius="0.16" material="color: #F472B6; metalness: 0.9; roughness: 0.1" animation="property: scale; from: 0.8 0.8 0.8; to: 1.3 1.3 1.3; dir: alternate; dur: 1100; loop: true; easing: easeInOutSine"></a-sphere>
 
-      <!-- Right Wing Pivot (Body Hinge at X=0, Y=0, Z=0.1) -->
-      <a-entity id="rightWingPivot" position="0 0 0.1" animation="property: rotation; from: 0 0 0; to: 0 -50 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <!-- Right Wing Plane (2x Larger for High Visibility) -->
-        <a-plane position="0.5 0 0" width="1.0" height="1.3" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
-      </a-entity>
-
-      <!-- Floating 3D Glowing Spheres -->
-      <a-sphere position="-0.8 0.6 0.2" radius="0.15" material="color: #38BDF8; metalness: 0.9" animation="property: position; from: -0.8 0.6 0.2; to: -0.8 0.85 0.3; dir: alternate; dur: 900; loop: true; easing: easeInOutSine"></a-sphere>
-      <a-sphere position="0.8 0.6 0.2" radius="0.15" material="color: #A78BFA; metalness: 0.9" animation="property: position; from: 0.8 0.6 0.2; to: 0.8 0.85 0.3; dir: alternate; dur: 1050; loop: true; easing: easeInOutSine"></a-sphere>
+      <!-- 5. Floating Constellation Sparkles -->
+      <a-sphere position="-0.5 0.4 0.15" radius="0.08" material="color: #38BDF8; metalness: 0.9" animation="property: position; from: -0.5 0.4 0.15; to: -0.5 0.58 0.2; dir: alternate; dur: 900; loop: true; easing: easeInOutSine"></a-sphere>
+      <a-sphere position="0.5 0.4 0.15" radius="0.08" material="color: #A78BFA; metalness: 0.9" animation="property: position; from: 0.5 0.4 0.15; to: 0.5 0.58 0.2; dir: alternate; dur: 1050; loop: true; easing: easeInOutSine"></a-sphere>
     </a-entity>
   </a-scene>
 
@@ -125,6 +256,109 @@
         if (captionEl) captionEl.textContent = '✨ Point camera at clean butterfly artwork';
       });
     }
+
+    const expressionId = 'cosmic-butterfly';
+    let supabaseClient = null;
+
+    async function initSupabase() {
+      try {
+        const res = await fetch('/api/config');
+        const config = await res.json();
+        if (config.supabaseUrl && config.supabaseKey) {
+          supabaseClient = supabase.createClient(config.supabaseUrl, config.supabaseKey);
+          pollData();
+          setInterval(pollData, 3000);
+        }
+      } catch (err) {
+        console.error('Supabase init error:', err);
+      }
+    }
+
+    async function pollData() {
+      if (!supabaseClient) return;
+      try {
+        const { data: reactions } = await supabaseClient
+          .from('reactions')
+          .select('*')
+          .eq('expression_id', expressionId);
+
+        if (reactions) {
+          const likes = reactions.filter(r => r.kind === 'like').length + 5;
+          const waves = reactions.filter(r => r.kind === 'greeting').length + 3;
+          const comments = reactions.filter(r => r.kind === 'comment');
+
+          document.getElementById('likeCount').textContent = likes;
+          document.getElementById('waveCount').textContent = waves;
+
+          if (comments.length > 0) {
+            document.getElementById('commentsFeed').innerHTML = comments.map(c => `
+              <div class="comment-item">
+                <strong class="comment-author">${escapeHtml(c.author || 'Viewer')}:</strong>
+                <span>${escapeHtml(c.text || '')}</span>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }
+
+    async function handleLike() {
+      const el = document.getElementById('likeCount');
+      el.textContent = parseInt(el.textContent) + 1;
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'like' });
+      }
+    }
+
+    async function handleWave() {
+      const el = document.getElementById('waveCount');
+      el.textContent = parseInt(el.textContent) + 1;
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'greeting' });
+      }
+    }
+
+    function openCommentModal() {
+      document.getElementById('commentModal').classList.add('active');
+    }
+
+    function closeCommentModal(event) {
+      if (!event || event.target === document.getElementById('commentModal')) {
+        document.getElementById('commentModal').classList.remove('active');
+      }
+    }
+
+    async function submitComment() {
+      const author = document.getElementById('commentAuthorInput').value.trim() || 'Viewer';
+      const text = document.getElementById('commentTextInput').value.trim();
+      if (!text) return;
+
+      const feed = document.getElementById('commentsFeed');
+      const newItem = document.createElement('div');
+      newItem.className = 'comment-item';
+      newItem.innerHTML = `<strong class="comment-author">${escapeHtml(author)}:</strong> <span>${escapeHtml(text)}</span>`;
+      feed.appendChild(newItem);
+
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({
+          expression_id: expressionId,
+          kind: 'comment',
+          author,
+          text
+        });
+      }
+
+      document.getElementById('commentTextInput').value = '';
+      closeCommentModal();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    initSupabase();
   </script>
 </body>
 

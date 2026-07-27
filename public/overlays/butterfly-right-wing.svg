@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="250 0 250 500" width="250" height="500">
+  <!-- Right Upper Wing -->
+  <polygon points="250,230 390,100 440,180 320,250" fill="url(#rightUpperGrad)" stroke="#A78BFA" stroke-width="3"/>
+  <!-- Right Lower Wing -->
+  <polygon points="250,250 380,270 410,380 280,320" fill="url(#rightLowerGrad)" stroke="#38BDF8" stroke-width="3"/>
+
+  <!-- Wing Inner Geometric Patterns -->
+  <circle cx="340" cy="160" r="18" fill="#F472B6" opacity="0.9"/>
+  <circle cx="330" cy="310" r="14" fill="#A78BFA" opacity="0.9"/>
+  <polygon points="340,160 290,210 360,220" fill="#38BDF8" opacity="0.8"/>
+
+  <defs>
+    <linearGradient id="rightUpperGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7C5CFF"/>
+      <stop offset="100%" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="rightLowerGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F472B6"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+</svg>
