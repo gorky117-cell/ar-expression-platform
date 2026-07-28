@@ -254,22 +254,8 @@
       });
     }
 
-    const expressionId = '00000000-0000-0000-0000-000000000002';
+    const expressionId = 2;
     let supabaseClient = null;
-
-    async function ensureCosmicRowInDb() {
-      if (!supabaseClient) return;
-      try {
-        await supabaseClient.from('expressions').upsert({
-          id: expressionId,
-          name: 'Cosmic Butterfly',
-          mood: 'inspired',
-          trigger_image: '/overlays/cosmic-butterfly.svg',
-          overlay_image: '/overlays/cosmic-butterfly.svg',
-          caption: '✨ Markerless AR Active'
-        });
-      } catch (e) {}
-    }
 
     async function initSupabase() {
       try {
@@ -286,7 +272,6 @@
 
         if (window.supabase) {
           supabaseClient = window.supabase.createClient(sbUrl, sbKey);
-          await ensureCosmicRowInDb();
           pollData();
           setInterval(pollData, 500); // 500ms ultra-fast free tier sync
         }
@@ -301,7 +286,7 @@
         const { data: reactions } = await supabaseClient
           .from('reactions')
           .select('*')
-          .in('expression_id', [expressionId, '2', 'cosmic-butterfly']);
+          .eq('expression_id', expressionId);
 
         if (reactions) {
           const likes = reactions.filter(r => r.kind === 'like').length + 5;
@@ -329,7 +314,6 @@
       const el = document.getElementById('likeCount');
       el.textContent = parseInt(el.textContent) + 1;
       if (supabaseClient) {
-        await ensureCosmicRowInDb();
         await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'like' });
       }
     }
@@ -338,7 +322,6 @@
       const el = document.getElementById('waveCount');
       el.textContent = parseInt(el.textContent) + 1;
       if (supabaseClient) {
-        await ensureCosmicRowInDb();
         await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'greeting' });
       }
     }
@@ -368,7 +351,6 @@
       feed.insertBefore(newItem, feed.firstChild);
 
       if (supabaseClient) {
-        await ensureCosmicRowInDb();
         await supabaseClient.from('reactions').insert({
           expression_id: expressionId,
           kind: 'comment',

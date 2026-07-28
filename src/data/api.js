@@ -62,24 +62,6 @@ export async function getExpressions() {
   return fetched
 }
 
-const COSMIC_UUID = '00000000-0000-0000-0000-000000000002'
-
-async function ensureCosmicRow() {
-  if (!supabase) return
-  try {
-    await supabase.from('expressions').upsert({
-      id: COSMIC_UUID,
-      name: 'Cosmic Butterfly',
-      mood: 'inspired',
-      trigger_image: '/overlays/cosmic-butterfly.svg',
-      overlay_image: '/overlays/cosmic-butterfly.svg',
-      caption: '✨ Markerless AR Active',
-    })
-  } catch (e) {
-    console.log('Cosmic row notice:', e)
-  }
-}
-
 export async function getExpression(id) {
   const storeItem = store.getExpression(id) || {
     id: 'cosmic-butterfly',
@@ -98,8 +80,8 @@ export async function getExpression(id) {
 
   if (!supabase) return Promise.resolve(storeItem)
 
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || id === COSMIC_UUID)
-  const targetId = isCosmic ? COSMIC_UUID : id
+  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
+  const targetId = isCosmic ? 2 : id
 
   const { data: reactions } = await supabase
     .from('reactions')
@@ -151,26 +133,23 @@ export async function addExpression(expr) {
 }
 
 export async function likeExpression(id) {
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || id === COSMIC_UUID)
-  const targetId = isCosmic ? COSMIC_UUID : id
+  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
+  const targetId = isCosmic ? 2 : id
   if (!supabase) return store.likeExpression(targetId)
-  if (isCosmic) await ensureCosmicRow()
   await supabase.from('reactions').insert({ expression_id: targetId, kind: 'like' })
 }
 
 export async function sendGreeting(id) {
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || id === COSMIC_UUID)
-  const targetId = isCosmic ? COSMIC_UUID : id
+  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
+  const targetId = isCosmic ? 2 : id
   if (!supabase) return store.sendGreeting(targetId)
-  if (isCosmic) await ensureCosmicRow()
   await supabase.from('reactions').insert({ expression_id: targetId, kind: 'greeting' })
 }
 
 export async function addReaction(id, kind, opts = {}) {
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || id === COSMIC_UUID)
-  const targetId = isCosmic ? COSMIC_UUID : id
+  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
+  const targetId = isCosmic ? 2 : id
   if (!supabase) return
-  if (isCosmic) await ensureCosmicRow()
   await supabase.from('reactions').insert({
     expression_id: targetId,
     kind,
@@ -180,10 +159,9 @@ export async function addReaction(id, kind, opts = {}) {
 }
 
 export async function addComment(id, text, author) {
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || id === COSMIC_UUID)
-  const targetId = isCosmic ? COSMIC_UUID : id
+  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
+  const targetId = isCosmic ? 2 : id
   if (!supabase) return store.addComment(targetId, text, author)
-  if (isCosmic) await ensureCosmicRow()
   await supabase.from('reactions').insert({
     expression_id: targetId,
     kind: 'comment',
