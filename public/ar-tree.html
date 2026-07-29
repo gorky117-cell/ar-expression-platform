@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Tree & Birds - Pure Markerless 3D AR</title>
+  <meta name="description" content="Pure Markerless Natural Feature Tracking 3D AR Experience for Tree & Birds Artwork">
+
+  <!-- Include local MindAR + A-Frame bundle to prevent CORS worker blocks -->
+  <script src="/js/mindar-image-aframe.prod.js"></script>
+  <!-- Supabase Client for real-time social reactions -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      touch-action: none;
+    }
+
+    /* Force video feed to background and WebGL canvas to foreground */
+    video {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      z-index: -2 !important;
+    }
+
+    .a-canvas {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 1 !important;
+      pointer-events: none;
+    }
+
+    /* Top Navigation & Status Bar */
+    .ar-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 99;
+      background: linear-gradient(180deg, rgba(15, 15, 18, 0.85) 0%, rgba(15, 15, 18, 0) 100%);
+      pointer-events: auto;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ar-title-badge {
+      background: rgba(124, 92, 255, 0.25);
+      border: 1px solid rgba(124, 92, 255, 0.5);
+      color: #cabeff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Scanning Guidance Overlay */
+    .scan-guide-container {
+      position: fixed;
+      bottom: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99;
+      pointer-events: none;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .scan-guide-card {
+      background: rgba(20, 20, 26, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 12px 18px;
+      color: #f0f0f5;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Interactive Social Controls Bar */
+    .social-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 12px;
+      background: rgba(20, 20, 26, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 14px;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:active {
+      transform: scale(0.92);
+      background: rgba(124, 92, 255, 0.3);
+    }
+
+    /* Comment Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #16161c;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px 28px 0 0;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-sizing: border-box;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .comments-feed {
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comment-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #ddd;
+      font-size: 14px;
+    }
+
+    .comment-author {
+      color: #cabeff;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .comment-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .comment-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .submit-btn {
+      background: #7c5cff;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <div class="ar-header">
+    <a href="/expression/1" class="back-btn">← Back</a>
+    <div class="ar-title-badge">🌳 Tree & Birds AR</div>
+  </div>
+
+  <!-- Scan Target Guidance Box -->
+  <div class="scan-guide-container">
+    <div class="scan-guide-card">
+      <span id="expCaption">✨ Point camera at clean Tree & Birds artwork</span>
+    </div>
+  </div>
+
+  <!-- Interactive Social Reactions Bar -->
+  <div class="social-bar">
+    <button class="action-btn" onclick="handleLike()">
+      ❤️ <span id="likeCount">3</span>
+    </button>
+    <button class="action-btn" onclick="handleWave()">
+      👋 <span id="waveCount">2</span>
+    </button>
+    <button class="action-btn" onclick="openCommentModal()">
+      💬 Comments
+    </button>
+  </div>
+
+  <!-- Social Comments Modal Sheet -->
+  <div class="modal-overlay" id="commentModal" onclick="closeCommentModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">💬 Live Comments Feed</div>
+        <button class="modal-close" onclick="closeCommentModal()">✕</button>
+      </div>
+
+      <div class="comments-feed" id="commentsFeed">
+        <p style="color: #7a7f90; font-size: 13px; text-align: center;">No comments yet. Be the first to express!</p>
+      </div>
+
+      <div class="comment-input-group">
+        <input type="text" id="commentAuthorInput" class="comment-input" placeholder="Name" style="max-width: 90px;" value="Viewer">
+        <input type="text" id="commentTextInput" class="comment-input" placeholder="Type a message...">
+        <button class="submit-btn" onclick="submitComment()">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MindAR A-Frame 3D Scene Setup -->
+  <a-scene
+    mindar-image="imageTargetSrc: /data/targets/tree-birds.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <!-- Target 0 Anchor: Point camera at the clean Tree & Birds artwork image -->
+    <a-entity mindar-image-target="targetIndex: 0" id="mindTarget">
+      <!-- 3D Swaying Animated Tree & Birds Plane -->
+      <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+    </a-entity>
+
+    <a-assets>
+      <img id="treeTex" src="/overlays/tree-birds.svg" crossorigin="anonymous">
+    </a-assets>
+  </a-scene>
+
+  <script>
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const sceneEl = document.querySelector('a-scene');
+      sceneEl.addEventListener('render-start', () => {
+        const targetEntity = document.getElementById('mindTarget');
+        targetEntity.addEventListener('targetFound', () => {
+          console.log('Tree & Birds Target Found!');
+          const captionEl = document.getElementById('expCaption');
+          if (captionEl) captionEl.textContent = '✨ 3D Tree & Birds AR Overlay Active!';
+        });
+        targetEntity.addEventListener('targetLost', () => {
+          console.log('Tree & Birds Target Lost!');
+          const captionEl = document.getElementById('expCaption');
+          if (captionEl) captionEl.textContent = '✨ Point camera at clean Tree & Birds artwork';
+        });
+      });
+      initSupabase();
+    });
+
+    const expressionId = 1;
+    let supabaseClient = null;
+
+    async function initSupabase() {
+      try {
+        let sbUrl = 'https://pbfhgpitghiwkelhzssz.supabase.co';
+        let sbKey = 'sb_publishable_9UC-fIvJNypRa6oIpZBXlw_dHpB9OUm';
+        try {
+          const res = await fetch('/api/config');
+          const config = await res.json();
+          if (config.supabaseUrl && config.supabaseKey) {
+            sbUrl = config.supabaseUrl;
+            sbKey = config.supabaseKey;
+          }
+        } catch (e) {}
+
+        if (window.supabase) {
+          supabaseClient = window.supabase.createClient(sbUrl, sbKey);
+          pollData();
+          setInterval(pollData, 500); // 500ms ultra-fast sync
+        }
+      } catch (err) {
+        console.error('Supabase init error:', err);
+      }
+    }
+
+    async function pollData() {
+      if (!supabaseClient) return;
+      try {
+        const { data: reactions } = await supabaseClient
+          .from('reactions')
+          .select('*')
+          .eq('expression_id', expressionId);
+
+        if (reactions) {
+          const likes = reactions.filter(r => r.kind === 'like').length + 3;
+          const waves = reactions.filter(r => r.kind === 'greeting').length + 2;
+          const comments = reactions.filter(r => r.kind === 'comment');
+
+          document.getElementById('likeCount').textContent = likes;
+          document.getElementById('waveCount').textContent = waves;
+
+          if (comments.length > 0) {
+            document.getElementById('commentsFeed').innerHTML = comments.slice().reverse().map(c => `
+              <div class="comment-item">
+                <strong class="comment-author">${escapeHtml(c.author || 'Viewer')}:</strong>
+                <span>${escapeHtml(c.text || '')}</span>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }
+
+    async function handleLike() {
+      const el = document.getElementById('likeCount');
+      el.textContent = parseInt(el.textContent) + 1;
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'like' });
+      }
+    }
+
+    async function handleWave() {
+      const el = document.getElementById('waveCount');
+      el.textContent = parseInt(el.textContent) + 1;
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({ expression_id: expressionId, kind: 'greeting' });
+      }
+    }
+
+    function openCommentModal() {
+      document.getElementById('commentModal').classList.add('active');
+    }
+
+    function closeCommentModal(event) {
+      if (!event || event.target === document.getElementById('commentModal')) {
+        document.getElementById('commentModal').classList.remove('active');
+      }
+    }
+
+    async function submitComment() {
+      const author = document.getElementById('commentAuthorInput').value.trim() || 'Viewer';
+      const text = document.getElementById('commentTextInput').value.trim();
+      if (!text) return;
+
+      const feed = document.getElementById('commentsFeed');
+      const emptyMsg = feed.querySelector('p');
+      if (emptyMsg) emptyMsg.remove();
+
+      const newItem = document.createElement('div');
+      newItem.className = 'comment-item';
+      newItem.innerHTML = `<strong class="comment-author">${escapeHtml(author)}:</strong> <span>${escapeHtml(text)}</span>`;
+      feed.insertBefore(newItem, feed.firstChild);
+
+      if (supabaseClient) {
+        await supabaseClient.from('reactions').insert({
+          expression_id: expressionId,
+          kind: 'comment',
+          author,
+          text
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

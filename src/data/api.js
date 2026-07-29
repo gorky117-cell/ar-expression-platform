@@ -80,16 +80,17 @@ export async function getExpression(id) {
 
   if (!supabase) return Promise.resolve(storeItem)
 
+  const isTree = (id === '1' || String(id) === '1')
   const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
-  const targetId = isCosmic ? 2 : id
+  const targetId = isCosmic ? 2 : (isTree ? 1 : id)
 
   const { data: reactions } = await supabase
     .from('reactions')
     .select('*')
     .eq('expression_id', targetId)
 
-  const baseLikes = 5
-  const baseGreetings = 3
+  const baseLikes = isTree ? 3 : 5
+  const baseGreetings = isTree ? 2 : 3
   const rxList = reactions || []
   const dbLikes = rxList.filter((r) => r.kind === 'like').length
   const dbGreetings = rxList.filter((r) => r.kind === 'greeting').length
@@ -102,8 +103,12 @@ export async function getExpression(id) {
       at: new Date(r.created_at || Date.now()).getTime(),
     }))
 
+  const baseComments = isTree
+    ? [{ id: 'c1', text: 'Love the birds!', author: 'Viewer', at: Date.now() - 3600000 }]
+    : [{ id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 }]
+
   const allComments = [
-    { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
+    ...baseComments,
     ...dbComments,
   ]
 

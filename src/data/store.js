@@ -2,10 +2,11 @@
 let expressions = [
   {
     id: '1',
-    name: 'Tree & Birds',
+    name: 'Test Tree',
     mood: 'calm',
-    triggerImage: '/markers/hiro.png',
+    triggerImage: '/overlays/tree-birds-target.png',
     overlayImage: '/overlays/tree-birds.svg',
+    arViewerUrl: '/ar-tree.html',
     createdAt: Date.now() - 86400000,
     likes: 3,
     greetings: 2,
