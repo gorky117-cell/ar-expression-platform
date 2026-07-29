@@ -31,7 +31,7 @@ export default function AR() {
   }
 
   const exprId = expr ? String(expr.id) : ''
-  const isPureMarkerless = exprId === '2' || (expr && expr.arViewerUrl === '/ar-mind.html')
+  const isPureMarkerless = exprId === '2' || exprId === '1' || (expr && (expr.arViewerUrl === '/ar-mind.html' || expr.arViewerUrl === '/ar-tree.html'))
   const overlayUrl = expr ? (expr.overlayImage || '/overlays/tree-birds.svg') : '/overlays/tree-birds.svg'
   const mood = expr ? expr.mood : 'calm'
   const caption = (expr && expr.caption) ? encodeURIComponent(expr.caption) : ''
@@ -39,6 +39,8 @@ export default function AR() {
   const arUrl = expr && expr.arViewerUrl 
     ? expr.arViewerUrl 
     : ('/ar.html?id=' + exprId + '&overlay=' + encodeURIComponent(overlayUrl) + '&mood=' + mood + (caption ? '&caption=' + caption : ''))
+
+  const targetImgUrl = expr ? (expr.triggerImage || expr.overlayImage || '/overlays/cosmic-butterfly.svg') : '/overlays/cosmic-butterfly.svg'
 
   return (
     <div className="page-shell page-main ar-hero ar-shell page-enter">
@@ -63,7 +65,7 @@ export default function AR() {
         
         <p className="ar-copy ar-lede" style={{ fontSize: '0.95rem', color: '#8888a0', lineHeight: 1.5, marginBottom: '1.5rem' }}>
           {isPureMarkerless
-            ? 'Point your phone camera directly at the clean Cosmic Butterfly artwork image on a laptop screen or printed media. No markers required!'
+            ? `Point your phone camera directly at the clean ${expr ? expr.name : 'artwork'} image on a laptop screen or printed media. No markers required!`
             : 'Point your phone camera at the physical printed Hiro marker on a flat surface or another screen. The animated 3D visual overlay will render instantly over the print.'
           }
         </p>
@@ -77,6 +79,7 @@ export default function AR() {
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
               {expressionsList.map((item) => {
                 const isActive = expr && String(expr.id) === String(item.id)
+                const itemMarkerless = String(item.id) === '2' || String(item.id) === '1' || (item && (item.arViewerUrl === '/ar-mind.html' || item.arViewerUrl === '/ar-tree.html'))
                 return (
                   <button
                     key={item.id}
@@ -93,7 +96,7 @@ export default function AR() {
                       transition: 'all 0.2s ease',
                     }}
                   >
-                    {item.name} {String(item.id) === '2' ? '✨ Pure Markerless' : ''}
+                    {item.name} {itemMarkerless ? '✨ Pure Markerless' : ''}
                   </button>
                 )
               })}
@@ -127,13 +130,13 @@ export default function AR() {
           <div className="ar-marker-rows" style={{ display: 'flex', flexDirection: 'column', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
             {isPureMarkerless ? (
               <a
-                href="/overlays/cosmic-butterfly.svg"
+                href={targetImgUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ar-marker-row"
                 style={{ padding: '0.75rem 1rem', color: '#34d399', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}
               >
-                🖼️ View Clean Cosmic Butterfly Target Image
+                🖼️ View Clean {expr ? expr.name : 'Artwork'} Target Image
               </a>
             ) : (
               <a
