@@ -222,15 +222,17 @@ Use this format for new product or architecture decisions:
   3. Cleaned 3D A-Frame scene by removing expanding body spheres/dots, implementing body-hinged 3D left/right wing flap animations (`butterfly-left-wing.svg` and `butterfly-right-wing.svg`) at a controlled 45° rotation rhythm (`550ms` pulse) over the clean target.
   4. Added full interactive social bar (❤️ Likes, 👋 Waves, 💬 Comments modal) directly to `ar-mind.html`.
 - **Why:** Resolved mobile browser WebGL canvas occluding bug where camera video stream blocked WebGL drawing output. Provides immediate 0ms real-time feedback for comments while giving users an unencumbered, elegant 3D wing flapping animation over target prints.
-### 2026-07-30 — Universal Multi-Target WebAR Camera Scanner (`ar-camera.html`)
+### 2026-07-30 — Universal Multi-Target WebAR Camera Scanner (`/scanner`) & Apple-Style Portal
 
 - **Status:** accepted
 - **Decision:**
-  1. Compiled multi-target descriptor `all-targets.mind` containing `Target 0` (Cosmic Butterfly) and `Target 1` (Test Tree).
-  2. Built `public/ar-camera.html` allowing one single camera view to automatically scan both Cosmic Butterfly and Test Tree without closing or switching scanner pages.
-  3. Integrated auto-switching HUD that updates title badge, status guidance, and real-time Supabase reaction counters based on active target in view.
-- **Why:** Delivers seamless WebAR camera experience where viewers open ONE camera view and point at ANY streetwear artwork print to trigger matching 3D AR overlays.
-- **Impacts:** `public/ar-camera.html`, `public/data/targets/all-targets.mind`, `scripts/compile-mind-all.cjs`, `src/pages/AR.jsx`
+  1. **Multi-Target MindAR Compilation (`all-targets.mind`):** Automated headless Puppeteer compiler (`test-multi-compile.cjs`) to compile multi-target descriptor `all-targets.mind` (329,772 bytes) containing keypoints for `Target 0` (Cosmic Butterfly) and `Target 1` (Test Tree).
+  2. **Universal WebAR Scanner (`/scanner` & `public/ar-camera.html`):** Built single camera view allowing viewers to scan ANY artwork print (Butterfly or Tree) in one camera view. Auto-updates top title badge, status guidance, and real-time Supabase reaction counters based on active target in view.
+  3. **Apple-Style Minimalist UI (`src/pages/AR.jsx`):** Redesigned `/ar` scanning portal into an ultra-clean, Apple-level interface featuring 3 simple micro-steps (*1. Aim Camera*, *2. Instant AI Scan*, *3. Express & React*) and a single high-impact CTA button: **`📷 Open AR Camera`**.
+  4. **Clean Express Route Aliases (`server.js`):** Added clean route `/scanner` in Express server and Vite build so users never see or type `.html` extensions.
+  5. **Core Library Dependency Resolution:** Fixed missing `<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>` dependency in `ar-camera.html` head section, resolving black screen camera feed issues and restoring full WebGL 3D rendering.
+- **Why:** Delivers seamless, elegant, distraction-free WebAR camera experience where viewers open ONE clean camera link and point at ANY streetwear artwork print to trigger matching 3D AR overlays.
+- **Impacts:** `public/ar-camera.html`, `public/data/targets/all-targets.mind`, `scripts/test-multi-compile.cjs`, `server.js`, `src/pages/AR.jsx`, `memory.md`
 
 ---
 
@@ -240,13 +242,15 @@ Use this format for new product or architecture decisions:
 - **Visual Overlay Ingestion:** Ingested 4 new SVG overlay assets: [happy.svg](file:///d:/ar-expression-platform/public/overlays/happy.svg), [playful.svg](file:///d:/ar-expression-platform/public/overlays/playful.svg), [inspired.svg](file:///d:/ar-expression-platform/public/overlays/inspired.svg), and [peaceful.svg](file:///d:/ar-expression-platform/public/overlays/peaceful.svg) inside `public/overlays/`.
 - **Visual Overlay Selector:** Added a horizontal selection grid inside [Create.jsx](file:///d:/ar-expression-platform/src/pages/Create.jsx) to select overlays with one tap.
 - **Tactile Voice Controls:** Upgraded [Expression.jsx](file:///d:/ar-expression-platform/src/pages/Expression.jsx) with a glassmorphic layout and a glowing, circular microphone button with pulse animations.
-- **AR Scanning Interface:** Cleaned up [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) to display clear instructions and target download cards.
-- **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar`.
+- **Apple-Minimalist AR Scanning Interface:** Redesigned [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) into an ultra-clean scanning portal with 3 micro-steps and a single primary **📷 Open AR Camera** button.
+- **Clean `/scanner` Route Alias:** Added clean Express route `/scanner` serving the universal camera view without `.html` file extensions.
+- **Universal Multi-Target MindAR Camera:** Built `public/ar-camera.html` powered by `all-targets.mind` (329,772 bytes) tracking Cosmic Butterfly (`Target 0`) and Test Tree (`Target 1`) simultaneously in one single camera view.
+- **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar` and `https://ar.aiforall.ltd/scanner`.
 - **Mobile-AR Clean Interface:** Disabled default A-Frame split-screen Cardboard VR features, removing the headset buttons to enforce a distraction-free WebAR camera layout.
-- **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar.html` and `ar-mind.html` on top of the webcam feed.
+- **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar-camera.html`, `ar.html`, and `ar-mind.html` on top of the webcam feed.
 - **Transparent 3D Spacing & Floating:** Fixed A-Frame plane height calculations to render relative to the Y-axis (vertical offset above the marker) and removed solid SVG box backgrounds for true transparency.
 - **Secure VM Git Syncing:** Configured Linux SSH folder permissions and agent identities on the GCP instance, allowing frictionless `git fetch && git reset --hard` deployments.
-- **MindAR Neural Image Tracking:** Migrated `ar.html` and `ar-mind.html` to MindAR (TF.js). Target descriptor compilation is automated via `scripts/compile-mind.cjs`, enabling pure 100% markerless tracking on clean original vector artwork directly (zero Hiro tags, zero scan badges).
+- **MindAR Neural Image Tracking:** Migrated `ar.html`, `ar-mind.html`, and `ar-camera.html` to MindAR (TF.js). Target descriptor compilation is automated via `scripts/test-multi-compile.cjs`, enabling pure 100% markerless tracking on clean original vector artwork directly (zero Hiro tags, zero scan badges).
 - **Optimistic 0ms Real-Time Social Commenting:** Integrated optimistic DOM prepending for social comments so viewer responses render instantly in 0ms without waiting for backend network roundtrips.
 - **Pure 3D Wing Flapping WebAR Engine:** Built dedicated body-hinged wing flap planes for Cosmic Butterfly with controlled 45° rotation pulses and interactive reaction controls.
 - **Real-Time Cross-Device DB Reactions Sync:** Successfully verified 500ms live database persistence & real-time auto-sync for Likes, Waves, and Comments between mobile AR view and laptop desktop views.
