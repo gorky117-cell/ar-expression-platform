@@ -29,8 +29,24 @@ if (fs.existsSync(envPath)) {
 const app = express()
 const PORT = process.env.PORT || 61100
 
+// Force no-cache on HTML files so phone browsers always get latest version
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') || req.path === '/scanner' || req.path === '/ar-camera' || req.path === '/ar-mind' || req.path === '/ar-tree') {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+  }
+  next();
+});
+
 // Serve static files from the Vite build directory
-app.use(express.static(path.join(__dirname, 'dist')))
+app.use(express.static(path.join(__dirname, 'dist'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    }
+  }
+}))
 
 // Expose Supabase credentials for the static HTML page (ar.html)
 app.get('/api/config', (req, res) => {
