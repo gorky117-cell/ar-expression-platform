@@ -222,14 +222,15 @@ Use this format for new product or architecture decisions:
   3. Cleaned 3D A-Frame scene by removing expanding body spheres/dots, implementing body-hinged 3D left/right wing flap animations (`butterfly-left-wing.svg` and `butterfly-right-wing.svg`) at a controlled 45° rotation rhythm (`550ms` pulse) over the clean target.
   4. Added full interactive social bar (❤️ Likes, 👋 Waves, 💬 Comments modal) directly to `ar-mind.html`.
 - **Why:** Resolved mobile browser WebGL canvas occluding bug where camera video stream blocked WebGL drawing output. Provides immediate 0ms real-time feedback for comments while giving users an unencumbered, elegant 3D wing flapping animation over target prints.
-### 2026-07-28 — Integer ID 2 Supabase Schema Alignment & Production Fallback Credentials
+### 2026-07-30 — Universal Multi-Target WebAR Camera Scanner (`ar-camera.html`)
 
 - **Status:** accepted
 - **Decision:**
-  1. Updated `getExpression()`, `likeExpression()`, `sendGreeting()`, `addComment()`, and `ar-mind.html` to query and insert reactions under integer `expression_id: 2` (matching remote Supabase database column type `integer`).
-  2. Provided hardcoded production fallback credentials in `src/data/supabase.js`, `server.js`, and `public/ar-mind.html` so Docker containers on GCP VM connect 100% reliably even when `.env` is omitted by `.gitignore`.
-- **Why:** Resolved DB query type mismatch error and missing env vars in Docker, achieving 100% real-time cross-device sync for Likes, Greetings/Waves, and Comments across mobile phone AR view and laptop desktop views.
-- **Impacts:** `src/data/api.js`, `src/data/supabase.js`, `server.js`, `public/ar-mind.html`
+  1. Compiled multi-target descriptor `all-targets.mind` containing `Target 0` (Cosmic Butterfly) and `Target 1` (Test Tree).
+  2. Built `public/ar-camera.html` allowing one single camera view to automatically scan both Cosmic Butterfly and Test Tree without closing or switching scanner pages.
+  3. Integrated auto-switching HUD that updates title badge, status guidance, and real-time Supabase reaction counters based on active target in view.
+- **Why:** Delivers seamless WebAR camera experience where viewers open ONE camera view and point at ANY streetwear artwork print to trigger matching 3D AR overlays.
+- **Impacts:** `public/ar-camera.html`, `public/data/targets/all-targets.mind`, `scripts/compile-mind-all.cjs`, `src/pages/AR.jsx`
 
 ---
 
