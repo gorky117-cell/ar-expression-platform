@@ -153,24 +153,45 @@ export default function AR() {
         </section>
 
         <a
-          href={arUrl}
+          href="/ar-camera.html"
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary ar-cta"
           style={{
             display: 'block',
             textAlign: 'center',
-            padding: '1rem',
-            background: isPureMarkerless ? 'linear-gradient(135deg, #7c5cff, #34d399)' : '#7c5cff',
+            padding: '1.1rem 1rem',
+            background: 'linear-gradient(135deg, #7c5cff, #34d399)',
             color: '#fff',
             borderRadius: '9999px',
-            fontWeight: 700,
-            fontSize: '1rem',
-            boxShadow: '0 8px 24px rgba(124, 92, 255, 0.3)',
+            fontWeight: 800,
+            fontSize: '1.05rem',
+            boxShadow: '0 8px 24px rgba(124, 92, 255, 0.4)',
+            textDecoration: 'none',
+            marginBottom: '0.75rem',
+          }}
+        >
+          📷 Launch Universal AR Scanner (Scans Any Design)
+        </a>
+
+        <a
+          href={arUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            textAlign: 'center',
+            padding: '0.75rem',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            color: '#ddd',
+            borderRadius: '9999px',
+            fontWeight: 600,
+            fontSize: '0.875rem',
             textDecoration: 'none',
           }}
         >
-          📷 Launch AR Camera View ({expr ? expr.name : 'AR'})
+          Direct Scanner View ({expr ? expr.name : 'AR'})
         </a>
 
         <p className="ar-footnote" style={{ marginTop: '1.5rem', color: '#7a7f90', fontSize: '0.75rem', textAlign: 'center', lineHeight: 1.4 }}>
