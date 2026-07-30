@@ -63,9 +63,7 @@ export default function AR() {
 
         {/* Single Ultra-Clean Glowing Launch Button */}
         <a
-          href="/ar-camera.html"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/scanner"
           style={{
             display: 'block',
             textAlign: 'center',

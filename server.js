@@ -40,6 +40,20 @@ app.get('/api/config', (req, res) => {
   })
 })
 
+// Clean route aliases without .html extension
+app.get('/scanner', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'ar-camera.html'))
+})
+app.get('/ar-camera', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'ar-camera.html'))
+})
+app.get('/ar-mind', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'ar-mind.html'))
+})
+app.get('/ar-tree', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'ar-tree.html'))
+})
+
 // Handle SPA routing: serve index.html for all non-file routes
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
