@@ -324,23 +324,23 @@
     <!-- Target 0 Anchor: Cosmic Butterfly -->
     <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly" visible="false">
       <!-- 1. Center Butterfly Body Base -->
-      <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
+      <a-plane class="butterfly-part" visible="false" position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
 
       <!-- 2. Realistic 3D Flapping Left Wing Hinge -->
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
-        <a-plane position="-0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane class="butterfly-part" visible="false" position="-0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
       <!-- 3. Realistic 3D Flapping Right Wing Hinge -->
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
-        <a-plane position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane class="butterfly-part" visible="false" position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree" visible="false">
       <!-- 3D Swaying Animated Tree & Birds Plane -->
-      <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+      <a-plane class="tree-part" visible="false" position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
     </a-entity>
 
     <a-assets>
@@ -364,15 +364,27 @@
         const targetButterfly = document.getElementById('targetButterfly');
         const targetTree = document.getElementById('targetTree');
 
+        // Helper to toggle visibility of target parts
+        function setPartsVisible(selector, isVis) {
+          document.querySelectorAll(selector).forEach(el => {
+            el.setAttribute('visible', isVis ? 'true' : 'false');
+          });
+        }
+
         // Target 0: Cosmic Butterfly
         targetButterfly.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
           activeExpressionId = 2;
+          targetButterfly.setAttribute('visible', 'true');
+          setPartsVisible('.butterfly-part', true);
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
           document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
           pollData();
         });
         targetButterfly.addEventListener('targetLost', () => {
+          console.log('Cosmic Butterfly Target Lost!');
+          targetButterfly.setAttribute('visible', 'false');
+          setPartsVisible('.butterfly-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
 
@@ -380,11 +392,16 @@
         targetTree.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
           activeExpressionId = 1;
+          targetTree.setAttribute('visible', 'true');
+          setPartsVisible('.tree-part', true);
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
           document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
           pollData();
         });
         targetTree.addEventListener('targetLost', () => {
+          console.log('Test Tree Target Lost!');
+          targetTree.setAttribute('visible', 'false');
+          setPartsVisible('.tree-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
       });
