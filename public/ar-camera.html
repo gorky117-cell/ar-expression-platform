@@ -23,10 +23,9 @@
       touch-action: none;
     }
 
-    /* CRITICAL: Force-hide A-Frame asset images and planes before engine initializes */
-    a-assets, a-assets * { display: none !important; visibility: hidden !important; }
-    a-plane { opacity: 0; }
-    a-scene img { display: none !important; }
+    /* CRITICAL: Force-hide A-Frame asset preload images before engine initializes */
+    a-assets { display: none !important; visibility: hidden !important; width: 0 !important; height: 0 !important; overflow: hidden !important; position: absolute !important; }
+    a-assets img { display: none !important; width: 0 !important; height: 0 !important; }
 
     /* Force video feed to background and WebGL canvas to foreground */
     video {
