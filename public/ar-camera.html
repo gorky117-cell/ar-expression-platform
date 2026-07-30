@@ -359,19 +359,17 @@
     let activeExpressionId = 2; // Default to Cosmic Butterfly (2) or Test Tree (1)
 
     document.addEventListener('DOMContentLoaded', () => {
-      const sceneEl = document.querySelector('a-scene');
-      sceneEl.addEventListener('render-start', () => {
-        const targetButterfly = document.getElementById('targetButterfly');
-        const targetTree = document.getElementById('targetTree');
+      const targetButterfly = document.getElementById('targetButterfly');
+      const targetTree = document.getElementById('targetTree');
 
-        // Helper to toggle visibility of target parts
-        function setPartsVisible(selector, isVis) {
-          document.querySelectorAll(selector).forEach(el => {
-            el.setAttribute('visible', isVis ? 'true' : 'false');
-          });
-        }
+      function setPartsVisible(selector, isVis) {
+        document.querySelectorAll(selector).forEach(el => {
+          el.setAttribute('visible', isVis ? 'true' : 'false');
+        });
+      }
 
-        // Target 0: Cosmic Butterfly
+      // Target 0: Cosmic Butterfly
+      if (targetButterfly) {
         targetButterfly.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
           activeExpressionId = 2;
@@ -391,8 +389,10 @@
           setPartsVisible('.butterfly-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
+      }
 
-        // Target 1: Test Tree
+      // Target 1: Test Tree
+      if (targetTree) {
         targetTree.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
           activeExpressionId = 1;
@@ -412,7 +412,7 @@
           setPartsVisible('.tree-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
-      });
+      }
 
       initSupabase();
     });
