@@ -322,23 +322,23 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
-    <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly" visible="false">
+    <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly" visible="false" scale="0 0 0" position="0 -999 0">
       <!-- 1. Center Butterfly Body Base -->
       <a-plane class="butterfly-part" visible="false" position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
 
       <!-- 2. Realistic 3D Flapping Left Wing Hinge -->
-      <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
+      <a-entity class="butterfly-part" visible="false" position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane class="butterfly-part" visible="false" position="-0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
       <!-- 3. Realistic 3D Flapping Right Wing Hinge -->
-      <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
+      <a-entity class="butterfly-part" visible="false" position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane class="butterfly-part" visible="false" position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
-    <a-entity mindar-image-target="targetIndex: 1" id="targetTree" visible="false">
+    <a-entity mindar-image-target="targetIndex: 1" id="targetTree" visible="false" scale="0 0 0" position="0 -999 0">
       <!-- 3D Swaying Animated Tree & Birds Plane -->
       <a-plane class="tree-part" visible="false" position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
     </a-entity>
@@ -375,6 +375,8 @@
         targetButterfly.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
           activeExpressionId = 2;
+          targetButterfly.setAttribute('scale', '1 1 1');
+          targetButterfly.setAttribute('position', '0 0 0');
           targetButterfly.setAttribute('visible', 'true');
           setPartsVisible('.butterfly-part', true);
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
@@ -383,6 +385,8 @@
         });
         targetButterfly.addEventListener('targetLost', () => {
           console.log('Cosmic Butterfly Target Lost!');
+          targetButterfly.setAttribute('scale', '0 0 0');
+          targetButterfly.setAttribute('position', '0 -999 0');
           targetButterfly.setAttribute('visible', 'false');
           setPartsVisible('.butterfly-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
@@ -392,6 +396,8 @@
         targetTree.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
           activeExpressionId = 1;
+          targetTree.setAttribute('scale', '1 1 1');
+          targetTree.setAttribute('position', '0 0 0');
           targetTree.setAttribute('visible', 'true');
           setPartsVisible('.tree-part', true);
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
@@ -400,6 +406,8 @@
         });
         targetTree.addEventListener('targetLost', () => {
           console.log('Test Tree Target Lost!');
+          targetTree.setAttribute('scale', '0 0 0');
+          targetTree.setAttribute('position', '0 -999 0');
           targetTree.setAttribute('visible', 'false');
           setPartsVisible('.tree-part', false);
           document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
