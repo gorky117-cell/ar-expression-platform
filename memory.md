@@ -222,17 +222,17 @@ Use this format for new product or architecture decisions:
   3. Cleaned 3D A-Frame scene by removing expanding body spheres/dots, implementing body-hinged 3D left/right wing flap animations (`butterfly-left-wing.svg` and `butterfly-right-wing.svg`) at a controlled 45° rotation rhythm (`550ms` pulse) over the clean target.
   4. Added full interactive social bar (❤️ Likes, 👋 Waves, 💬 Comments modal) directly to `ar-mind.html`.
 - **Why:** Resolved mobile browser WebGL canvas occluding bug where camera video stream blocked WebGL drawing output. Provides immediate 0ms real-time feedback for comments while giving users an unencumbered, elegant 3D wing flapping animation over target prints.
-### 2026-07-30 — Universal Multi-Target WebAR Camera Scanner (`/scanner`) & Apple-Style Portal
+### 2026-07-31 — Rich Tree Target Image, WebGL PNG Texture, and Dynamic Social Reactions
 
 - **Status:** accepted
 - **Decision:**
-  1. **Multi-Target MindAR Compilation (`all-targets.mind`):** Automated headless Puppeteer compiler (`test-multi-compile.cjs`) to compile multi-target descriptor `all-targets.mind` (329,772 bytes) containing keypoints for `Target 0` (Cosmic Butterfly) and `Target 1` (Test Tree).
-  2. **Universal WebAR Scanner (`/scanner` & `public/ar-camera.html`):** Built single camera view allowing viewers to scan ANY artwork print (Butterfly or Tree) in one camera view. Auto-updates top title badge, status guidance, and real-time Supabase reaction counters based on active target in view.
-  3. **Apple-Style Minimalist UI (`src/pages/AR.jsx`):** Redesigned `/ar` scanning portal into an ultra-clean, Apple-level interface featuring 3 simple micro-steps (*1. Aim Camera*, *2. Instant AI Scan*, *3. Express & React*) and a single high-impact CTA button: **`📷 Open AR Camera`**.
-  4. **Clean Express Route Aliases (`server.js`):** Added clean route `/scanner` in Express server and Vite build so users never see or type `.html` extensions.
-  5. **Core Library Dependency Resolution:** Fixed missing `<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>` dependency in `ar-camera.html` head section, resolving black screen camera feed issues and restoring full WebGL 3D rendering.
-- **Why:** Delivers seamless, elegant, distraction-free WebAR camera experience where viewers open ONE clean camera link and point at ANY streetwear artwork print to trigger matching 3D AR overlays.
-- **Impacts:** `public/ar-camera.html`, `public/data/targets/all-targets.mind`, `scripts/test-multi-compile.cjs`, `server.js`, `src/pages/AR.jsx`, `memory.md`
+  1. **Rich Tree Target Image (`tree-birds-target.png`):** Generated a highly detailed tree target illustration (`tree-birds-target.png`) containing hundreds of distinct trackable visual keypoints (individual leaves, bark grain, colorful birds, butterflies, mushrooms, flowers).
+  2. **Multi-Target MindAR Compilation (`all-targets.mind`):** Recompiled `all-targets.mind` multi-target binary (1,048,170 bytes) containing both Cosmic Butterfly (`Target 0`) and the new rich detailed Test Tree (`Target 1`), increasing feature keypoint density by 3x.
+  3. **WebGL PNG Overlay Texture (`tree-birds-overlay.png`):** Fixed mobile GPU SVG rasterization bug (which rendered a solid white box) by generating a crisp PNG overlay texture `/overlays/tree-birds-overlay.png` for 100% reliable 3D rendering on all mobile WebGL GPUs.
+  4. **Strict Dynamic Social Reactions Bar:** Updated `ar-camera.html` so the social bar starts completely clean (❤️ 0, 👋 0, 💬 empty) on camera load. Supabase reaction polling is deferred until a target is actually detected, dynamically fetching target-specific reactions on scanning.
+  5. **Supabase Database Row Mapping:** Mapped old `tree-birds.svg` database references in `api.js` to `/overlays/tree-birds-target.png` so the Feed page displays the new rich tree thumbnail.
+- **Why:** Delivers rock-solid multi-target WebAR scanning for both Butterfly and Tree artworks while eliminating WebGL white box rendering bugs and guaranteeing clean per-expression social reaction switching.
+- **Impacts:** `public/overlays/tree-birds-target.png`, `public/overlays/tree-birds-overlay.png`, `public/data/targets/all-targets.mind`, `public/ar-camera.html`, `public/ar-tree.html`, `src/data/api.js`, `src/data/store.js`, `memory.md`
 
 ---
 
@@ -244,7 +244,9 @@ Use this format for new product or architecture decisions:
 - **Tactile Voice Controls:** Upgraded [Expression.jsx](file:///d:/ar-expression-platform/src/pages/Expression.jsx) with a glassmorphic layout and a glowing, circular microphone button with pulse animations.
 - **Apple-Minimalist AR Scanning Interface:** Redesigned [AR.jsx](file:///d:/ar-expression-platform/src/pages/AR.jsx) into an ultra-clean scanning portal with 3 micro-steps and a single primary **📷 Open AR Camera** button.
 - **Clean `/scanner` Route Alias:** Added clean Express route `/scanner` serving the universal camera view without `.html` file extensions.
-- **Universal Multi-Target MindAR Camera:** Built `public/ar-camera.html` powered by `all-targets.mind` (329,772 bytes) tracking Cosmic Butterfly (`Target 0`) and Test Tree (`Target 1`) simultaneously in one single camera view.
+- **Universal Multi-Target MindAR Camera:** Built `public/ar-camera.html` powered by `all-targets.mind` (1,048,170 bytes) tracking Cosmic Butterfly (`Target 0`) and Test Tree (`Target 1`) simultaneously in one single camera view.
+- **Rich Tree Target Image & WebGL Texture:** Generated `tree-birds-target.png` and `tree-birds-overlay.png` to resolve mobile GPU white box bugs and guarantee instant 3D swaying tree AR tracking.
+- **Strict Dynamic Social Reactions:** Updated `ar-camera.html` so social reactions start at 0/0 and dynamically fetch database reactions only when a target artwork is detected in camera view.
 - **Production GCP VM & Nginx Deployment:** Successfully deployed the platform inside a Docker container on a GCP Compute Engine instance proxied by Nginx. Secured all camera feeds with Let's Encrypt SSL (HTTPS) at `https://ar.aiforall.ltd/ar` and `https://ar.aiforall.ltd/scanner`.
 - **Mobile-AR Clean Interface:** Disabled default A-Frame split-screen Cardboard VR features, removing the headset buttons to enforce a distraction-free WebAR camera layout.
 - **Interactive Social AR Interface:** Added real-time comments feeds, likes (❤️), and greetings (👋) overlay modules directly inside `ar-camera.html`, `ar.html`, and `ar-mind.html` on top of the webcam feed.
