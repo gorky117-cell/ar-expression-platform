@@ -22,7 +22,7 @@ function rowToExpression(row, reactions = []) {
     name: row.name || 'My Expression',
     mood: row.mood || 'calm',
     triggerImage: row.trigger_image || '/markers/hiro.png',
-    overlayImage: row.overlay_image || '/overlays/tree-birds.svg',
+    overlayImage: row.overlay_image || '/overlays/tree-birds-target.png',
     arViewerUrl: row.ar_viewer_url || null,
     caption: row.caption,
     isLive: row.is_live !== false,

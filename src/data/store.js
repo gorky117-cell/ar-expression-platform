@@ -5,7 +5,7 @@ let expressions = [
     name: 'Test Tree',
     mood: 'calm',
     triggerImage: '/overlays/tree-birds-target.png',
-    overlayImage: '/overlays/tree-birds.svg',
+    overlayImage: '/overlays/tree-birds-target.png',
     arViewerUrl: '/ar-tree.html',
     createdAt: Date.now() - 86400000,
     likes: 3,
