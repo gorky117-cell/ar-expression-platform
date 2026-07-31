@@ -364,7 +364,8 @@
       return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    let activeExpressionId = 2;
+    let activeExpressionId = null;
+    let pollingStarted = false;
 
     document.addEventListener('DOMContentLoaded', () => {
       const targetButterfly = document.getElementById('targetButterfly');
@@ -376,6 +377,7 @@
           activeExpressionId = 2;
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
           document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
+          startPolling();
           pollData();
         });
         targetButterfly.addEventListener('targetLost', () => {
@@ -390,6 +392,7 @@
           activeExpressionId = 1;
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
           document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
+          startPolling();
           pollData();
         });
         targetTree.addEventListener('targetLost', () => {
@@ -402,6 +405,13 @@
     });
 
     let supabaseClient = null;
+
+    function startPolling() {
+      if (!pollingStarted && supabaseClient) {
+        pollingStarted = true;
+        setInterval(pollData, 500);
+      }
+    }
 
     async function initSupabase() {
       try {
@@ -418,8 +428,7 @@
 
         if (window.supabase) {
           supabaseClient = window.supabase.createClient(sbUrl, sbKey);
-          pollData();
-          setInterval(pollData, 500);
+          // Don't poll here — wait until a target is actually detected
         }
       } catch (err) {
         console.error('Supabase init error:', err);
@@ -427,7 +436,7 @@
     }
 
     async function pollData() {
-      if (!supabaseClient) return;
+      if (!supabaseClient || activeExpressionId === null) return;
       try {
         const { data: reactions } = await supabaseClient
           .from('reactions')
