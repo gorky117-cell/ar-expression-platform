@@ -51,7 +51,9 @@ export async function getExpressions() {
     return acc
   }, {})
   
-  const fetched = rows.map((row) => rowToExpression(row, byExpr[row.id] || []))
+  const fetched = rows
+    .filter((row) => row.name !== 'My Expression')
+    .map((row) => rowToExpression(row, byExpr[row.id] || []))
   
   // Ensure Cosmic Butterfly card is always present at top of list
   const cosmicItem = defaultList.find((item) => item.id === 'cosmic-butterfly')
