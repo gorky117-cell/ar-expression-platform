@@ -3,11 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { addExpression, MOODS } from '../data/api'
 
 const SYSTEM_OVERLAYS = [
-  { mood: 'calm', path: '/overlays/tree-birds.svg', label: 'Calm Canopy' },
-  { mood: 'happy', path: '/overlays/happy.svg', label: 'Happy Sparks' },
-  { mood: 'playful', path: '/overlays/playful.svg', label: 'Playful Bubbles' },
-  { mood: 'inspired', path: '/overlays/inspired.svg', label: 'Inspired Prism' },
-  { mood: 'peaceful', path: '/overlays/peaceful.svg', label: 'Peaceful Zen' },
+  { mood: 'inspired', path: '/overlays/cosmic-butterfly.svg', label: 'Cosmic Butterfly' },
+  { mood: 'calm', path: '/overlays/tree-birds-target.png', label: 'Test Tree' },
 ]
 
 export default function Create() {
