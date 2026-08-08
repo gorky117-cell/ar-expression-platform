@@ -159,16 +159,18 @@ export default function Create() {
               </span>
             </div>
 
-            <div style={{ fontSize: '0.85rem', color: '#e0dcf0', lineHeight: 1.5, marginBottom: '0.5rem' }}>
+            <div style={{ fontSize: '0.85rem', color: '#e0dcf0', lineHeight: 1.6, marginBottom: '0.5rem' }}>
               {selectedOverlay.label === 'Cosmic Butterfly' ? (
                 <>
-                  <p style={{ margin: '0 0 4px 0' }}>✨ <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
-                  <p style={{ margin: 0 }}>🎨 <strong>Ambient Aura:</strong> Pulsing Cyan &amp; Magenta Neon Glow</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> Pulsing Cyan &amp; Magenta Galactic Neon Glow</p>
+                  <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Floating 3D Hearts rising upward on viewer Likes</p>
                 </>
               ) : (
                 <>
-                  <p style={{ margin: '0 0 4px 0' }}>🌿 <strong>3D Motion:</strong> Swaying Forest Canopy with Perched Birds &amp; Falling Leaves</p>
-                  <p style={{ margin: 0 }}>🧘 <strong>Ambient Aura:</strong> Soothing Emerald &amp; Teal Breathing Glow</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Birds &amp; Falling Autumn Leaves floating in wind</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> Soothing Emerald &amp; Teal Breathing Glow around trunk</p>
+                  <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Live Reactions (Likes, Waves &amp; Comments) floating in 3D</p>
                 </>
               )}
             </div>
