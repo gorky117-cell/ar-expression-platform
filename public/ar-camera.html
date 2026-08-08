@@ -331,6 +331,9 @@
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
     <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly">
+      <!-- 0. Dynamic 3D Mood Aura Halo Behind Artwork -->
+      <a-circle id="butterflyAura3D" position="0 0 0.01" radius="0.7" material="shader: flat; color: #00f0ff; opacity: 0.45; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.15 1.15 1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-circle>
+
       <!-- 1. Center Butterfly Body Base -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
 
@@ -352,6 +355,9 @@
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
+      <!-- 0. Dynamic 3D Mood Aura Halo Behind Artwork -->
+      <a-circle id="treeAura3D" position="0 0 0.01" radius="0.7" material="shader: flat; color: #10b981; opacity: 0.45; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.15 1.15 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-circle>
+
       <!-- 3D Swaying Animated Tree & Birds Plane -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
 
@@ -479,6 +485,19 @@
           const tree3D = document.getElementById('treeText3D');
           if (butterfly3D) butterfly3D.setAttribute('value', textVal);
           if (tree3D) tree3D.setAttribute('value', textVal);
+
+          // Update 3D Mood Aura Halo Color dynamically in 3D WebGL scene
+          let moodColor = '#10b981'; // default calm emerald
+          const m = (latest.mood || '').toLowerCase();
+          if (m === 'inspired' || m === 'galactic') moodColor = '#00f0ff';
+          else if (m === 'happy' || m === 'solar-beams' || m === 'hyperdrive') moodColor = '#f59e0b';
+          else if (m === 'playful' || m === 'micro-swarm' || m === 'leaf-whirlwind') moodColor = '#ec4899';
+          else if (m === 'peaceful' || m === 'zenith' || m === 'starlight-roots') moodColor = '#6366f1';
+
+          const butterflyAura = document.getElementById('butterflyAura3D');
+          const treeAura = document.getElementById('treeAura3D');
+          if (butterflyAura) butterflyAura.setAttribute('material', 'color', moodColor);
+          if (treeAura) treeAura.setAttribute('material', 'color', moodColor);
         }
 
         const { data: reactions } = await supabaseClient
