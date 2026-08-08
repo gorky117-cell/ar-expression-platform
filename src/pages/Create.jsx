@@ -45,7 +45,7 @@ export default function Create() {
         Publish a digital layer linked to your wearable design. Dictate caption and mood.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 480 }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 520 }}>
         <label>
           <span style={{ display: 'block', marginBottom: 6, fontSize: '0.85rem', fontWeight: 600, color: '#c9c4d8' }}>
             Expression Name
@@ -57,25 +57,6 @@ export default function Create() {
             placeholder="e.g. Cyberpunk Hoodie"
             style={inputStyle}
           />
-        </label>
-
-        <label>
-          <span style={{ display: 'block', marginBottom: 6, fontSize: '0.85rem', fontWeight: 600, color: '#c9c4d8' }}>
-            Active Mood
-          </span>
-          <select 
-            value={mood} 
-            onChange={(e) => {
-              setMood(e.target.value)
-              const matchingOverlay = SYSTEM_OVERLAYS.find(o => o.mood === e.target.value)
-              if (matchingOverlay) setSelectedOverlay(matchingOverlay)
-            }} 
-            style={inputStyle}
-          >
-            {MOODS.map((m) => (
-              <option key={m} value={m} style={{ background: '#1a1a20' }}>{m}</option>
-            ))}
-          </select>
         </label>
 
         <label>
@@ -93,44 +74,98 @@ export default function Create() {
 
         <div>
           <span style={{ display: 'block', marginBottom: 12, fontSize: '0.85rem', fontWeight: 600, color: '#c9c4d8' }}>
-            Select AR Visual Overlay Template
+            Choose Artwork Design &amp; Expression Mood
           </span>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '0.75rem', marginBottom: '1.25rem' }}>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
             {SYSTEM_OVERLAYS.map((overlay) => {
-              const isSelected = selectedOverlay.mood === overlay.mood
+              const isSelected = selectedOverlay.label === overlay.label
               return (
-                <button
-                  type="button"
-                  key={overlay.mood}
-                  onClick={() => {
-                    setSelectedOverlay(overlay)
-                    setMood(overlay.mood)
-                  }}
+                <div
+                  key={overlay.label}
                   style={{
-                    background: isSelected ? 'rgba(124, 92, 255, 0.18)' : 'rgba(26, 26, 32, 0.7)',
+                    background: isSelected ? 'linear-gradient(135deg, rgba(124, 92, 255, 0.18) 0%, rgba(26, 26, 32, 0.8) 100%)' : 'rgba(26, 26, 32, 0.6)',
                     border: isSelected ? '2px solid #7c5cff' : '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: 12,
-                    padding: '0.65rem',
-                    textAlign: 'center',
-                    cursor: 'pointer',
+                    borderRadius: 16,
+                    padding: '1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.75rem',
                     transition: 'all 0.2s ease',
                   }}
                 >
-                  <div
-                    style={{
-                      width: '100%',
-                      aspectRatio: '1',
-                      backgroundImage: `url(${overlay.path})`,
-                      backgroundSize: 'contain',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center',
-                      marginBottom: 6,
-                    }}
-                  />
-                  <span style={{ fontSize: '0.75rem', color: isSelected ? '#fff' : '#8888a0', fontWeight: 700 }}>
-                    {overlay.label}
-                  </span>
-                </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div
+                      onClick={() => {
+                        setSelectedOverlay(overlay)
+                        setMood(overlay.mood)
+                      }}
+                      style={{
+                        width: 70,
+                        height: 70,
+                        borderRadius: 12,
+                        backgroundImage: `url(${overlay.path})`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        backgroundColor: '#121218',
+                        border: isSelected ? '2px solid #7c5cff' : '1px solid rgba(255, 255, 255, 0.1)',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#fff' }}>{overlay.label}</h4>
+                        {isSelected && (
+                          <span style={{ fontSize: '0.7rem', background: '#7c5cff', color: '#fff', padding: '2px 8px', borderRadius: 99, fontWeight: 700 }}>
+                            ACTIVE SELECTION
+                          </span>
+                        )}
+                      </div>
+                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#8888a0', lineHeight: 1.4 }}>
+                        {overlay.label === 'Cosmic Butterfly' 
+                          ? '✨ 3D Flapping Wings & Star-Dust Flight Trail'
+                          : '🌿 2 Perched Bluebirds & Falling Autumn Leaves'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Mood Selector Buttons inside this specific artwork */}
+                  <div>
+                    <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#a0a0b8', marginBottom: 6 }}>
+                      Select Expression Mood for {overlay.label}:
+                    </span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                      {MOODS.map((m) => {
+                        const isMoodActive = isSelected && mood === m
+                        return (
+                          <button
+                            type="button"
+                            key={m}
+                            onClick={() => {
+                              setSelectedOverlay(overlay)
+                              setMood(m)
+                            }}
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: 999,
+                              border: isMoodActive ? '1px solid #7c5cff' : '1px solid rgba(255, 255, 255, 0.1)',
+                              background: isMoodActive ? '#7c5cff' : 'rgba(255, 255, 255, 0.05)',
+                              color: isMoodActive ? '#fff' : '#aaa',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                          >
+                            {m === 'calm' ? '🌿 calm' : m === 'inspired' ? '🌌 inspired' : m === 'happy' ? '⚡ happy' : m === 'playful' ? '🎨 playful' : '🧘 peaceful'}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
               )
             })}
           </div>
@@ -163,13 +198,13 @@ export default function Create() {
               {selectedOverlay.label === 'Cosmic Butterfly' ? (
                 <>
                   <p style={{ margin: '0 0 6px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> Pulsing Cyan &amp; Magenta Galactic Neon Glow</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> {mood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : mood === 'calm' ? 'Teal Soft Ambient Glow' : 'Golden Radiant Sparkles'}</p>
                   <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Floating 3D Hearts rising upward on viewer Likes</p>
                 </>
               ) : (
                 <>
                   <p style={{ margin: '0 0 6px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Birds &amp; Falling Autumn Leaves floating in wind</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> Soothing Emerald &amp; Teal Breathing Glow around trunk</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> {mood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : mood === 'peaceful' ? 'Soft Blue Zen Aura' : 'Golden Sunlight Pulse'}</p>
                   <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Live Reactions (Likes, Waves &amp; Comments) floating in 3D</p>
                 </>
               )}
@@ -217,4 +252,3 @@ const btnStyle = {
   fontSize: '0.95rem',
   boxShadow: '0 4px 16px rgba(124, 92, 255, 0.25)',
 }
-
