@@ -1,48 +1,47 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { addExpression, MOODS } from '../data/api'
+import { addExpression } from '../data/api'
 
+// ARTWORK-SPECIFIC MOODS & EXPRESSION OPTIONS
 const SYSTEM_OVERLAYS = [
-  { mood: 'inspired', path: '/overlays/cosmic-butterfly.svg', label: 'Cosmic Butterfly' },
-  { mood: 'calm', path: '/overlays/tree-birds-target.png', label: 'Test Tree' },
+  {
+    label: 'Cosmic Butterfly',
+    path: '/overlays/cosmic-butterfly.svg',
+    defaultMood: 'inspired',
+    moods: [
+      { id: 'inspired', label: '🌌 galactic', particle: '✨', aura: 'rgba(0, 240, 255, 0.6)', motion: 'Flapping Wing Oscillations & Star-Dust Flight Trail', auraDesc: 'Cyan & Magenta Neon Galactic Glow' },
+      { id: 'flutter', label: '🦋 micro-swarm', particle: '🦋', aura: 'rgba(236, 72, 153, 0.6)', motion: 'Micro-Butterfly Swarm & Pulsing Wing Flap', auraDesc: 'Vibrant Magenta & Pink Sparkle Swarm' },
+      { id: 'hyperdrive', label: '⚡ hyperdrive', particle: '⚡', aura: 'rgba(245, 158, 11, 0.6)', motion: 'Electric Gold Sparkle Burst & High-Speed Flap', auraDesc: 'Radiant Golden Sunlight Pulse' },
+      { id: 'zenith', label: '🧘 zenith aura', particle: '🔮', aura: 'rgba(99, 102, 241, 0.6)', motion: 'Soft Violet Breathing Aura Waves', auraDesc: 'Deep Indigo & Violet Zen Ripple' },
+    ]
+  },
+  {
+    label: 'Test Tree',
+    path: '/overlays/tree-birds-target.png',
+    defaultMood: 'calm',
+    moods: [
+      { id: 'calm', label: '🌿 canopy-calm', particle: '🍃', aura: 'rgba(16, 185, 129, 0.6)', motion: '2 Perched Bluebirds & Falling Autumn Leaves floating in wind', auraDesc: 'Soothing Emerald & Teal Breathing Glow around trunk' },
+      { id: 'breeze', label: '🍃 leaf-whirlwind', particle: '🍁', aura: 'rgba(245, 158, 11, 0.6)', motion: 'Swirling Golden Leaf Whirlwind & Swaying Tree Canopy', auraDesc: 'Warm Autumn Gold & Amber Glow' },
+      { id: 'sunlight', label: '☀️ solar-beams', particle: '☀️', aura: 'rgba(251, 191, 36, 0.6)', motion: 'Radiant Sun Beams & Nesting Bird Animations', auraDesc: 'Bright Sunlight Ray Particles' },
+      { id: 'starlight', label: '✨ starlight-roots', particle: '🌟', aura: 'rgba(56, 189, 248, 0.6)', motion: 'Starlight Root Pulses & Glowing Hummingbird Hover', auraDesc: 'Sky-Blue Starlight Aura' },
+    ]
+  },
 ]
 
 export default function Create() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
-  const [mood, setMood] = useState(MOODS[0])
   const [caption, setCaption] = useState('')
   const [selectedOverlay, setSelectedOverlay] = useState(SYSTEM_OVERLAYS[0])
-  const [hoveredState, setHoveredState] = useState(null) // { overlay, mood }
+  const [mood, setMood] = useState(SYSTEM_OVERLAYS[0].defaultMood)
+  const [hoveredState, setHoveredState] = useState(null) // { overlay, moodObj }
   const [submitting, setSubmitting] = useState(false)
 
   const activeOverlay = hoveredState?.overlay || selectedOverlay
-  const activeMood = hoveredState?.mood || mood
+  
+  // Find current mood object
+  const currentMoodObj = activeOverlay.moods.find(m => m.id === (hoveredState?.moodObj?.id || mood)) || activeOverlay.moods[0]
   const isHoveredPreview = !!hoveredState
-
-  // Dynamic aura colors per mood
-  const getAuraColor = (m) => {
-    switch (m) {
-      case 'inspired': return 'rgba(0, 240, 255, 0.5)'
-      case 'calm': return 'rgba(16, 185, 129, 0.5)'
-      case 'happy': return 'rgba(245, 158, 11, 0.5)'
-      case 'playful': return 'rgba(236, 72, 153, 0.5)'
-      case 'peaceful': return 'rgba(99, 102, 241, 0.5)'
-      default: return 'rgba(124, 92, 255, 0.5)'
-    }
-  }
-
-  // Dynamic mood particle icon
-  const getMoodParticle = (m) => {
-    switch (m) {
-      case 'inspired': return '✨'
-      case 'calm': return '🍃'
-      case 'happy': return '⚡'
-      case 'playful': return '🎨'
-      case 'peaceful': return '🧘'
-      default: return '✨'
-    }
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -50,7 +49,7 @@ export default function Create() {
     try {
       const expr = await addExpression({
         name: name || 'My Expression',
-        mood,
+        mood: currentMoodObj.id,
         caption: caption.trim() || undefined,
         triggerImage: '/markers/hiro.png',
         overlayImage: selectedOverlay.path,
@@ -153,9 +152,9 @@ export default function Create() {
                     <div
                       onClick={() => {
                         setSelectedOverlay(overlay)
-                        setMood(overlay.mood)
+                        setMood(overlay.defaultMood)
                       }}
-                      onMouseEnter={() => setHoveredState({ overlay, mood: overlay.mood })}
+                      onMouseEnter={() => setHoveredState({ overlay, moodObj: overlay.moods[0] })}
                       onMouseLeave={() => setHoveredState(null)}
                       style={{
                         width: 70,
@@ -188,39 +187,39 @@ export default function Create() {
                     </div>
                   </div>
 
-                  {/* Mood Selector Buttons inside this specific artwork */}
+                  {/* Artwork-Specific Mood Selector Buttons */}
                   <div>
                     <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#a0a0b8', marginBottom: 6 }}>
-                      Select Expression Mood (Hover to preview in AR):
+                      Select Artwork Expression Mood for {overlay.label}:
                     </span>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                      {MOODS.map((m) => {
-                        const isMoodActive = isSelected && mood === m
-                        const isHovered = hoveredState?.overlay.label === overlay.label && hoveredState?.mood === m
+                      {overlay.moods.map((mObj) => {
+                        const isMoodActive = isSelected && mood === mObj.id
+                        const isHovered = hoveredState?.overlay.label === overlay.label && hoveredState?.moodObj?.id === mObj.id
                         return (
                           <button
                             type="button"
-                            key={m}
+                            key={mObj.id}
                             onClick={() => {
                               setSelectedOverlay(overlay)
-                              setMood(m)
+                              setMood(mObj.id)
                             }}
-                            onMouseEnter={() => setHoveredState({ overlay, mood: m })}
+                            onMouseEnter={() => setHoveredState({ overlay, moodObj: mObj })}
                             onMouseLeave={() => setHoveredState(null)}
                             style={{
-                              padding: '4px 10px',
+                              padding: '5px 12px',
                               borderRadius: 999,
                               border: isMoodActive ? '1px solid #7c5cff' : isHovered ? '1px solid #00f0ff' : '1px solid rgba(255, 255, 255, 0.1)',
                               background: isMoodActive ? '#7c5cff' : isHovered ? 'rgba(0, 240, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)',
                               color: isMoodActive ? '#fff' : isHovered ? '#00f0ff' : '#aaa',
                               fontSize: '0.75rem',
-                              fontWeight: 600,
+                              fontWeight: 700,
                               cursor: 'pointer',
                               transform: isHovered ? 'scale(1.05)' : 'scale(1)',
                               transition: 'all 0.15s ease',
                             }}
                           >
-                            {m === 'calm' ? '🌿 calm' : m === 'inspired' ? '🌌 inspired' : m === 'happy' ? '⚡ happy' : m === 'playful' ? '🎨 playful' : '🧘 peaceful'}
+                            {mObj.label}
                           </button>
                         )
                       })}
@@ -254,7 +253,7 @@ export default function Create() {
                 fontSize: '0.72rem',
                 fontWeight: 700,
               }}>
-                {activeOverlay.label} ({activeMood})
+                {activeOverlay.label} ({currentMoodObj.id})
               </span>
             </div>
 
@@ -265,8 +264,8 @@ export default function Create() {
               height: 170,
               borderRadius: 12,
               backgroundColor: '#0a0a10',
-              border: `1px solid ${getAuraColor(activeMood)}`,
-              boxShadow: `inset 0 0 35px ${getAuraColor(activeMood)}`,
+              border: `1px solid ${currentMoodObj.aura}`,
+              boxShadow: `inset 0 0 35px ${currentMoodObj.aura}`,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -276,13 +275,13 @@ export default function Create() {
             }}>
               {/* Dynamic Mood Particles Floating Over Artwork */}
               <div style={{ position: 'absolute', top: '15%', left: '20%', fontSize: '1.1rem', animation: 'particleUp 2.2s infinite ease-in-out', zIndex: 1 }}>
-                {getMoodParticle(activeMood)}
+                {currentMoodObj.particle}
               </div>
               <div style={{ position: 'absolute', top: '25%', right: '25%', fontSize: '1.2rem', animation: 'particleUp 1.8s infinite ease-in-out 0.4s', zIndex: 1 }}>
-                {getMoodParticle(activeMood)}
+                {currentMoodObj.particle}
               </div>
               <div style={{ position: 'absolute', bottom: '20%', left: '30%', fontSize: '1rem', animation: 'particleDown 2.5s infinite ease-in-out 0.8s', zIndex: 1 }}>
-                {getMoodParticle(activeMood)}
+                {currentMoodObj.particle}
               </div>
 
               {/* Pulsing Aura Ring Behind Artwork */}
@@ -291,7 +290,7 @@ export default function Create() {
                 width: 110,
                 height: 110,
                 borderRadius: '50%',
-                background: getAuraColor(activeMood),
+                background: currentMoodObj.aura,
                 filter: 'blur(22px)',
                 animation: 'floatText 2.5s infinite ease-in-out',
               }} />
@@ -333,17 +332,8 @@ export default function Create() {
 
             {/* Detailed Description */}
             <div style={{ fontSize: '0.82rem', color: '#d0cce0', lineHeight: 1.6 }}>
-              {activeOverlay.label === 'Cosmic Butterfly' ? (
-                <>
-                  <p style={{ margin: '0 0 4px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
-                  <p style={{ margin: '0 0 4px 0' }}>🎨 <strong>Ambient Aura:</strong> {activeMood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : activeMood === 'calm' ? 'Teal Soft Ambient Glow' : activeMood === 'happy' ? 'Golden Radiant Sparkles' : activeMood === 'playful' ? 'Bouncing Sparkle Particle Swarm' : 'Soft Zen Breathing Waves'}</p>
-                </>
-              ) : (
-                <>
-                  <p style={{ margin: '0 0 4px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Bluebirds &amp; Falling Autumn Leaves floating in wind</p>
-                  <p style={{ margin: '0 0 4px 0' }}>🧘 <strong>Ambient Aura:</strong> {activeMood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : activeMood === 'peaceful' ? 'Soft Blue Zen Aura' : activeMood === 'happy' ? 'Golden Sunlight Pulse' : activeMood === 'inspired' ? 'Glowing Starlight Roots' : 'Sparkling Leaf Aura'}</p>
-                </>
-              )}
+              <p style={{ margin: '0 0 4px 0' }}>✨ <strong>3D Motion:</strong> {currentMoodObj.motion}</p>
+              <p style={{ margin: 0 }}>🎨 <strong>Ambient Aura:</strong> {currentMoodObj.auraDesc}</p>
             </div>
           </div>
         </div>
