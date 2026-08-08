@@ -75,6 +75,19 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
+// Automated Supabase keep-alive ping (runs once every 24 hours to prevent inactivity pause)
+const SUPABASE_PING_URL = (process.env.VITE_SUPABASE_URL || 'https://pbfhgpitghiwkelhzssz.supabase.co') + '/rest/v1/'
+setInterval(async () => {
+  try {
+    const key = process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_9UC-fIvJNypRa6oIpZBXlw_dHpB9OUm'
+    await fetch(SUPABASE_PING_URL, { headers: { apikey: key, authorization: `Bearer ${key}` } })
+    console.log('🔄 Supabase Keep-Alive ping successful.')
+  } catch (e) {
+    console.error('Supabase keep-alive ping failed:', e.message)
+  }
+}, 24 * 60 * 60 * 1000)
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on http://0.0.0.0:${PORT}`)
 })
+
