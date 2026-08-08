@@ -368,36 +368,49 @@
     let pollingStarted = false;
 
     document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCaption = urlParams.get('caption');
+      const urlMood = urlParams.get('mood');
+      const urlId = urlParams.get('id');
+
+      if (urlId) {
+        activeExpressionId = urlId;
+      }
+
+      if (urlCaption) {
+        document.getElementById('expCaption').textContent = `💬 "${urlCaption}" (${urlMood || 'active'})`;
+      }
+
       const targetButterfly = document.getElementById('targetButterfly');
       const targetTree = document.getElementById('targetTree');
 
       if (targetButterfly) {
         targetButterfly.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
-          activeExpressionId = 2;
+          if (!urlId) activeExpressionId = 2;
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
-          document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
           startPolling();
           pollData();
         });
         targetButterfly.addEventListener('targetLost', () => {
           console.log('Cosmic Butterfly Target Lost!');
-          document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
       }
 
       if (targetTree) {
         targetTree.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
-          activeExpressionId = 1;
+          if (!urlId) activeExpressionId = 1;
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
-          document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
           startPolling();
           pollData();
         });
         targetTree.addEventListener('targetLost', () => {
           console.log('Test Tree Target Lost!');
-          document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
         });
       }
 
