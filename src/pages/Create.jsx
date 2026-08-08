@@ -13,7 +13,12 @@ export default function Create() {
   const [mood, setMood] = useState(MOODS[0])
   const [caption, setCaption] = useState('')
   const [selectedOverlay, setSelectedOverlay] = useState(SYSTEM_OVERLAYS[0])
+  const [hoveredState, setHoveredState] = useState(null) // { overlay, mood }
   const [submitting, setSubmitting] = useState(false)
+
+  const activeOverlay = hoveredState?.overlay || selectedOverlay
+  const activeMood = hoveredState?.mood || mood
+  const isHoveredPreview = !!hoveredState
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -100,6 +105,8 @@ export default function Create() {
                         setSelectedOverlay(overlay)
                         setMood(overlay.mood)
                       }}
+                      onMouseEnter={() => setHoveredState({ overlay, mood: overlay.mood })}
+                      onMouseLeave={() => setHoveredState(null)}
                       style={{
                         width: 70,
                         height: 70,
@@ -134,11 +141,12 @@ export default function Create() {
                   {/* Mood Selector Buttons inside this specific artwork */}
                   <div>
                     <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#a0a0b8', marginBottom: 6 }}>
-                      Select Expression Mood for {overlay.label}:
+                      Select Expression Mood (Hover to preview in AR):
                     </span>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                       {MOODS.map((m) => {
                         const isMoodActive = isSelected && mood === m
+                        const isHovered = hoveredState?.overlay.label === overlay.label && hoveredState?.mood === m
                         return (
                           <button
                             type="button"
@@ -147,15 +155,18 @@ export default function Create() {
                               setSelectedOverlay(overlay)
                               setMood(m)
                             }}
+                            onMouseEnter={() => setHoveredState({ overlay, mood: m })}
+                            onMouseLeave={() => setHoveredState(null)}
                             style={{
                               padding: '4px 10px',
                               borderRadius: 999,
-                              border: isMoodActive ? '1px solid #7c5cff' : '1px solid rgba(255, 255, 255, 0.1)',
-                              background: isMoodActive ? '#7c5cff' : 'rgba(255, 255, 255, 0.05)',
-                              color: isMoodActive ? '#fff' : '#aaa',
+                              border: isMoodActive ? '1px solid #7c5cff' : isHovered ? '1px solid #00f0ff' : '1px solid rgba(255, 255, 255, 0.1)',
+                              background: isMoodActive ? '#7c5cff' : isHovered ? 'rgba(0, 240, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                              color: isMoodActive ? '#fff' : isHovered ? '#00f0ff' : '#aaa',
                               fontSize: '0.75rem',
                               fontWeight: 600,
                               cursor: 'pointer',
+                              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
                               transition: 'all 0.15s ease',
                             }}
                           >
@@ -172,39 +183,42 @@ export default function Create() {
 
           {/* Interactive 3D AR Visual Preview Box */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(30, 24, 54, 0.8) 0%, rgba(18, 18, 24, 0.9) 100%)',
-            border: '1px solid rgba(124, 92, 255, 0.3)',
+            background: isHoveredPreview 
+              ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(30, 24, 54, 0.9) 100%)' 
+              : 'linear-gradient(135deg, rgba(30, 24, 54, 0.8) 0%, rgba(18, 18, 24, 0.9) 100%)',
+            border: isHoveredPreview ? '1px solid #00f0ff' : '1px solid rgba(124, 92, 255, 0.3)',
             borderRadius: 14,
             padding: '1rem 1.25rem',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+            boxShadow: isHoveredPreview ? '0 8px 24px rgba(0, 240, 255, 0.25)' : '0 8px 24px rgba(0, 0, 0, 0.4)',
+            transition: 'all 0.25s ease',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#7c5cff' }}>
-                🔮 3D AR Visual Preview
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: isHoveredPreview ? '#00f0ff' : '#7c5cff' }}>
+                🔮 3D AR VISUAL PREVIEW {isHoveredPreview ? '(HOVER PREVIEW)' : ''}
               </span>
               <span style={{
-                background: 'rgba(124, 92, 255, 0.2)',
-                color: '#bfaeff',
+                background: isHoveredPreview ? 'rgba(0, 240, 255, 0.2)' : 'rgba(124, 92, 255, 0.2)',
+                color: isHoveredPreview ? '#00f0ff' : '#bfaeff',
                 padding: '2px 8px',
                 borderRadius: 99,
                 fontSize: '0.7rem',
                 fontWeight: 700,
               }}>
-                {selectedOverlay.label} ({mood})
+                {activeOverlay.label} ({activeMood})
               </span>
             </div>
 
             <div style={{ fontSize: '0.85rem', color: '#e0dcf0', lineHeight: 1.6, marginBottom: '0.5rem' }}>
-              {selectedOverlay.label === 'Cosmic Butterfly' ? (
+              {activeOverlay.label === 'Cosmic Butterfly' ? (
                 <>
                   <p style={{ margin: '0 0 6px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> {mood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : mood === 'calm' ? 'Teal Soft Ambient Glow' : 'Golden Radiant Sparkles'}</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> {activeMood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : activeMood === 'calm' ? 'Teal Soft Ambient Glow' : activeMood === 'happy' ? 'Golden Radiant Sparkles' : activeMood === 'playful' ? 'Bouncing Sparkle Particle Swarm' : 'Soft Zen Breathing Waves'}</p>
                   <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Floating 3D Hearts rising upward on viewer Likes</p>
                 </>
               ) : (
                 <>
                   <p style={{ margin: '0 0 6px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Birds &amp; Falling Autumn Leaves floating in wind</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> {mood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : mood === 'peaceful' ? 'Soft Blue Zen Aura' : 'Golden Sunlight Pulse'}</p>
+                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> {activeMood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : activeMood === 'peaceful' ? 'Soft Blue Zen Aura' : activeMood === 'happy' ? 'Golden Sunlight Pulse' : activeMood === 'inspired' ? 'Glowing Starlight Roots' : 'Sparkling Leaf Aura'}</p>
                   <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Live Reactions (Likes, Waves &amp; Comments) floating in 3D</p>
                 </>
               )}
@@ -215,7 +229,7 @@ export default function Create() {
               padding: '0.5rem 0.75rem',
               background: 'rgba(0, 0, 0, 0.3)',
               borderRadius: 8,
-              borderLeft: '3px solid #7c5cff',
+              borderLeft: isHoveredPreview ? '3px solid #00f0ff' : '3px solid #7c5cff',
               fontSize: '0.8rem',
               color: '#a0a0b8',
               fontStyle: 'italic',
