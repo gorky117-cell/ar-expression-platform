@@ -343,12 +343,22 @@
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
+
+      <!-- 4. Floating 3D Story Banner in AR Space -->
+      <a-plane position="0 0.65 0.08" width="1.1" height="0.22" material="shader: flat; color: #121218; opacity: 0.88; transparent: true">
+        <a-text id="butterflyText3D" value="💬 Wearer Story Loading..." align="center" width="2.2" color="#ffffff" position="0 0 0.01"></a-text>
+      </a-plane>
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
       <!-- 3D Swaying Animated Tree & Birds Plane -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+
+      <!-- 4. Floating 3D Story Banner in AR Space -->
+      <a-plane position="0 0.65 0.08" width="1.1" height="0.22" material="shader: flat; color: #121218; opacity: 0.88; transparent: true">
+        <a-text id="treeText3D" value="💬 Wearer Story Loading..." align="center" width="2.2" color="#ffffff" position="0 0 0.01"></a-text>
+      </a-plane>
     </a-entity>
 
     <a-assets>
@@ -462,9 +472,13 @@
 
         if (exprList && exprList.length > 0) {
           const latest = exprList[0];
-          if (latest.caption) {
-            document.getElementById('expCaption').textContent = `💬 "${latest.caption}" (${latest.mood || 'calm'})`;
-          }
+          const textVal = latest.caption ? `💬 "${latest.caption}" (${latest.mood || 'active'})` : `💬 ${latest.name} (${latest.mood || 'active'})`;
+          document.getElementById('expCaption').textContent = textVal;
+
+          const butterfly3D = document.getElementById('butterflyText3D');
+          const tree3D = document.getElementById('treeText3D');
+          if (butterfly3D) butterfly3D.setAttribute('value', textVal);
+          if (tree3D) tree3D.setAttribute('value', textVal);
         }
 
         const { data: reactions } = await supabaseClient
