@@ -65,7 +65,27 @@ export async function getExpressions() {
 }
 
 export async function getExpression(id) {
-  const storeItem = store.getExpression(id) || {
+  if (supabase) {
+    const { data: row } = await supabase.from('expressions').select('*').eq('id', id).single()
+    if (row) {
+      const { data: reactions } = await supabase.from('reactions').select('*').eq('expression_id', id)
+      return rowToExpression(row, reactions || [])
+    }
+  }
+
+  const isTree = (id === '1' || String(id) === '1' || id === 'tree')
+  const defaultObj = isTree ? {
+    id: '1',
+    name: 'Test Tree',
+    mood: 'calm',
+    triggerImage: '/overlays/tree-birds-target.png',
+    overlayImage: '/overlays/tree-birds-target.png',
+    arViewerUrl: '/ar-camera.html',
+    createdAt: Date.now() - 86400000,
+    likes: 3,
+    greetings: 2,
+    comments: [{ id: 'c1', text: 'Love the birds!', author: 'Viewer', at: Date.now() - 3600000 }],
+  } : {
     id: 'cosmic-butterfly',
     name: 'Cosmic Butterfly',
     mood: 'inspired',
@@ -75,24 +95,18 @@ export async function getExpression(id) {
     createdAt: Date.now() - 43200000,
     likes: 5,
     greetings: 3,
-    comments: [
-      { id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 },
-    ],
+    comments: [{ id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 }],
   }
 
-  if (!supabase) return Promise.resolve(storeItem)
+  const storeItem = store.getExpression(id) || defaultObj
 
-  const isTree = (id === '1' || String(id) === '1')
-  const isCosmic = (id === 'cosmic-butterfly' || id === '2' || String(id) === '2')
-  const targetId = isCosmic ? 2 : (isTree ? 1 : id)
+  if (!supabase) return Promise.resolve(storeItem)
 
   const { data: reactions } = await supabase
     .from('reactions')
     .select('*')
-    .eq('expression_id', targetId)
+    .eq('expression_id', id)
 
-  const baseLikes = isTree ? 3 : 5
-  const baseGreetings = isTree ? 2 : 3
   const rxList = reactions || []
   const dbLikes = rxList.filter((r) => r.kind === 'like').length
   const dbGreetings = rxList.filter((r) => r.kind === 'greeting').length
@@ -105,20 +119,11 @@ export async function getExpression(id) {
       at: new Date(r.created_at || Date.now()).getTime(),
     }))
 
-  const baseComments = isTree
-    ? [{ id: 'c1', text: 'Love the birds!', author: 'Viewer', at: Date.now() - 3600000 }]
-    : [{ id: 'c2', text: 'Pure markerless tracking is amazing!', author: 'WebAR Fans', at: Date.now() - 1800000 }]
-
-  const allComments = [
-    ...baseComments,
-    ...dbComments,
-  ]
-
   return {
     ...storeItem,
-    likes: baseLikes + dbLikes,
-    greetings: baseGreetings + dbGreetings,
-    comments: allComments,
+    likes: storeItem.likes + dbLikes,
+    greetings: storeItem.greetings + dbGreetings,
+    comments: [...storeItem.comments, ...dbComments],
   }
 }
 
