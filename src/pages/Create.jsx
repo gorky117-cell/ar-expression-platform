@@ -23,12 +23,24 @@ export default function Create() {
   // Dynamic aura colors per mood
   const getAuraColor = (m) => {
     switch (m) {
-      case 'inspired': return 'rgba(0, 240, 255, 0.4)'
-      case 'calm': return 'rgba(16, 185, 129, 0.4)'
-      case 'happy': return 'rgba(245, 158, 11, 0.4)'
-      case 'playful': return 'rgba(236, 72, 153, 0.4)'
-      case 'peaceful': return 'rgba(99, 102, 241, 0.4)'
-      default: return 'rgba(124, 92, 255, 0.4)'
+      case 'inspired': return 'rgba(0, 240, 255, 0.5)'
+      case 'calm': return 'rgba(16, 185, 129, 0.5)'
+      case 'happy': return 'rgba(245, 158, 11, 0.5)'
+      case 'playful': return 'rgba(236, 72, 153, 0.5)'
+      case 'peaceful': return 'rgba(99, 102, 241, 0.5)'
+      default: return 'rgba(124, 92, 255, 0.5)'
+    }
+  }
+
+  // Dynamic mood particle icon
+  const getMoodParticle = (m) => {
+    switch (m) {
+      case 'inspired': return '✨'
+      case 'calm': return '🍃'
+      case 'happy': return '⚡'
+      case 'playful': return '🎨'
+      case 'peaceful': return '🧘'
+      default: return '✨'
     }
   }
 
@@ -51,7 +63,7 @@ export default function Create() {
 
   return (
     <div className="page-shell page-main page-enter">
-      {/* CSS Animations for AR Graphic Preview */}
+      {/* CSS Animations for AR Graphic Preview & Floating Particles */}
       <style>{`
         @keyframes butterflyFlap {
           0%, 100% { transform: scaleX(1) scaleY(1) rotate(0deg); }
@@ -64,6 +76,16 @@ export default function Create() {
         @keyframes floatText {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-4px); }
+        }
+        @keyframes particleUp {
+          0% { transform: translateY(20px) scale(0.6); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(-30px) scale(1.1); opacity: 0; }
+        }
+        @keyframes particleDown {
+          0% { transform: translateY(-20px) scale(0.6); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(30px) scale(1.1); opacity: 0; }
         }
       `}</style>
 
@@ -240,26 +262,37 @@ export default function Create() {
             <div style={{
               position: 'relative',
               width: '100%',
-              height: 160,
+              height: 170,
               borderRadius: 12,
               backgroundColor: '#0a0a10',
               border: `1px solid ${getAuraColor(activeMood)}`,
-              boxShadow: `inset 0 0 30px ${getAuraColor(activeMood)}`,
+              boxShadow: `inset 0 0 35px ${getAuraColor(activeMood)}`,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justify: 'center',
+              justifyContent: 'center',
               overflow: 'hidden',
               marginBottom: '1rem',
             }}>
+              {/* Dynamic Mood Particles Floating Over Artwork */}
+              <div style={{ position: 'absolute', top: '15%', left: '20%', fontSize: '1.1rem', animation: 'particleUp 2.2s infinite ease-in-out', zIndex: 1 }}>
+                {getMoodParticle(activeMood)}
+              </div>
+              <div style={{ position: 'absolute', top: '25%', right: '25%', fontSize: '1.2rem', animation: 'particleUp 1.8s infinite ease-in-out 0.4s', zIndex: 1 }}>
+                {getMoodParticle(activeMood)}
+              </div>
+              <div style={{ position: 'absolute', bottom: '20%', left: '30%', fontSize: '1rem', animation: 'particleDown 2.5s infinite ease-in-out 0.8s', zIndex: 1 }}>
+                {getMoodParticle(activeMood)}
+              </div>
+
               {/* Pulsing Aura Ring Behind Artwork */}
               <div style={{
                 position: 'absolute',
-                width: 100,
-                height: 100,
+                width: 110,
+                height: 110,
                 borderRadius: '50%',
                 background: getAuraColor(activeMood),
-                filter: 'blur(20px)',
+                filter: 'blur(22px)',
                 animation: 'floatText 2.5s infinite ease-in-out',
               }} />
 
