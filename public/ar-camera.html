@@ -438,6 +438,22 @@
     async function pollData() {
       if (!supabaseClient || activeExpressionId === null) return;
       try {
+        // Fetch latest published expression for this target overlay
+        const overlayPath = activeExpressionId === 1 ? '/overlays/tree-birds-target.png' : '/overlays/cosmic-butterfly.svg';
+        const { data: exprList } = await supabaseClient
+          .from('expressions')
+          .select('*')
+          .eq('overlay_image', overlayPath)
+          .order('created_at', { ascending: false })
+          .limit(1);
+
+        if (exprList && exprList.length > 0) {
+          const latest = exprList[0];
+          if (latest.caption) {
+            document.getElementById('expCaption').textContent = `💬 "${latest.caption}" (${latest.mood || 'calm'})`;
+          }
+        }
+
         const { data: reactions } = await supabaseClient
           .from('reactions')
           .select('*')
