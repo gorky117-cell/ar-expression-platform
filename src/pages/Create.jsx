@@ -20,6 +20,18 @@ export default function Create() {
   const activeMood = hoveredState?.mood || mood
   const isHoveredPreview = !!hoveredState
 
+  // Dynamic aura colors per mood
+  const getAuraColor = (m) => {
+    switch (m) {
+      case 'inspired': return 'rgba(0, 240, 255, 0.4)'
+      case 'calm': return 'rgba(16, 185, 129, 0.4)'
+      case 'happy': return 'rgba(245, 158, 11, 0.4)'
+      case 'playful': return 'rgba(236, 72, 153, 0.4)'
+      case 'peaceful': return 'rgba(99, 102, 241, 0.4)'
+      default: return 'rgba(124, 92, 255, 0.4)'
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitting(true)
@@ -39,6 +51,22 @@ export default function Create() {
 
   return (
     <div className="page-shell page-main page-enter">
+      {/* CSS Animations for AR Graphic Preview */}
+      <style>{`
+        @keyframes butterflyFlap {
+          0%, 100% { transform: scaleX(1) scaleY(1) rotate(0deg); }
+          50% { transform: scaleX(0.82) scaleY(1.05) rotate(-3deg); }
+        }
+        @keyframes treeSway {
+          0%, 100% { transform: rotate(0deg); }
+          50% { transform: rotate(2.5deg); }
+        }
+        @keyframes floatText {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-4px); }
+        }
+      `}</style>
+
       <Link to="/feed" style={{ display: 'inline-block', marginBottom: '1.5rem', color: '#7c5cff', fontWeight: 600 }}>
         ← Back to Feed
       </Link>
@@ -50,7 +78,7 @@ export default function Create() {
         Publish a digital layer linked to your wearable design. Dictate caption and mood.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 520 }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: 540 }}>
         <label>
           <span style={{ display: 'block', marginBottom: 6, fontSize: '0.85rem', fontWeight: 600, color: '#c9c4d8' }}>
             Expression Name
@@ -187,54 +215,102 @@ export default function Create() {
               ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(30, 24, 54, 0.9) 100%)' 
               : 'linear-gradient(135deg, rgba(30, 24, 54, 0.8) 0%, rgba(18, 18, 24, 0.9) 100%)',
             border: isHoveredPreview ? '1px solid #00f0ff' : '1px solid rgba(124, 92, 255, 0.3)',
-            borderRadius: 14,
-            padding: '1rem 1.25rem',
-            boxShadow: isHoveredPreview ? '0 8px 24px rgba(0, 240, 255, 0.25)' : '0 8px 24px rgba(0, 0, 0, 0.4)',
+            borderRadius: 16,
+            padding: '1.25rem',
+            boxShadow: isHoveredPreview ? '0 8px 32px rgba(0, 240, 255, 0.25)' : '0 8px 32px rgba(0, 0, 0, 0.5)',
             transition: 'all 0.25s ease',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: isHoveredPreview ? '#00f0ff' : '#7c5cff' }}>
-                🔮 3D AR VISUAL PREVIEW {isHoveredPreview ? '(HOVER PREVIEW)' : ''}
+                🔮 LIVE AR VISUAL PREVIEW {isHoveredPreview ? '(HOVER PREVIEW)' : ''}
               </span>
               <span style={{
                 background: isHoveredPreview ? 'rgba(0, 240, 255, 0.2)' : 'rgba(124, 92, 255, 0.2)',
                 color: isHoveredPreview ? '#00f0ff' : '#bfaeff',
-                padding: '2px 8px',
+                padding: '3px 10px',
                 borderRadius: 99,
-                fontSize: '0.7rem',
+                fontSize: '0.72rem',
                 fontWeight: 700,
               }}>
                 {activeOverlay.label} ({activeMood})
               </span>
             </div>
 
-            <div style={{ fontSize: '0.85rem', color: '#e0dcf0', lineHeight: 1.6, marginBottom: '0.5rem' }}>
+            {/* LIVE ANIMATED GRAPHIC CANVAS PREVIEW BOX */}
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              height: 160,
+              borderRadius: 12,
+              backgroundColor: '#0a0a10',
+              border: `1px solid ${getAuraColor(activeMood)}`,
+              boxShadow: `inset 0 0 30px ${getAuraColor(activeMood)}`,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justify: 'center',
+              overflow: 'hidden',
+              marginBottom: '1rem',
+            }}>
+              {/* Pulsing Aura Ring Behind Artwork */}
+              <div style={{
+                position: 'absolute',
+                width: 100,
+                height: 100,
+                borderRadius: '50%',
+                background: getAuraColor(activeMood),
+                filter: 'blur(20px)',
+                animation: 'floatText 2.5s infinite ease-in-out',
+              }} />
+
+              {/* Animated Artwork Graphic Preview */}
+              <img
+                src={activeOverlay.path}
+                alt="AR Preview"
+                style={{
+                  width: 90,
+                  height: 90,
+                  objectFit: 'contain',
+                  position: 'relative',
+                  zIndex: 2,
+                  animation: activeOverlay.label === 'Cosmic Butterfly' 
+                    ? 'butterflyFlap 1.2s infinite ease-in-out' 
+                    : 'treeSway 3s infinite ease-in-out',
+                }}
+              />
+
+              {/* Live Floating 3D Caption Story Badge */}
+              <div style={{
+                position: 'relative',
+                zIndex: 3,
+                marginTop: 8,
+                padding: '4px 12px',
+                borderRadius: 999,
+                background: 'rgba(0, 0, 0, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#fff',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                animation: 'floatText 2s infinite ease-in-out',
+              }}>
+                💬 &ldquo;{caption || 'Your 3D AR story floats here'}&rdquo;
+              </div>
+            </div>
+
+            {/* Detailed Description */}
+            <div style={{ fontSize: '0.82rem', color: '#d0cce0', lineHeight: 1.6 }}>
               {activeOverlay.label === 'Cosmic Butterfly' ? (
                 <>
-                  <p style={{ margin: '0 0 6px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🎨 <strong>Ambient Aura:</strong> {activeMood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : activeMood === 'calm' ? 'Teal Soft Ambient Glow' : activeMood === 'happy' ? 'Golden Radiant Sparkles' : activeMood === 'playful' ? 'Bouncing Sparkle Particle Swarm' : 'Soft Zen Breathing Waves'}</p>
-                  <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Floating 3D Hearts rising upward on viewer Likes</p>
+                  <p style={{ margin: '0 0 4px 0' }}>🦋 <strong>3D Motion:</strong> Flapping Wing Oscillations &amp; Star-Dust Flight Trail</p>
+                  <p style={{ margin: '0 0 4px 0' }}>🎨 <strong>Ambient Aura:</strong> {activeMood === 'inspired' ? 'Cyan & Magenta Neon Galactic Glow' : activeMood === 'calm' ? 'Teal Soft Ambient Glow' : activeMood === 'happy' ? 'Golden Radiant Sparkles' : activeMood === 'playful' ? 'Bouncing Sparkle Particle Swarm' : 'Soft Zen Breathing Waves'}</p>
                 </>
               ) : (
                 <>
-                  <p style={{ margin: '0 0 6px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Birds &amp; Falling Autumn Leaves floating in wind</p>
-                  <p style={{ margin: '0 0 6px 0' }}>🧘 <strong>Ambient Aura:</strong> {activeMood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : activeMood === 'peaceful' ? 'Soft Blue Zen Aura' : activeMood === 'happy' ? 'Golden Sunlight Pulse' : activeMood === 'inspired' ? 'Glowing Starlight Roots' : 'Sparkling Leaf Aura'}</p>
-                  <p style={{ margin: 0 }}>❤️ <strong>Social Deck:</strong> Live Reactions (Likes, Waves &amp; Comments) floating in 3D</p>
+                  <p style={{ margin: '0 0 4px 0' }}>🌿 <strong>3D Motion:</strong> 2 Perched Bluebirds &amp; Falling Autumn Leaves floating in wind</p>
+                  <p style={{ margin: '0 0 4px 0' }}>🧘 <strong>Ambient Aura:</strong> {activeMood === 'calm' ? 'Soothing Emerald & Teal Breathing Glow' : activeMood === 'peaceful' ? 'Soft Blue Zen Aura' : activeMood === 'happy' ? 'Golden Sunlight Pulse' : activeMood === 'inspired' ? 'Glowing Starlight Roots' : 'Sparkling Leaf Aura'}</p>
                 </>
               )}
-            </div>
-
-            <div style={{
-              marginTop: '0.75rem',
-              padding: '0.5rem 0.75rem',
-              background: 'rgba(0, 0, 0, 0.3)',
-              borderRadius: 8,
-              borderLeft: isHoveredPreview ? '3px solid #00f0ff' : '3px solid #7c5cff',
-              fontSize: '0.8rem',
-              color: '#a0a0b8',
-              fontStyle: 'italic',
-            }}>
-              Floating 3D Caption Preview: &ldquo;{caption || 'Your custom story will float in 3D AR space right here!'}&rdquo;
             </div>
           </div>
         </div>
