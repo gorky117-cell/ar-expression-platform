@@ -66,6 +66,24 @@
       pointer-events: none !important;
     }
 
+    /* Floating Mood Particle Overlay Keyframe Animations */
+    @keyframes floatParticle1 {
+      0%, 100% { transform: translateY(0px) scale(0.9); opacity: 0.7; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    }
+    @keyframes floatParticle2 {
+      0%, 100% { transform: translateY(0px) scale(0.9); opacity: 0.8; }
+      50% { transform: translateY(18px) scale(1.15); opacity: 1; }
+    }
+    @keyframes floatParticle3 {
+      0%, 100% { transform: translateY(0px) scale(0.85); opacity: 0.65; }
+      50% { transform: translateY(-16px) scale(1.1); opacity: 0.95; }
+    }
+    @keyframes floatParticle4 {
+      0%, 100% { transform: translateY(0px) scale(0.85); opacity: 0.75; }
+      50% { transform: translateY(16px) scale(1.08); opacity: 1; }
+    }
+
     /* Top Navigation & Status Bar */
     .ar-header {
       position: fixed;
@@ -300,6 +318,14 @@
     </div>
   </div>
 
+  <!-- Floating Mood Particle Overlay (Renders colorful native emojis floating around artwork) -->
+  <div id="particleOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 5; display: none;">
+    <div id="particle1" style="position: absolute; top: 32%; left: 20%; font-size: 1.5rem; animation: floatParticle1 2.2s infinite ease-in-out;">✨</div>
+    <div id="particle2" style="position: absolute; top: 26%; right: 20%; font-size: 1.5rem; animation: floatParticle2 1.8s infinite ease-in-out 0.4s;">✨</div>
+    <div id="particle3" style="position: absolute; bottom: 38%; left: 24%; font-size: 1.3rem; animation: floatParticle3 2.5s infinite ease-in-out 0.8s;">✨</div>
+    <div id="particle4" style="position: absolute; bottom: 35%; right: 24%; font-size: 1.3rem; animation: floatParticle4 2.0s infinite ease-in-out 0.2s;">✨</div>
+  </div>
+
   <!-- Interactive Social Reactions Bar -->
   <div class="social-bar">
     <button class="action-btn" onclick="handleLike()">
@@ -455,48 +481,61 @@
           const el = document.getElementById(id);
           if (el) el.setAttribute('material', 'color', moodColor);
         });
-        ['bfParticle1', 'bfParticle2', 'bfParticle3', 'bfParticle4', 'treeParticle1', 'treeParticle2', 'treeParticle3', 'treeParticle4'].forEach(id => {
+        ['particle1', 'particle2', 'particle3', 'particle4'].forEach(id => {
           const el = document.getElementById(id);
-          if (el) el.setAttribute('value', particleChar);
+          if (el) el.textContent = particleChar;
         });
-      }
-
-      const targetButterfly = document.getElementById('targetButterfly');
-      const targetTree = document.getElementById('targetTree');
-
-      if (urlOverlay.includes('butterfly')) {
-        document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
-      } else if (urlOverlay.includes('tree')) {
-        document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
       }
 
       const bf = document.getElementById('targetButterfly');
       const tr = document.getElementById('targetTree');
 
       if (bf) {
-        bf.addEventListener('targetFound', () => {
+        bf.addEventListener('targetFound', async () => {
           console.log('Cosmic Butterfly Target Found!');
-          if (!urlExpressionId) activeExpressionId = 2;
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
-          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
+          const pOverlay = document.getElementById('particleOverlay');
+          if (pOverlay) pOverlay.style.display = 'block';
+          if (!urlExpressionId && supabaseClient) {
+            const { data: list } = await supabaseClient
+              .from('expressions')
+              .select('*')
+              .ilike('overlay_image', '%butterfly%')
+              .order('created_at', { ascending: false })
+              .limit(1);
+            if (list && list.length > 0) activeExpressionId = list[0].id;
+          }
           startPolling();
           pollData();
         });
         bf.addEventListener('targetLost', () => {
+          const pOverlay = document.getElementById('particleOverlay');
+          if (pOverlay) pOverlay.style.display = 'none';
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
 
       if (tr) {
-        tr.addEventListener('targetFound', () => {
+        tr.addEventListener('targetFound', async () => {
           console.log('Test Tree Target Found!');
-          if (!urlExpressionId) activeExpressionId = 1;
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
-          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
+          const pOverlay = document.getElementById('particleOverlay');
+          if (pOverlay) pOverlay.style.display = 'block';
+          if (!urlExpressionId && supabaseClient) {
+            const { data: list } = await supabaseClient
+              .from('expressions')
+              .select('*')
+              .ilike('overlay_image', '%tree%')
+              .order('created_at', { ascending: false })
+              .limit(1);
+            if (list && list.length > 0) activeExpressionId = list[0].id;
+          }
           startPolling();
           pollData();
         });
         tr.addEventListener('targetLost', () => {
+          const pOverlay = document.getElementById('particleOverlay');
+          if (pOverlay) pOverlay.style.display = 'none';
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
@@ -605,9 +644,9 @@
           });
 
 
-          ['bfParticle1', 'bfParticle2', 'bfParticle3', 'bfParticle4', 'treeParticle1', 'treeParticle2', 'treeParticle3', 'treeParticle4'].forEach(id => {
+          ['particle1', 'particle2', 'particle3', 'particle4'].forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.setAttribute('value', particleChar);
+            if (el) el.textContent = particleChar;
           });
         }
 
