@@ -425,8 +425,8 @@
       const urlOverlay = decodeURIComponent(urlParams.get('overlay') || '');
 
       if (urlId) {
-        urlExpressionId = urlId;
-        activeExpressionId = urlId;
+        urlExpressionId = parseInt(urlId, 10) || urlId;
+        activeExpressionId = urlExpressionId;
       }
 
       if (urlCaption) {
