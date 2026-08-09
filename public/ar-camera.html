@@ -450,9 +450,22 @@
         document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
       }
 
-      // Apply the correct mind file and start MindAR
+      // Apply the correct mind file, then explicitly start MindAR
       if (arScene) {
-        arScene.setAttribute('mindar-image', `imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;`);
+        arScene.setAttribute('mindar-image', `imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: false;`);
+        // Wait for the scene to be fully ready, then start MindAR manually
+        const doStart = () => {
+          const sys = arScene.systems['mindar-image-system'];
+          if (sys && sys.start) {
+            sys.start();
+            console.log('MindAR started with:', mindFile);
+          }
+        };
+        if (arScene.hasLoaded) {
+          doStart();
+        } else {
+          arScene.addEventListener('loaded', doStart);
+        }
       }
 
       // Re-read targets after potential removal
