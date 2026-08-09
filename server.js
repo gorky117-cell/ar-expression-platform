@@ -69,10 +69,7 @@ function sendFreshHtml(res, filePath) {
   res.sendFile(filePath);
 }
 
-app.get('/scanner', (req, res) => {
-  sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-camera.html'));
-})
-app.get('/ar-camera', (req, res) => {
+app.get(['/scanner', '/ar-camera', '/ar-scanner', '/scanner-v2'], (req, res) => {
   sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-camera.html'));
 })
 app.get('/ar-mind', (req, res) => {
