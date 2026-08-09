@@ -414,6 +414,7 @@
 
     let activeExpressionId = null;
     let pollingStarted = false;
+    let urlExpressionId = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -422,6 +423,7 @@
       const urlId = urlParams.get('id');
 
       if (urlId) {
+        urlExpressionId = urlId;
         activeExpressionId = urlId;
       }
 
@@ -435,7 +437,7 @@
       if (targetButterfly) {
         targetButterfly.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
-          if (!urlId) activeExpressionId = 2;
+          if (!urlExpressionId) activeExpressionId = 2;
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Flapping Cosmic Butterfly AR Active!';
           startPolling();
@@ -450,7 +452,7 @@
       if (targetTree) {
         targetTree.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
-          if (!urlId) activeExpressionId = 1;
+          if (!urlExpressionId) activeExpressionId = 1;
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ 3D Swaying Tree & Birds AR Active!';
           startPolling();
@@ -489,7 +491,10 @@
 
         if (window.supabase) {
           supabaseClient = window.supabase.createClient(sbUrl, sbKey);
-          // Don't poll here — wait until a target is actually detected
+          if (urlExpressionId) {
+            startPolling();
+            pollData();
+          }
         }
       } catch (err) {
         console.error('Supabase init error:', err);
@@ -499,19 +504,30 @@
     async function pollData() {
       if (!supabaseClient || activeExpressionId === null) return;
       try {
-        // Fetch latest published expression for this target overlay
-        const overlayPath = activeExpressionId === 1 ? '/overlays/tree-birds-target.png' : '/overlays/cosmic-butterfly.svg';
-        const { data: exprList } = await supabaseClient
-          .from('expressions')
-          .select('*')
-          .eq('overlay_image', overlayPath)
-          .order('created_at', { ascending: false })
-          .limit(1);
+        let latest = null;
 
-        if (exprList && exprList.length > 0) {
-          const latest = exprList[0];
-          // Dynamically lock activeExpressionId to the exact published expression ID!
-          if (latest.id) {
+        if (urlExpressionId) {
+          const { data: row } = await supabaseClient
+            .from('expressions')
+            .select('*')
+            .eq('id', urlExpressionId)
+            .single();
+          if (row) latest = row;
+        }
+
+        if (!latest) {
+          const overlayPath = activeExpressionId == 1 ? '/overlays/tree-birds-target.png' : '/overlays/cosmic-butterfly.svg';
+          const { data: exprList } = await supabaseClient
+            .from('expressions')
+            .select('*')
+            .eq('overlay_image', overlayPath)
+            .order('created_at', { ascending: false })
+            .limit(1);
+          if (exprList && exprList.length > 0) latest = exprList[0];
+        }
+
+        if (latest) {
+          if (!urlExpressionId && latest.id) {
             activeExpressionId = latest.id;
           }
 
@@ -529,8 +545,7 @@
           if (bfTag) bfTag.setAttribute('value', moodText);
           if (treeTag) treeTag.setAttribute('value', moodText);
 
-          // Dynamic Mood 3D Visual Effects Mapping
-          let moodColor = '#10b981'; // default emerald calm
+          let moodColor = '#10b981';
           let particleChar = '🍃';
 
           const m = (latest.mood || '').toLowerCase();
@@ -548,7 +563,6 @@
             particleChar = '🧘';
           }
 
-          // Update 3D Aura Halo & Glass Border Colors
           ['butterflyAura3D', 'butterflyAuraOuter3D', 'treeAura3D', 'treeAuraOuter3D'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('material', 'color', moodColor);
@@ -562,24 +576,21 @@
           if (bfTag) bfTag.setAttribute('color', moodColor);
           if (treeTag) treeTag.setAttribute('color', moodColor);
 
-          // Update 3D Floating Particle Swarm Elements
           ['bfParticle1', 'bfParticle2', 'bfParticle3', 'bfParticle4', 'treeParticle1', 'treeParticle2', 'treeParticle3', 'treeParticle4'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('value', particleChar);
           });
         }
 
+        const reactionExprId = urlExpressionId || activeExpressionId;
         const { data: reactions } = await supabaseClient
           .from('reactions')
           .select('*')
-          .eq('expression_id', activeExpressionId);
+          .eq('expression_id', reactionExprId);
 
         if (reactions) {
-          const baseLikes = activeExpressionId === 1 ? 3 : 5;
-          const baseWaves = activeExpressionId === 1 ? 2 : 3;
-
-          const likes = reactions.filter(r => r.kind === 'like').length + baseLikes;
-          const waves = reactions.filter(r => r.kind === 'greeting').length + baseWaves;
+          const likes = reactions.filter(r => r.kind === 'like').length;
+          const waves = reactions.filter(r => r.kind === 'greeting').length;
           const comments = reactions.filter(r => r.kind === 'comment');
 
           document.getElementById('likeCount').textContent = likes;
@@ -605,7 +616,7 @@
       const el = document.getElementById('likeCount');
       el.textContent = parseInt(el.textContent) + 1;
       if (supabaseClient) {
-        await supabaseClient.from('reactions').insert({ expression_id: activeExpressionId, kind: 'like' });
+        await supabaseClient.from('reactions').insert({ expression_id: urlExpressionId || activeExpressionId, kind: 'like' });
       }
     }
 
@@ -613,7 +624,7 @@
       const el = document.getElementById('waveCount');
       el.textContent = parseInt(el.textContent) + 1;
       if (supabaseClient) {
-        await supabaseClient.from('reactions').insert({ expression_id: activeExpressionId, kind: 'greeting' });
+        await supabaseClient.from('reactions').insert({ expression_id: urlExpressionId || activeExpressionId, kind: 'greeting' });
       }
     }
 
@@ -643,7 +654,7 @@
 
       if (supabaseClient) {
         await supabaseClient.from('reactions').insert({
-          expression_id: activeExpressionId,
+          expression_id: urlExpressionId || activeExpressionId,
           kind: 'comment',
           author,
           text
