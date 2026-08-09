@@ -100,3 +100,40 @@ git add -A
 git commit -m "Your feature update message"
 git push origin master
 ```
+
+---
+
+## 7. August 9, 2026 Milestone Updates & Tomorrow's Roadmap
+
+### Major Solved Milestones Today (`18ff589` & `6e6701d`):
+1. **Markerless Multi-Target AR Web Camera Engine**:
+   - Universal WebAR camera scanner loads `public/data/targets/all-targets.mind` (Target 0: Cosmic Butterfly, Target 1: Test Tree).
+2. **Soft Radial Gradient Aura Texture (`/overlays/soft-aura.svg`)**:
+   - Created a custom soft radial gradient alpha-mask SVG texture `#softAuraTex`.
+   - WebGL maps active mood colors (cyan, amber, green, pink, indigo) onto this soft radial plane.
+   - **Result:** Zero hard circular edges, zero cyan box wireframes. Soft, seamless blurred aura glow matching the 2D preview 1-to-1.
+3. **Subtle White Glass Story Pill**:
+   - Replaced cyan box outline with subtle white glass border (`#ffffff` at `0.25` opacity) and `💬` icon (`💬 "Your 3D AR story floats here"`).
+4. **Vibrant Native Emoji Floating Particles (`#particleOverlay`)**:
+   - Solved A-Frame 3D bitmap font unicode limitation by using a floating native emoji particle overlay layer.
+   - Star sparkles (`✨`), leaves (`🍃`), lightning bolts (`⚡`), palette icons (`🎨`), and zen symbols (`🧘`) float, drift, and drop smoothly around scanned artwork using system emoji fonts.
+5. **Automatic Target-to-Expression Dynamic Sync**:
+   - The moment the camera detects Cosmic Butterfly or Test Tree, the scanner queries Supabase for the **LATEST published expression** for that target.
+   - Automatically loads caption, mood aura, and binds ❤️ Like / 👋 Wave buttons to that exact expression thread with real-time Supabase sync.
+6. **Automatic Mobile Cache-Busting Script**:
+   - Inline script in `ar-camera.html` forces mobile browsers (Safari/Chrome) to attach `?_cb=TIMESTAMP` on launch, bypassing phone disk cache.
+
+---
+
+### Tomorrow's Creator Iteration Plan (Trees & Butterflies):
+1. **Differentiate Each Emotion Visual & Motion Profile**:
+   - **`🌌 inspired`**: Cyan/magenta galactic radial glow, 3D flapping wing oscillations, drifting star sparkles (`✨`).
+   - **`⚡ happy`**: Warm amber/solar beam aura, faster upbeat wing flap / tree sway rhythm, floating lightning sparkles (`⚡`).
+   - **`🎨 playful`**: Vibrant pink/magenta micro-swarm aura glow, bouncy playful motion dynamics, floating palette particles (`🎨`).
+   - **`🧘 peaceful`**: Soft indigo/zenith starlight aura, slow gentle breathing motion rhythm, floating zen particles (`🧘`).
+   - **`🌿 calm`**: Emerald green forest canopy aura, gentle swaying leaf motion, floating leaves (`🍃`).
+2. **Creator Side Clarity & Precision**:
+   - Enhance the Live AR Visual Preview box on `/create` so creators can clearly preview the exact motion, aura, and particle behavior before publishing.
+3. **Random Expression Testing**:
+   - Test publishing different random mood expressions for both Butterfly and Tree targets and verify that scanning accurately detects and displays each unique emotion profile!
+
