@@ -510,6 +510,11 @@
 
         if (exprList && exprList.length > 0) {
           const latest = exprList[0];
+          // Dynamically lock activeExpressionId to the exact published expression ID!
+          if (latest.id) {
+            activeExpressionId = latest.id;
+          }
+
           const storyText = latest.caption ? `💬 "${latest.caption}"` : `💬 ${latest.name}`;
           const moodText = `🔮 MOOD: ${(latest.mood || 'calm').toUpperCase()}`;
           document.getElementById('expCaption').textContent = `${storyText} (${latest.mood || 'active'})`;
