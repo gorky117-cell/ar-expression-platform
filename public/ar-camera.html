@@ -354,7 +354,7 @@
       <a-text id="bfParticle4" value="✨" position="0.45 -0.35 0.1" align="center" width="1.8" animation="property: position; from: 0.45 -0.40 0.1; to: 0.45 -0.28 0.1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
 
       <!-- Clean Floating Story Badge (Exact match to Create.jsx live AR preview pill) -->
-      <a-entity position="0 -0.52 0.08" animation="property: position; from: 0 -0.54 0.08; to: 0 -0.50 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+      <a-entity position="0 -0.42 0.08" animation="property: position; from: 0 -0.44 0.08; to: 0 -0.40 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
         <!-- Pill Border -->
         <a-plane id="butterflyBorder3D" position="0 0 0.001" width="1.14" height="0.22" material="shader: flat; color: #00f0ff; opacity: 0.6; transparent: true"></a-plane>
         <!-- Pill Background -->
@@ -380,7 +380,7 @@
       <a-text id="treeParticle4" value="🍃" position="0.45 -0.35 0.1" align="center" width="1.8" animation="property: position; from: 0.45 -0.40 0.1; to: 0.45 -0.28 0.1; dir: alternate; dur: 1950; loop: true; easing: easeInOutSine"></a-text>
 
       <!-- Clean Floating Story Badge -->
-      <a-entity position="0 -0.52 0.08" animation="property: position; from: 0 -0.54 0.08; to: 0 -0.50 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+      <a-entity position="0 -0.42 0.08" animation="property: position; from: 0 -0.44 0.08; to: 0 -0.40 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
         <!-- Pill Border -->
         <a-plane id="treeBorder3D" position="0 0 0.001" width="1.14" height="0.22" material="shader: flat; color: #10b981; opacity: 0.6; transparent: true"></a-plane>
         <!-- Pill Background -->
@@ -531,7 +531,7 @@
           }
 
           const storyText = latest.caption ? `💬 "${latest.caption}"` : `💬 "Your 3D AR story floats here"`;
-          document.getElementById('expCaption').textContent = `${storyText} (${latest.mood || 'active'})`;
+          document.getElementById('expCaption').textContent = `✨ AR Target Active (${(latest.mood || 'active').toUpperCase()})`;
 
           const butterfly3D = document.getElementById('butterflyText3D');
           const tree3D = document.getElementById('treeText3D');
