@@ -337,9 +337,8 @@
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
     <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly">
-      <!-- 1. Soft Pulsing Center Aura Glow Behind Body -->
-      <a-circle id="butterflyAuraOuter3D" position="0 0 0.003" radius="0.55" material="shader: flat; color: #00f0ff; opacity: 0.12; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.3 1.3 1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-circle>
-      <a-circle id="butterflyAura3D" position="0 0 0.005" radius="0.40" material="shader: flat; color: #00f0ff; opacity: 0.25; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- 1. Seamless Soft Radial Gradient Aura Glow (Matching preview 1-to-1) -->
+      <a-plane id="butterflyAura3D" position="0 0 0.005" width="1.4" height="1.4" material="shader: flat; src: #softAuraTex; color: #00f0ff; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
       <!-- 2. Center Butterfly Body & 3D Flapping Wings -->
       <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
@@ -350,11 +349,11 @@
         <a-plane position="0.19 0 0" width="0.40" height="0.75" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- 3. Floating Sparkle Particles -->
-      <a-text id="bfParticle1" value="✨" position="-0.42 0.35 0.08" align="center" width="1.8" animation="property: position; from: -0.42 0.25 0.08; to: -0.42 0.45 0.08; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle2" value="✨" position="0.44 0.30 0.08" align="center" width="1.8" animation="property: position; from: 0.44 0.20 0.08; to: 0.44 0.40 0.08; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle3" value="✨" position="-0.38 -0.25 0.08" align="center" width="1.5" animation="property: position; from: -0.38 -0.18 0.08; to: -0.38 -0.32 0.08; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle4" value="✨" position="0.38 -0.28 0.08" align="center" width="1.5" animation="property: position; from: 0.38 -0.20 0.08; to: 0.38 -0.35 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-text>
+      <!-- 3. Dripping & Drifting Particles -->
+      <a-text id="bfParticle1" value="✨" position="-0.45 0.35 0.08" align="center" width="1.8" animation="property: position; from: -0.45 0.45 0.08; to: -0.45 0.15 0.08; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle2" value="✨" position="0.45 0.30 0.08" align="center" width="1.8" animation="property: position; from: 0.45 0.40 0.08; to: 0.45 0.10 0.08; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle3" value="✨" position="-0.38 -0.25 0.08" align="center" width="1.5" animation="property: position; from: -0.38 -0.10 0.08; to: -0.38 -0.40 0.08; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle4" value="✨" position="0.38 -0.28 0.08" align="center" width="1.5" animation="property: position; from: 0.38 -0.12 0.08; to: 0.38 -0.42 0.08; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-text>
 
       <!-- 4. Floating Story Badge (Pill matching Image 1) -->
       <a-entity position="0 -0.48 0.09" animation="property: position; from: 0 -0.50 0.09; to: 0 -0.46 0.09; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
@@ -369,18 +368,17 @@
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
-      <!-- 1. Soft Pulsing Center Aura Glow -->
-      <a-circle id="treeAuraOuter3D" position="0 0 0.003" radius="0.55" material="shader: flat; color: #10b981; opacity: 0.12; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.3 1.3 1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-circle>
-      <a-circle id="treeAura3D" position="0 0 0.005" radius="0.40" material="shader: flat; color: #10b981; opacity: 0.25; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- 1. Seamless Soft Radial Gradient Aura Glow -->
+      <a-plane id="treeAura3D" position="0 0 0.005" width="1.4" height="1.4" material="shader: flat; src: #softAuraTex; color: #10b981; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
       <!-- 2. Swaying Tree Artwork -->
       <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -2; to: 0 0 2; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- 3. Floating Particles -->
-      <a-text id="treeParticle1" value="🍃" position="-0.42 0.35 0.08" align="center" width="1.8" animation="property: position; from: -0.42 0.25 0.08; to: -0.42 0.45 0.08; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle2" value="🍃" position="0.44 0.30 0.08" align="center" width="1.8" animation="property: position; from: 0.44 0.20 0.08; to: 0.44 0.40 0.08; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle3" value="🍃" position="-0.38 -0.25 0.08" align="center" width="1.5" animation="property: position; from: -0.38 -0.18 0.08; to: -0.38 -0.32 0.08; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle4" value="🍃" position="0.38 -0.28 0.08" align="center" width="1.5" animation="property: position; from: 0.38 -0.20 0.08; to: 0.38 -0.35 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-text>
+      <!-- 3. Dripping & Drifting Particles -->
+      <a-text id="treeParticle1" value="🍃" position="-0.45 0.35 0.08" align="center" width="1.8" animation="property: position; from: -0.45 0.45 0.08; to: -0.45 0.15 0.08; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle2" value="🍃" position="0.45 0.30 0.08" align="center" width="1.8" animation="property: position; from: 0.45 0.40 0.08; to: 0.45 0.10 0.08; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle3" value="🍃" position="-0.38 -0.25 0.08" align="center" width="1.5" animation="property: position; from: -0.38 -0.10 0.08; to: -0.38 -0.40 0.08; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle4" value="🍃" position="0.38 -0.28 0.08" align="center" width="1.5" animation="property: position; from: 0.38 -0.12 0.08; to: 0.38 -0.42 0.08; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-text>
 
       <!-- 4. Floating Story Badge -->
       <a-entity position="0 -0.48 0.09" animation="property: position; from: 0 -0.50 0.09; to: 0 -0.46 0.09; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
@@ -394,6 +392,7 @@
     </a-entity>
 
     <a-assets>
+      <img id="softAuraTex" src="/overlays/soft-aura.svg" crossorigin="anonymous">
       <img id="butterflyTex" src="/overlays/cosmic-butterfly.svg" crossorigin="anonymous">
       <img id="leftWingTex" src="/overlays/butterfly-left-wing.svg" crossorigin="anonymous">
       <img id="rightWingTex" src="/overlays/butterfly-right-wing.svg" crossorigin="anonymous">
@@ -439,7 +438,7 @@
         else if (m === 'playful' || m === 'micro-swarm' || m === 'leaf-whirlwind') { moodColor = '#ec4899'; particleChar = '🎨'; }
         else if (m === 'peaceful' || m === 'zenith' || m === 'starlight-roots') { moodColor = '#6366f1'; particleChar = '🧘'; }
 
-        ['butterflyAura3D', 'butterflyAuraOuter3D', 'treeAura3D', 'treeAuraOuter3D'].forEach(id => {
+        ['butterflyAura3D', 'treeAura3D'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.setAttribute('material', 'color', moodColor);
         });
@@ -586,7 +585,7 @@
             particleChar = '🧘';
           }
 
-          ['butterflyAura3D', 'butterflyAuraOuter3D', 'treeAura3D', 'treeAuraOuter3D'].forEach(id => {
+          ['butterflyAura3D', 'treeAura3D'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.setAttribute('material', 'color', moodColor);
           });
