@@ -319,26 +319,14 @@
     </div>
   </div>
 
-  <!-- MindAR A-Frame 3D Target Scene Setup — dynamically selects correct .mind file -->
-  <script>
-    // Determine correct .mind file from URL overlay param BEFORE a-scene renders
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      const overlay = decodeURIComponent(params.get('overlay') || '');
-      let mindFile = '/data/targets/all-targets.mind';
-      if (overlay.includes('butterfly')) {
-        mindFile = '/data/targets/cosmic-butterfly.mind';
-      } else if (overlay.includes('tree')) {
-        mindFile = '/data/targets/tree-birds.mind';
-      }
-      document.write(`<a-scene
-        mindar-image="imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
-        color-space="sRGB"
-        renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
-        vr-mode-ui="enabled: false"
-        device-orientation-permission-ui="enabled: false">`);
-    })();
-  </script>
+  <!-- MindAR A-Frame 3D Target Scene — mind file set dynamically via JS -->
+  <a-scene
+    id="arScene"
+    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: false;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
@@ -448,18 +436,24 @@
       const targetButterfly = document.getElementById('targetButterfly');
       const targetTree = document.getElementById('targetTree');
 
-      // Fix targetIndex for single-target .mind files
-      // When using a single .mind file, the only target is always at index 0
+      // Dynamically set the correct .mind file based on overlay param
+      const arScene = document.getElementById('arScene');
+      let mindFile = '/data/targets/all-targets.mind';
       if (urlOverlay.includes('butterfly')) {
-        // Using cosmic-butterfly.mind → butterfly is index 0, hide tree
+        mindFile = '/data/targets/cosmic-butterfly.mind';
         if (targetTree) targetTree.remove();
-        // butterfly already at index 0 — correct
+        document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
       } else if (urlOverlay.includes('tree')) {
-        // Using tree-birds.mind → tree is index 0, hide butterfly
+        mindFile = '/data/targets/tree-birds.mind';
         if (targetButterfly) targetButterfly.remove();
         if (targetTree) targetTree.setAttribute('mindar-image-target', 'targetIndex: 0');
+        document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
       }
-      // If no overlay param → keep both (all-targets.mind, original indices)
+
+      // Apply the correct mind file and start MindAR
+      if (arScene) {
+        arScene.setAttribute('mindar-image', `imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;`);
+      }
 
       // Re-read targets after potential removal
       const bf = document.getElementById('targetButterfly');
@@ -475,7 +469,6 @@
           pollData();
         });
         bf.addEventListener('targetLost', () => {
-          console.log('Cosmic Butterfly Target Lost!');
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
@@ -490,7 +483,6 @@
           pollData();
         });
         tr.addEventListener('targetLost', () => {
-          console.log('Test Tree Target Lost!');
           if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
