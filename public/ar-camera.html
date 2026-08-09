@@ -319,10 +319,10 @@
     </div>
   </div>
 
-  <!-- MindAR A-Frame 3D Target Scene — mind file set dynamically via JS -->
+  <!-- MindAR A-Frame 3D Target Scene -->
   <a-scene
     id="arScene"
-    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: false;"
+    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
     vr-mode-ui="enabled: false"
@@ -426,39 +426,12 @@
       const targetButterfly = document.getElementById('targetButterfly');
       const targetTree = document.getElementById('targetTree');
 
-      // Dynamically set the correct .mind file based on overlay param
-      const arScene = document.getElementById('arScene');
-      let mindFile = '/data/targets/all-targets.mind';
       if (urlOverlay.includes('butterfly')) {
-        mindFile = '/data/targets/cosmic-butterfly.mind';
-        if (targetTree) targetTree.remove();
         document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
       } else if (urlOverlay.includes('tree')) {
-        mindFile = '/data/targets/tree-birds.mind';
-        if (targetButterfly) targetButterfly.remove();
-        if (targetTree) targetTree.setAttribute('mindar-image-target', 'targetIndex: 0');
         document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
       }
 
-      // Apply the correct mind file, then explicitly start MindAR
-      if (arScene) {
-        arScene.setAttribute('mindar-image', `imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: false;`);
-        // Wait for the scene to be fully ready, then start MindAR manually
-        const doStart = () => {
-          const sys = arScene.systems['mindar-image-system'];
-          if (sys && sys.start) {
-            sys.start();
-            console.log('MindAR started with:', mindFile);
-          }
-        };
-        if (arScene.hasLoaded) {
-          doStart();
-        } else {
-          arScene.addEventListener('loaded', doStart);
-        }
-      }
-
-      // Re-read targets after potential removal
       const bf = document.getElementById('targetButterfly');
       const tr = document.getElementById('targetTree');
 
