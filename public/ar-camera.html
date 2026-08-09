@@ -332,61 +332,53 @@
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
     <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly">
-      <!-- Soft Pulsing Aura Glow Behind Artwork (matching preview) -->
-      <a-circle id="butterflyAuraOuter3D" position="0 0 0.005" radius="0.75" material="shader: flat; color: #00f0ff; opacity: 0.15; transparent: true" animation="property: scale; from: 0.85 0.85 1; to: 1.25 1.25 1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-circle>
-      <a-circle id="butterflyAura3D" position="0 0 0.01" radius="0.55" material="shader: flat; color: #00f0ff; opacity: 0.25; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.1 1.1 1; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- Subtle Aura Glow (very soft, not solid rings) -->
+      <a-circle id="butterflyAuraOuter3D" position="0 0 0.003" radius="0.7" material="shader: flat; color: #00f0ff; opacity: 0.06; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.3 1.3 1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-circle>
+      <a-circle id="butterflyAura3D" position="0 0 0.006" radius="0.5" material="shader: flat; color: #00f0ff; opacity: 0.10; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine"></a-circle>
 
-      <!-- Center Butterfly Body & Flapping Wings -->
-      <a-plane position="0 0 0.02" width="0.85" height="0.85" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
-
+      <!-- Butterfly Body & Flapping Wings -->
+      <a-plane position="0 0 0.02" width="0.7" height="0.7" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <a-plane position="-0.22 0 0" width="0.45" height="0.85" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane position="-0.18 0 0" width="0.38" height="0.7" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
-
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <a-plane position="0.22 0 0" width="0.45" height="0.85" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-plane position="0.18 0 0" width="0.38" height="0.7" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- Floating Mood Particles -->
-      <a-text id="bfParticle1" value="✨" position="-0.55 0.4 0.1" align="center" width="2.0" animation="property: position; from: -0.55 0.35 0.1; to: -0.55 0.50 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle2" value="✨" position="0.55 0.35 0.1" align="center" width="2.0" animation="property: position; from: 0.55 0.30 0.1; to: 0.55 0.45 0.1; dir: alternate; dur: 1700; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle3" value="✨" position="-0.45 -0.3 0.1" align="center" width="1.8" animation="property: position; from: -0.45 -0.35 0.1; to: -0.45 -0.22 0.1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="bfParticle4" value="✨" position="0.45 -0.35 0.1" align="center" width="1.8" animation="property: position; from: 0.45 -0.40 0.1; to: 0.45 -0.28 0.1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
+      <!-- Small Mood Particles -->
+      <a-text id="bfParticle1" value="✨" position="-0.45 0.35 0.1" align="center" width="1.5" animation="property: position; from: -0.45 0.30 0.1; to: -0.45 0.42 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle2" value="✨" position="0.45 0.30 0.1" align="center" width="1.5" animation="property: position; from: 0.45 0.25 0.1; to: 0.45 0.38 0.1; dir: alternate; dur: 1700; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle3" value="✨" position="-0.35 -0.25 0.1" align="center" width="1.3" animation="property: position; from: -0.35 -0.30 0.1; to: -0.35 -0.20 0.1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle4" value="✨" position="0.35 -0.28 0.1" align="center" width="1.3" animation="property: position; from: 0.35 -0.33 0.1; to: 0.35 -0.23 0.1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
 
-      <!-- Clean Floating Story Badge (Exact match to Create.jsx live AR preview pill) -->
-      <a-entity position="0 -0.42 0.08" animation="property: position; from: 0 -0.44 0.08; to: 0 -0.40 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
-        <!-- Pill Border -->
-        <a-plane id="butterflyBorder3D" position="0 0 0.001" width="1.14" height="0.22" material="shader: flat; color: #00f0ff; opacity: 0.6; transparent: true"></a-plane>
-        <!-- Pill Background -->
-        <a-plane position="0 0 0.002" width="1.10" height="0.18" material="shader: flat; color: #0a0a10; opacity: 0.95; transparent: true"></a-plane>
-        <!-- Story Text -->
-        <a-text id="butterflyText3D" value="💬 &quot;Your 3D AR story floats here&quot;" align="center" width="1.7" color="#ffffff" position="0 0 0.005" wrap-count="24" font="kelsonsans"></a-text>
+      <!-- Story Pill — well below the artwork (y:-0.65) -->
+      <a-entity position="0 -0.65 0.08" animation="property: position; from: 0 -0.67 0.08; to: 0 -0.63 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+        <a-plane id="butterflyBorder3D" position="0 0 0.001" width="0.9" height="0.15" material="shader: flat; color: #00f0ff; opacity: 0.5; transparent: true"></a-plane>
+        <a-plane position="0 0 0.002" width="0.86" height="0.12" material="shader: flat; color: #000000; opacity: 0.9; transparent: true"></a-plane>
+        <a-text id="butterflyText3D" value="Your 3D AR story floats here" align="center" width="1.0" color="#ffffff" position="0 0 0.005" wrap-count="32" font="kelsonsans"></a-text>
       </a-entity>
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
-      <!-- Soft Pulsing Aura Glow Behind Artwork -->
-      <a-circle id="treeAuraOuter3D" position="0 0 0.005" radius="0.75" material="shader: flat; color: #10b981; opacity: 0.15; transparent: true" animation="property: scale; from: 0.85 0.85 1; to: 1.25 1.25 1; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-circle>
-      <a-circle id="treeAura3D" position="0 0 0.01" radius="0.55" material="shader: flat; color: #10b981; opacity: 0.25; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.1 1.1 1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- Subtle Aura Glow -->
+      <a-circle id="treeAuraOuter3D" position="0 0 0.003" radius="0.7" material="shader: flat; color: #10b981; opacity: 0.06; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.3 1.3 1; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-circle>
+      <a-circle id="treeAura3D" position="0 0 0.006" radius="0.5" material="shader: flat; color: #10b981; opacity: 0.10; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-circle>
 
-      <!-- 3D Swaying Tree & Birds -->
-      <a-plane position="0 0 0.02" width="0.85" height="0.85" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -2; to: 0 0 2; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- Swaying Tree -->
+      <a-plane position="0 0 0.02" width="0.7" height="0.7" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -2; to: 0 0 2; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- Floating Mood Particles -->
-      <a-text id="treeParticle1" value="🍃" position="-0.55 0.4 0.1" align="center" width="2.0" animation="property: position; from: -0.55 0.35 0.1; to: -0.55 0.50 0.1; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle2" value="🍃" position="0.55 0.35 0.1" align="center" width="2.0" animation="property: position; from: 0.55 0.30 0.1; to: 0.55 0.45 0.1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle3" value="🍃" position="-0.45 -0.3 0.1" align="center" width="1.8" animation="property: position; from: -0.45 -0.35 0.1; to: -0.45 -0.22 0.1; dir: alternate; dur: 2300; loop: true; easing: easeInOutSine"></a-text>
-      <a-text id="treeParticle4" value="🍃" position="0.45 -0.35 0.1" align="center" width="1.8" animation="property: position; from: 0.45 -0.40 0.1; to: 0.45 -0.28 0.1; dir: alternate; dur: 1950; loop: true; easing: easeInOutSine"></a-text>
+      <!-- Small Mood Particles -->
+      <a-text id="treeParticle1" value="🍃" position="-0.45 0.35 0.1" align="center" width="1.5" animation="property: position; from: -0.45 0.30 0.1; to: -0.45 0.42 0.1; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle2" value="🍃" position="0.45 0.30 0.1" align="center" width="1.5" animation="property: position; from: 0.45 0.25 0.1; to: 0.45 0.38 0.1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle3" value="🍃" position="-0.35 -0.25 0.1" align="center" width="1.3" animation="property: position; from: -0.35 -0.30 0.1; to: -0.35 -0.20 0.1; dir: alternate; dur: 2300; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle4" value="🍃" position="0.35 -0.28 0.1" align="center" width="1.3" animation="property: position; from: 0.35 -0.33 0.1; to: 0.35 -0.23 0.1; dir: alternate; dur: 1950; loop: true; easing: easeInOutSine"></a-text>
 
-      <!-- Clean Floating Story Badge -->
-      <a-entity position="0 -0.42 0.08" animation="property: position; from: 0 -0.44 0.08; to: 0 -0.40 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
-        <!-- Pill Border -->
-        <a-plane id="treeBorder3D" position="0 0 0.001" width="1.14" height="0.22" material="shader: flat; color: #10b981; opacity: 0.6; transparent: true"></a-plane>
-        <!-- Pill Background -->
-        <a-plane position="0 0 0.002" width="1.10" height="0.18" material="shader: flat; color: #0a0a10; opacity: 0.95; transparent: true"></a-plane>
-        <!-- Story Text -->
-        <a-text id="treeText3D" value="💬 &quot;Your 3D AR story floats here&quot;" align="center" width="1.7" color="#ffffff" position="0 0 0.005" wrap-count="24" font="kelsonsans"></a-text>
+      <!-- Story Pill — well below the artwork -->
+      <a-entity position="0 -0.65 0.08" animation="property: position; from: 0 -0.67 0.08; to: 0 -0.63 0.08; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine">
+        <a-plane id="treeBorder3D" position="0 0 0.001" width="0.9" height="0.15" material="shader: flat; color: #10b981; opacity: 0.5; transparent: true"></a-plane>
+        <a-plane position="0 0 0.002" width="0.86" height="0.12" material="shader: flat; color: #000000; opacity: 0.9; transparent: true"></a-plane>
+        <a-text id="treeText3D" value="Your 3D AR story floats here" align="center" width="1.0" color="#ffffff" position="0 0 0.005" wrap-count="32" font="kelsonsans"></a-text>
       </a-entity>
     </a-entity>
 
