@@ -415,7 +415,34 @@
       }
 
       if (urlCaption) {
-        document.getElementById('expCaption').textContent = `💬 "${urlCaption}" (${urlMood || 'active'})`;
+        const storyText = `💬 "${urlCaption}"`;
+        const bf3D = document.getElementById('butterflyText3D');
+        const tr3D = document.getElementById('treeText3D');
+        if (bf3D) bf3D.setAttribute('value', storyText);
+        if (tr3D) tr3D.setAttribute('value', storyText);
+      }
+
+      if (urlMood) {
+        let moodColor = '#10b981';
+        let particleChar = '🍃';
+        const m = urlMood.toLowerCase();
+        if (m === 'inspired' || m === 'galactic') { moodColor = '#00f0ff'; particleChar = '✨'; }
+        else if (m === 'happy' || m === 'solar-beams' || m === 'hyperdrive') { moodColor = '#f59e0b'; particleChar = '⚡'; }
+        else if (m === 'playful' || m === 'micro-swarm' || m === 'leaf-whirlwind') { moodColor = '#ec4899'; particleChar = '🎨'; }
+        else if (m === 'peaceful' || m === 'zenith' || m === 'starlight-roots') { moodColor = '#6366f1'; particleChar = '🧘'; }
+
+        ['butterflyAura3D', 'butterflyAuraOuter3D', 'treeAura3D', 'treeAuraOuter3D'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('material', 'color', moodColor);
+        });
+        ['butterflyBorder3D', 'treeBorder3D'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('material', 'color', moodColor);
+        });
+        ['bfParticle1', 'bfParticle2', 'bfParticle3', 'bfParticle4', 'treeParticle1', 'treeParticle2', 'treeParticle3', 'treeParticle4'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('value', particleChar);
+        });
       }
 
       const targetButterfly = document.getElementById('targetButterfly');
