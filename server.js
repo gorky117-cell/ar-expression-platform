@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from the Vite build directory
+app.use('/downloads', express.static(path.join(__dirname, 'public', 'downloads')));
 app.use(express.static(path.join(__dirname, 'dist'), {
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.html')) {
