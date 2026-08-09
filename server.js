@@ -57,17 +57,29 @@ app.get('/api/config', (req, res) => {
 })
 
 // Clean route aliases without .html extension
+// Force fresh content on every request — mobile browsers aggressively cache
+function sendFreshHtml(res, filePath) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  res.set('Surrogate-Control', 'no-store');
+  res.set('Vary', '*');
+  res.removeHeader('ETag');
+  res.removeHeader('Last-Modified');
+  res.sendFile(filePath);
+}
+
 app.get('/scanner', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'ar-camera.html'))
+  sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-camera.html'));
 })
 app.get('/ar-camera', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'ar-camera.html'))
+  sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-camera.html'));
 })
 app.get('/ar-mind', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'ar-mind.html'))
+  sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-mind.html'));
 })
 app.get('/ar-tree', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'ar-tree.html'))
+  sendFreshHtml(res, path.join(__dirname, 'dist', 'ar-tree.html'));
 })
 
 // Handle SPA routing: serve index.html for all non-file routes
