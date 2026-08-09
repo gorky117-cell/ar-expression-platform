@@ -331,40 +331,72 @@
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
     <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly">
-      <!-- 0. Dynamic 3D Mood Aura Halo Behind Artwork -->
-      <a-circle id="butterflyAura3D" position="0 0 0.01" radius="0.7" material="shader: flat; color: #00f0ff; opacity: 0.45; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.15 1.15 1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- 0. Dynamic 3D Neon Aura Outer Pulse Halo -->
+      <a-circle id="butterflyAuraOuter3D" position="0 0 0.005" radius="0.85" material="shader: flat; color: #00f0ff; opacity: 0.25; transparent: true" animation="property: scale; from: 0.85 0.85 1; to: 1.35 1.35 1; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-circle>
 
-      <!-- 1. Center Butterfly Body Base -->
+      <!-- 1. Dynamic 3D Mood Aura Inner Core -->
+      <a-circle id="butterflyAura3D" position="0 0 0.01" radius="0.65" material="shader: flat; color: #00f0ff; opacity: 0.55; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1600; loop: true; easing: easeInOutSine"></a-circle>
+
+      <!-- 2. Center Butterfly Body Base -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
 
-      <!-- 2. Realistic 3D Flapping Left Wing Hinge -->
+      <!-- 3. Realistic 3D Flapping Left Wing Hinge -->
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane position="-0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- 3. Realistic 3D Flapping Right Wing Hinge -->
+      <!-- 4. Realistic 3D Flapping Right Wing Hinge -->
       <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -45 0; dir: alternate; dur: 550; loop: true; easing: easeInOutSine">
         <a-plane position="0.25 0 0" width="0.5" height="1.0" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
       </a-entity>
 
-      <!-- 4. Floating 3D Story Banner in AR Space -->
-      <a-plane position="0 0.65 0.08" width="1.1" height="0.22" material="shader: flat; color: #121218; opacity: 0.88; transparent: true">
-        <a-text id="butterflyText3D" value="💬 Wearer Story Loading..." align="center" width="2.2" color="#ffffff" position="0 0 0.01"></a-text>
-      </a-plane>
+      <!-- 5. Floating 3D Mood Particle Swarm Planes -->
+      <a-text id="bfParticle1" value="✨" position="-0.65 0.45 0.1" align="center" width="3.5" animation="property: position; from: -0.65 0.35 0.1; to: -0.65 0.55 0.1; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle2" value="✨" position="0.65 0.4 0.1" align="center" width="3.5" animation="property: position; from: 0.65 0.3 0.1; to: 0.65 0.5 0.1; dir: alternate; dur: 1700; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle3" value="✨" position="-0.55 -0.35 0.1" align="center" width="3.0" animation="property: position; from: -0.55 -0.45 0.1; to: -0.55 -0.25 0.1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="bfParticle4" value="✨" position="0.55 -0.4 0.1" align="center" width="3.0" animation="property: position; from: 0.55 -0.5 0.1; to: 0.55 -0.3 0.1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-text>
+
+      <!-- 6. Floating Glassmorphic 3D Story Card in AR Space -->
+      <a-entity position="0 0.72 0.08" animation="property: position; from: 0 0.7 0.08; to: 0 0.75 0.08; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine">
+        <!-- Card Neon Border Glow -->
+        <a-plane id="butterflyBorder3D" position="0 0 0.001" width="1.24" height="0.34" material="shader: flat; color: #00f0ff; opacity: 0.8; transparent: true"></a-plane>
+        <!-- Card Glass Background -->
+        <a-plane position="0 0 0.002" width="1.2" height="0.3" material="shader: flat; color: #0b0b12; opacity: 0.92; transparent: true"></a-plane>
+        <!-- Card Story Text -->
+        <a-text id="butterflyText3D" value="💬 Wearer Story Loading..." align="center" width="2.3" color="#ffffff" position="0 0.03 0.005" font="kelsonsans"></a-text>
+        <!-- Card Active Mood Tag -->
+        <a-text id="butterflyMoodTag3D" value="🔮 ACTIVE MOOD: INSPIRED" align="center" width="1.6" color="#00f0ff" position="0 -0.08 0.005"></a-text>
+      </a-entity>
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
     <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
-      <!-- 0. Dynamic 3D Mood Aura Halo Behind Artwork -->
-      <a-circle id="treeAura3D" position="0 0 0.01" radius="0.7" material="shader: flat; color: #10b981; opacity: 0.45; transparent: true" animation="property: scale; from: 0.9 0.9 1; to: 1.15 1.15 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-circle>
+      <!-- 0. Dynamic 3D Neon Aura Outer Pulse Halo -->
+      <a-circle id="treeAuraOuter3D" position="0 0 0.005" radius="0.85" material="shader: flat; color: #10b981; opacity: 0.25; transparent: true" animation="property: scale; from: 0.85 0.85 1; to: 1.35 1.35 1; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine"></a-circle>
 
-      <!-- 3D Swaying Animated Tree & Birds Plane -->
+      <!-- 1. Dynamic 3D Mood Aura Inner Core -->
+      <a-circle id="treeAura3D" position="0 0 0.01" radius="0.65" material="shader: flat; color: #10b981; opacity: 0.55; transparent: true" animation="property: scale; from: 0.95 0.95 1; to: 1.15 1.15 1; dir: alternate; dur: 1900; loop: true; easing: easeInOutSine"></a-circle>
+
+      <!-- 2. 3D Swaying Animated Tree & Birds Plane -->
       <a-plane position="0 0 0.02" width="1.0" height="1.0" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -3; to: 0 0 3; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- 4. Floating 3D Story Banner in AR Space -->
-      <a-plane position="0 0.65 0.08" width="1.1" height="0.22" material="shader: flat; color: #121218; opacity: 0.88; transparent: true">
-        <a-text id="treeText3D" value="💬 Wearer Story Loading..." align="center" width="2.2" color="#ffffff" position="0 0 0.01"></a-text>
-      </a-plane>
+      <!-- 3. Floating 3D Mood Particle Swarm Planes -->
+      <a-text id="treeParticle1" value="🍃" position="-0.65 0.45 0.1" align="center" width="3.5" animation="property: position; from: -0.65 0.35 0.1; to: -0.65 0.55 0.1; dir: alternate; dur: 2100; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle2" value="🍃" position="0.65 0.4 0.1" align="center" width="3.5" animation="property: position; from: 0.65 0.3 0.1; to: 0.65 0.5 0.1; dir: alternate; dur: 1800; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle3" value="🍃" position="-0.55 -0.35 0.1" align="center" width="3.0" animation="property: position; from: -0.55 -0.45 0.1; to: -0.55 -0.25 0.1; dir: alternate; dur: 2300; loop: true; easing: easeInOutSine"></a-text>
+      <a-text id="treeParticle4" value="🍃" position="0.55 -0.4 0.1" align="center" width="3.0" animation="property: position; from: 0.55 -0.5 0.1; to: 0.55 -0.3 0.1; dir: alternate; dur: 1950; loop: true; easing: easeInOutSine"></a-text>
+
+      <!-- 4. Floating Glassmorphic 3D Story Card in AR Space -->
+      <a-entity position="0 0.72 0.08" animation="property: position; from: 0 0.7 0.08; to: 0 0.75 0.08; dir: alternate; dur: 2500; loop: true; easing: easeInOutSine">
+        <!-- Card Neon Border Glow -->
+        <a-plane id="treeBorder3D" position="0 0 0.001" width="1.24" height="0.34" material="shader: flat; color: #10b981; opacity: 0.8; transparent: true"></a-plane>
+        <!-- Card Glass Background -->
+        <a-plane position="0 0 0.002" width="1.2" height="0.3" material="shader: flat; color: #0b0b12; opacity: 0.92; transparent: true"></a-plane>
+        <!-- Card Story Text -->
+        <a-text id="treeText3D" value="💬 Wearer Story Loading..." align="center" width="2.3" color="#ffffff" position="0 0.03 0.005" font="kelsonsans"></a-text>
+        <!-- Card Active Mood Tag -->
+        <a-text id="treeMoodTag3D" value="🌿 ACTIVE MOOD: CALM" align="center" width="1.6" color="#10b981" position="0 -0.08 0.005"></a-text>
+      </a-entity>
     </a-entity>
 
     <a-assets>
@@ -478,26 +510,58 @@
 
         if (exprList && exprList.length > 0) {
           const latest = exprList[0];
-          const textVal = latest.caption ? `💬 "${latest.caption}" (${latest.mood || 'active'})` : `💬 ${latest.name} (${latest.mood || 'active'})`;
-          document.getElementById('expCaption').textContent = textVal;
+          const storyText = latest.caption ? `💬 "${latest.caption}"` : `💬 ${latest.name}`;
+          const moodText = `🔮 MOOD: ${(latest.mood || 'calm').toUpperCase()}`;
+          document.getElementById('expCaption').textContent = `${storyText} (${latest.mood || 'active'})`;
 
           const butterfly3D = document.getElementById('butterflyText3D');
           const tree3D = document.getElementById('treeText3D');
-          if (butterfly3D) butterfly3D.setAttribute('value', textVal);
-          if (tree3D) tree3D.setAttribute('value', textVal);
+          if (butterfly3D) butterfly3D.setAttribute('value', storyText);
+          if (tree3D) tree3D.setAttribute('value', storyText);
 
-          // Update 3D Mood Aura Halo Color dynamically in 3D WebGL scene
-          let moodColor = '#10b981'; // default calm emerald
+          const bfTag = document.getElementById('butterflyMoodTag3D');
+          const treeTag = document.getElementById('treeMoodTag3D');
+          if (bfTag) bfTag.setAttribute('value', moodText);
+          if (treeTag) treeTag.setAttribute('value', moodText);
+
+          // Dynamic Mood 3D Visual Effects Mapping
+          let moodColor = '#10b981'; // default emerald calm
+          let particleChar = '🍃';
+
           const m = (latest.mood || '').toLowerCase();
-          if (m === 'inspired' || m === 'galactic') moodColor = '#00f0ff';
-          else if (m === 'happy' || m === 'solar-beams' || m === 'hyperdrive') moodColor = '#f59e0b';
-          else if (m === 'playful' || m === 'micro-swarm' || m === 'leaf-whirlwind') moodColor = '#ec4899';
-          else if (m === 'peaceful' || m === 'zenith' || m === 'starlight-roots') moodColor = '#6366f1';
+          if (m === 'inspired' || m === 'galactic') {
+            moodColor = '#00f0ff';
+            particleChar = '✨';
+          } else if (m === 'happy' || m === 'solar-beams' || m === 'hyperdrive') {
+            moodColor = '#f59e0b';
+            particleChar = '⚡';
+          } else if (m === 'playful' || m === 'micro-swarm' || m === 'leaf-whirlwind') {
+            moodColor = '#ec4899';
+            particleChar = '🎨';
+          } else if (m === 'peaceful' || m === 'zenith' || m === 'starlight-roots') {
+            moodColor = '#6366f1';
+            particleChar = '🧘';
+          }
 
-          const butterflyAura = document.getElementById('butterflyAura3D');
-          const treeAura = document.getElementById('treeAura3D');
-          if (butterflyAura) butterflyAura.setAttribute('material', 'color', moodColor);
-          if (treeAura) treeAura.setAttribute('material', 'color', moodColor);
+          // Update 3D Aura Halo & Glass Border Colors
+          ['butterflyAura3D', 'butterflyAuraOuter3D', 'treeAura3D', 'treeAuraOuter3D'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('material', 'color', moodColor);
+          });
+
+          ['butterflyBorder3D', 'treeBorder3D'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('material', 'color', moodColor);
+          });
+
+          if (bfTag) bfTag.setAttribute('color', moodColor);
+          if (treeTag) treeTag.setAttribute('color', moodColor);
+
+          // Update 3D Floating Particle Swarm Elements
+          ['bfParticle1', 'bfParticle2', 'bfParticle3', 'bfParticle4', 'treeParticle1', 'treeParticle2', 'treeParticle3', 'treeParticle4'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('value', particleChar);
+          });
         }
 
         const { data: reactions } = await supabaseClient
