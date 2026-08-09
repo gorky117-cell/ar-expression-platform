@@ -319,13 +319,26 @@
     </div>
   </div>
 
-  <!-- MindAR A-Frame 3D Multi-Target Scene Setup -->
-  <a-scene
-    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
-    color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
+  <!-- MindAR A-Frame 3D Target Scene Setup — dynamically selects correct .mind file -->
+  <script>
+    // Determine correct .mind file from URL overlay param BEFORE a-scene renders
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const overlay = decodeURIComponent(params.get('overlay') || '');
+      let mindFile = '/data/targets/all-targets.mind';
+      if (overlay.includes('butterfly')) {
+        mindFile = '/data/targets/cosmic-butterfly.mind';
+      } else if (overlay.includes('tree')) {
+        mindFile = '/data/targets/tree-birds.mind';
+      }
+      document.write(`<a-scene
+        mindar-image="imageTargetSrc: ${mindFile}; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
+        color-space="sRGB"
+        renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">`);
+    })();
+  </script>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
@@ -421,6 +434,7 @@
       const urlCaption = urlParams.get('caption');
       const urlMood = urlParams.get('mood');
       const urlId = urlParams.get('id');
+      const urlOverlay = decodeURIComponent(urlParams.get('overlay') || '');
 
       if (urlId) {
         urlExpressionId = urlId;
@@ -434,8 +448,25 @@
       const targetButterfly = document.getElementById('targetButterfly');
       const targetTree = document.getElementById('targetTree');
 
-      if (targetButterfly) {
-        targetButterfly.addEventListener('targetFound', () => {
+      // Fix targetIndex for single-target .mind files
+      // When using a single .mind file, the only target is always at index 0
+      if (urlOverlay.includes('butterfly')) {
+        // Using cosmic-butterfly.mind → butterfly is index 0, hide tree
+        if (targetTree) targetTree.remove();
+        // butterfly already at index 0 — correct
+      } else if (urlOverlay.includes('tree')) {
+        // Using tree-birds.mind → tree is index 0, hide butterfly
+        if (targetButterfly) targetButterfly.remove();
+        if (targetTree) targetTree.setAttribute('mindar-image-target', 'targetIndex: 0');
+      }
+      // If no overlay param → keep both (all-targets.mind, original indices)
+
+      // Re-read targets after potential removal
+      const bf = document.getElementById('targetButterfly');
+      const tr = document.getElementById('targetTree');
+
+      if (bf) {
+        bf.addEventListener('targetFound', () => {
           console.log('Cosmic Butterfly Target Found!');
           if (!urlExpressionId) activeExpressionId = 2;
           document.getElementById('arTitleBadge').textContent = '🦋 Cosmic Butterfly AR';
@@ -443,14 +474,14 @@
           startPolling();
           pollData();
         });
-        targetButterfly.addEventListener('targetLost', () => {
+        bf.addEventListener('targetLost', () => {
           console.log('Cosmic Butterfly Target Lost!');
-          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
 
-      if (targetTree) {
-        targetTree.addEventListener('targetFound', () => {
+      if (tr) {
+        tr.addEventListener('targetFound', () => {
           console.log('Test Tree Target Found!');
           if (!urlExpressionId) activeExpressionId = 1;
           document.getElementById('arTitleBadge').textContent = '🌳 Test Tree AR';
@@ -458,9 +489,9 @@
           startPolling();
           pollData();
         });
-        targetTree.addEventListener('targetLost', () => {
+        tr.addEventListener('targetLost', () => {
           console.log('Test Tree Target Lost!');
-          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at Butterfly or Tree artwork print';
+          if (!urlCaption) document.getElementById('expCaption').textContent = '✨ Point camera at artwork print';
         });
       }
 

@@ -117,7 +117,7 @@ export default function Expression() {
             </span>
           </div>
           <a
-            href={`/scanner?id=${id}&caption=${encodeURIComponent(expr.caption || '')}&mood=${expr.mood}`}
+            href={`/scanner?id=${id}&caption=${encodeURIComponent(expr.caption || '')}&mood=${expr.mood}&overlay=${encodeURIComponent(expr.overlayImage || '')}`}
             className="btn-primary"
             style={{
               padding: '0.6rem 1.25rem',
