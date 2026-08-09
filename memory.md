@@ -80,6 +80,7 @@
 - **6-DOF Motion Smoothing:** Kalman filter / exponential moving average smoothing for fabric motion and body movement.
 - **3D Flying Birds & Figure-8 Flight:** 3D bluebirds taking flight off the tree branches into room space; 3D butterfly flying off chest print in figure-8 infinity loop flight path.
 - **Room Locking:** Spatial anchor fallback so 3D objects remain locked in physical room space even when camera briefly turns away from the garment print.
+- **Dynamic 3D AR Motion & Model Experimentation (Phase 2 End):** Real 3D model creation/selection (custom 3D GLTF models, e.g., sailing boat, surfer, dragon, sneakers) via visual model picker or voice/text prompt commands ("Put a sailing boat on ocean waves"). Creators preview the 3D model in real-time on `/create` before publishing, and the WebAR camera scanner dynamically loads and renders the selected 3D GLTF model over the physical print in real 3D room space!
 
 ### Phase 3 (V3 Heavy AI Models — GCP GPU Fallback)
 - **Generative AI Art Synthesis:** On-the-fly Stable Diffusion artwork generation driven by wearer voice prompts.
