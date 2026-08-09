@@ -29,6 +29,13 @@
       touch-action: none;
     }
 
+    /* Hide MindAR default loading spinner & scanning overlay */
+    .mindar-ui-loading, .mindar-ui-scanning, .mindar-ui-overlay {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
     /* Hide asset preload container */
     a-assets {
       display: none !important;
@@ -325,7 +332,7 @@
   <!-- MindAR A-Frame 3D Target Scene -->
   <a-scene
     id="arScene"
-    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true;"
+    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; filterMinCF: 0.0001; filterBeta: 0.001; autoStart: true; uiLoading: no; uiScanning: no;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
     vr-mode-ui="enabled: false"
