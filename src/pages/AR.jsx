@@ -63,7 +63,7 @@ export default function AR() {
 
         {/* Single Ultra-Clean Glowing Launch Button */}
         <a
-          href={`/ar-scanner?v=${Date.now()}`}
+          href="/scanner"
           style={{
             display: 'block',
             textAlign: 'center',
