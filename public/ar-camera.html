@@ -503,7 +503,16 @@
               .ilike('overlay_image', '%butterfly%')
               .order('created_at', { ascending: false })
               .limit(1);
-            if (list && list.length > 0) activeExpressionId = list[0].id;
+            if (list && list.length > 0) {
+              activeExpressionId = list[0].id;
+            } else {
+              activeExpressionId = null;
+              document.getElementById('expCaption').innerHTML = '✨ Expression yet to be created by wearer. <a href="/create" style="color:#7c5cff; font-weight:700; text-decoration:underline;">+ Create Story</a>';
+              const bf3D = document.getElementById('butterflyText3D');
+              if (bf3D) bf3D.setAttribute('value', '💬 "Expression yet to be created by wearer"');
+              document.getElementById('likeCount').textContent = '0';
+              document.getElementById('waveCount').textContent = '0';
+            }
           }
           startPolling();
           pollData();
@@ -528,7 +537,16 @@
               .ilike('overlay_image', '%tree%')
               .order('created_at', { ascending: false })
               .limit(1);
-            if (list && list.length > 0) activeExpressionId = list[0].id;
+            if (list && list.length > 0) {
+              activeExpressionId = list[0].id;
+            } else {
+              activeExpressionId = null;
+              document.getElementById('expCaption').innerHTML = '✨ Expression yet to be created by wearer. <a href="/create" style="color:#7c5cff; font-weight:700; text-decoration:underline;">+ Create Story</a>';
+              const tr3D = document.getElementById('treeText3D');
+              if (tr3D) tr3D.setAttribute('value', '💬 "Expression yet to be created by wearer"');
+              document.getElementById('likeCount').textContent = '0';
+              document.getElementById('waveCount').textContent = '0';
+            }
           }
           startPolling();
           pollData();
