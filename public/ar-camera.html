@@ -362,7 +362,7 @@
   <!-- MindAR A-Frame 3D Target Scene -->
   <a-scene
     id="arScene"
-    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001;"
+    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 12; warmupTolerance: 5;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
     vr-mode-ui="enabled: false"
@@ -371,7 +371,7 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <!-- Target 0 Anchor: Cosmic Butterfly -->
-    <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly">
+    <a-entity mindar-image-target="targetIndex: 0" id="targetButterfly" matrix-smoother="alpha: 0.18" distance-auto-scaler>
       <!-- 1. Seamless Soft Radial Gradient Aura Glow (Matching preview 1-to-1) -->
       <a-plane id="butterflyAura3D" position="0 0 0.005" width="1.6" height="1.6" material="shader: flat; src: #softAuraTex; color: #00f0ff; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
@@ -402,7 +402,7 @@
     </a-entity>
 
     <!-- Target 1 Anchor: Test Tree -->
-    <a-entity mindar-image-target="targetIndex: 1" id="targetTree">
+    <a-entity mindar-image-target="targetIndex: 1" id="targetTree" matrix-smoother="alpha: 0.18" distance-auto-scaler>
       <!-- 1. Seamless Soft Radial Gradient Aura Glow -->
       <a-plane id="treeAura3D" position="0 0 0.005" width="1.6" height="1.6" material="shader: flat; src: #softAuraTex; color: #10b981; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
@@ -435,7 +435,75 @@
     </a-assets>
   </a-scene>
 
-  <script>
+    // 1. 6-DOF Exponential Moving Average Matrix Smoother (Silk-smooth jitter filtering)
+    if (typeof AFRAME !== 'undefined') {
+      AFRAME.registerComponent('matrix-smoother', {
+        schema: {
+          alpha: { type: 'number', default: 0.18 }
+        },
+        init: function() {
+          this.smoothPos = new THREE.Vector3();
+          this.smoothRot = new THREE.Quaternion();
+          this.smoothScale = new THREE.Vector3(1, 1, 1);
+          this.initialized = false;
+        },
+        tick: function() {
+          const el = this.el;
+          if (!el.object3D.visible) {
+            this.initialized = false;
+            return;
+          }
+          if (!this.initialized) {
+            this.smoothPos.copy(el.object3D.position);
+            this.smoothRot.copy(el.object3D.quaternion);
+            this.smoothScale.copy(el.object3D.scale);
+            this.initialized = true;
+            return;
+          }
+          const alpha = this.data.alpha;
+          this.smoothPos.lerp(el.object3D.position, alpha);
+          this.smoothRot.slerp(el.object3D.quaternion, alpha);
+          this.smoothScale.lerp(el.object3D.scale, alpha);
+
+          el.object3D.position.copy(this.smoothPos);
+          el.object3D.quaternion.copy(this.smoothRot);
+          el.object3D.scale.copy(this.smoothScale);
+        }
+      });
+
+      // 2. Distance Auto-Scaler & Auto-Zooming Engine (Scales story pill & particles up to 2.5x from 10+ ft away)
+      AFRAME.registerComponent('distance-auto-scaler', {
+        schema: {
+          minScale: { type: 'number', default: 1.0 },
+          maxScale: { type: 'number', default: 2.5 }
+        },
+        tick: function() {
+          const sceneEl = this.el.sceneEl;
+          if (!sceneEl || !sceneEl.camera) return;
+          const cameraObj = sceneEl.camera;
+
+          const cameraWorldPos = new THREE.Vector3();
+          cameraObj.getWorldPosition(cameraWorldPos);
+
+          const targetWorldPos = new THREE.Vector3();
+          this.el.getWorldPosition(targetWorldPos);
+
+          const distMeters = cameraWorldPos.distanceTo(targetWorldPos);
+          const distFeet = distMeters * 3.28084;
+
+          // Scale Formula: ScaleFactor = clamp(1.0 + 0.12 * (DistanceInFeet - 2.0), 1.0, 2.5)
+          let rawScale = 1.0 + 0.12 * Math.max(0, distFeet - 2.0);
+          let clampedScale = Math.min(Math.max(rawScale, this.data.minScale), this.data.maxScale);
+
+          // Apply auto-scale to child elements
+          const pillEl = this.el.querySelector('[id*="PillBorder3D"]')?.parentElement;
+          if (pillEl) {
+            pillEl.object3D.scale.set(clampedScale, clampedScale, clampedScale);
+          }
+        }
+      });
+    }
+
     function escapeHtml(str) {
       return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
