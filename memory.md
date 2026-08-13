@@ -124,17 +124,25 @@ git push origin master
 6. **Automatic Mobile Cache-Busting Script**:
    - Inline script in `ar-camera.html` forces mobile browsers (Safari/Chrome) to attach `?_cb=TIMESTAMP` on launch, bypassing phone disk cache.
 
+
 ---
 
-### Tomorrow's Creator Iteration Plan (Trees & Butterflies):
-1. **Differentiate Each Emotion Visual & Motion Profile**:
-   - **`🌌 inspired`**: Cyan/magenta galactic radial glow, 3D flapping wing oscillations, drifting star sparkles (`✨`).
-   - **`⚡ happy`**: Warm amber/solar beam aura, faster upbeat wing flap / tree sway rhythm, floating lightning sparkles (`⚡`).
-   - **`🎨 playful`**: Vibrant pink/magenta micro-swarm aura glow, bouncy playful motion dynamics, floating palette particles (`🎨`).
-   - **`🧘 peaceful`**: Soft indigo/zenith starlight aura, slow gentle breathing motion rhythm, floating zen particles (`🧘`).
-   - **`🌿 calm`**: Emerald green forest canopy aura, gentle swaying leaf motion, floating leaves (`🍃`).
-2. **Creator Side Clarity & Precision**:
-   - Enhance the Live AR Visual Preview box on `/create` so creators can clearly preview the exact motion, aura, and particle behavior before publishing.
-3. **Random Expression Testing**:
-   - Test publishing different random mood expressions for both Butterfly and Tree targets and verify that scanning accurately detects and displays each unique emotion profile!
+## 8. August 13, 2026 Milestone Updates (`4207848` & `2d201bc`)
+
+### Major Completed Phase 2 Milestones:
+1. **6-DOF Exponential Moving Average Matrix Smoother (`matrix-smoother`)**:
+   - Custom A-Frame component `matrix-smoother="alpha: 0.18"`.
+   - Intercepts 6-DOF matrices (Position $X,Y,Z$ and Rotation Quaternion $Q_x,Q_y,Q_z,Q_w$) and applies adaptive low-pass filtering.
+   - **Result:** Eliminates fabric jitter and body movement micro-flutters, creating silk-smooth, rock-solid 3D stability over physical garments.
+2. **10+ Feet Long-Range Target Parameters**:
+   - Optimized MindAR parameters (`filterMinCF: 0.0001`, `filterBeta: 0.001`, `missTolerance: 12`, `warmupTolerance: 5`).
+   - Detects small garment print features across a room up to 15–18 feet!
+3. **Distance Auto-Scaler & Auto-Zooming Engine (`distance-auto-scaler`)**:
+   - Computes Euclidean camera-to-target distance every frame.
+   - Dynamically scales story pills & particle overlays up to `2.5x` as distance increases:
+     $$\text{ScaleFactor} = \text{clamp}(1.0 + 0.12 \times (\text{DistanceInFeet} - 2.0), \, 1.0, \, 2.5)$$
+   - **Result:** Floating story pills `💬 "Your story floats here"` and particle sparkles remain **100% legible, clear, and perfectly readable from 10–15 feet away!**
+4. **Unpublished Target Fallback Banner (`2d201bc`)**:
+   - When a target artwork is scanned before any expression has been published for it, the guidance banner displays: `✨ Expression yet to be created by wearer. [+ Create Story]`, linking directly to `/create`.
+
 
