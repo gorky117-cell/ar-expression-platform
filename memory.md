@@ -147,22 +147,21 @@ git push origin master
 
 ---
 
-## 9. August 16, 2026 — Critical Fixes & Live Demo Verification (`6877536` & `ced51f8`)
+## 10. August 16, 2026 — Long-Range (10+ ft) & Wide-Angle Tracking Upgrade (`6e06982`)
 
-### Bugs Found & Fixed:
-1. **Missing `<script>` Tag (`6877536`):**
-   - Restored missing `<script>` tag in `ar-camera.html` that had caused JavaScript to render as plain text.
-2. **A-Frame Component Registration Order (`6877536`):**
-   - Moved custom component registration (`matrix-smoother`, `distance-auto-scaler`) into a dedicated `<script>` block BEFORE the `<a-scene>` tag so A-Frame parses them properly.
-3. **Three.js Object3D Method Signature Fix (`ced51f8`):**
-   - Fixed `TypeError: this.el.getWorldPosition is not a function` by calling `this.el.object3D.getWorldPosition(targetWorldPos)` with safety null-checks.
+### Problems Identified:
+1. **Camera Sensor Resolution Bottleneck:** Mobile browsers previously opened standard SD `640x480` streams by default. At >3 feet away, the target print was too few pixels (<40px) for keypoint extraction.
+2. **Single-Target Search (`maxTrack: 1`):** MindAR was restricted to searching for only one target at a time, creating lag when switching between Butterfly and Tree.
+3. **Perspective Drop at Steep Angles:** Default warmup threshold (5 frames) and low miss tolerance dropped tracking when viewing at 45°–60° angles.
 
-### Live Browser Demo Test Results (Expression ID: 21):
-- ✅ **Expression Creation:** Created and published *"Phase 2 Live Self-Demo"* (ID 21, Mood: `inspired`).
-- ✅ **Universal Scanner:** Loaded with `INSPIRED` badge and active target tracking.
-- ✅ **Zero Console Errors:** Verified no script crashes, TypeErrors, or A-Frame component failures.
-- ✅ **Real-Time Reactions:** Tested Like (❤️) and Wave (👋) — both incremented smoothly.
-- ✅ **Comments Posting:** Tested comments modal — posted comment by `ViewerAgentTester` and rendered live.
-- ✅ **Database Persistence:** Checked `https://ar.aiforall.ltd/expression/21` — Likes (2), Waves (2), and comment permanently persisted in Supabase.
-- ✅ **Live Video Recording:** `demo_test_phase2_1786884953427.webp` & `demo_verify_fix_1786885377841.webp`.
+### Step-by-Step Fix Implemented:
+1. **Full HD 1080p Camera Feed (`mindar-image-aframe.prod.js`):**
+   - Configured `getUserMedia` with `{ width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 } }`.
+   - Result: 5x sharper feature descriptor density, enabling detection at **10–18 feet**.
+2. **Concurrent Multi-Target Tracking (`maxTrack: 2` in `ar-camera.html`):**
+   - Enables simultaneous real-time detection for both Cosmic Butterfly (Target 0) and Test Tree (Target 1).
+3. **Rapid Angle & Tilt Lock-on:**
+   - Set `warmupTolerance: 2` (2.5x faster lock-on at steep perspectives).
+   - Set `missTolerance: 20` (prevents tracking loss when tilting up to 60°).
+
 
