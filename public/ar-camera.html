@@ -432,7 +432,7 @@
   <!-- MindAR A-Frame 3D Target Scene -->
   <a-scene
     id="arScene"
-    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 12; warmupTolerance: 5;"
+    mindar-image="imageTargetSrc: /data/targets/all-targets.mind; autoStart: true; uiLoading: yes; uiError: yes; uiScanning: yes; maxTrack: 2; filterMinCF: 0.0001; filterBeta: 0.001; missTolerance: 20; warmupTolerance: 2;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights: true, alpha: true"
     vr-mode-ui="enabled: false"
