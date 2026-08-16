@@ -163,5 +163,9 @@ git push origin master
 3. **Rapid Angle & Tilt Lock-on:**
    - Set `warmupTolerance: 2` (2.5x faster lock-on at steep perspectives).
    - Set `missTolerance: 20` (prevents tracking loss when tilting up to 60°).
+4. **Smart Phone AR QR Tab & Dynamic Banner (`ae8958c`):**
+   - Added **`📱 Phone AR QR`** tab on `src/pages/Expression.jsx` generating a dynamic QR code for instant phone pairing.
+   - Enhanced `ar-camera.html` banner to show active story name: `✨ "[Expression Name]" • [MOOD]`.
+
 
 
