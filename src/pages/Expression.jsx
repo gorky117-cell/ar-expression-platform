@@ -168,6 +168,22 @@ export default function Expression() {
           >
             📷 AR Scan Target
           </button>
+          <button
+            onClick={() => setViewMode('qr')}
+            style={{
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              border: '1px solid ' + (viewMode === 'qr' ? '#7c5cff' : 'rgba(255,255,255,0.1)'),
+              background: viewMode === 'qr' ? 'rgba(124,92,255,0.15)' : 'transparent',
+              color: viewMode === 'qr' ? '#cabeff' : '#8888a0',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            📱 Phone AR QR
+          </button>
         </div>
 
         {/* Display Content */}
@@ -194,24 +210,48 @@ export default function Expression() {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'relative',
+              padding: viewMode === 'qr' ? '2rem' : 0,
             }}
           >
-            <img
-              src={expr.overlayImage || '/overlays/cosmic-butterfly.svg'}
-              alt={expr.name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                display: 'block',
-              }}
-            />
+            {viewMode === 'qr' ? (
+              <div style={{ textAlign: 'center' }}>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`https://ar.aiforall.ltd/scanner?id=${id}&mood=${expr.mood}&caption=${encodeURIComponent(expr.caption || '')}`)}`}
+                  alt="Scan QR code with phone"
+                  style={{
+                    width: 200,
+                    height: 200,
+                    borderRadius: 12,
+                    display: 'block',
+                    margin: '0 auto 1rem',
+                    background: '#fff',
+                    padding: 8,
+                  }}
+                />
+                <p style={{ color: '#cabeff', fontSize: '0.85rem', fontWeight: 600, margin: 0 }}>
+                  Scan with Phone Camera to Launch Paired AR
+                </p>
+              </div>
+            ) : (
+              <img
+                src={expr.overlayImage || '/overlays/cosmic-butterfly.svg'}
+                alt={expr.name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            )}
           </div>
 
           <p style={{ color: '#8888a0', fontSize: '0.8rem', marginTop: '0.75rem', textAlign: 'center' }}>
-            {viewMode === 'scan'
-              ? '✨ Point your phone camera directly at this target image to trigger 3D AR'
-              : '🎨 Clean artwork design (Pure Markerless Target)'
+            {viewMode === 'qr'
+              ? '📱 Point your phone camera at this QR code to launch AR scanner paired to this exact expression'
+              : viewMode === 'scan'
+                ? '✨ Point your phone camera directly at this target image to trigger 3D AR'
+                : '🎨 Clean artwork design (Pure Markerless Target)'
             }
           </p>
         </div>

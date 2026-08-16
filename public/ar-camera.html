@@ -696,7 +696,7 @@
           }
 
           const storyText = latest.caption ? `💬 "${latest.caption}"` : `💬 "Your 3D AR story floats here"`;
-          document.getElementById('expCaption').textContent = `✨ AR Target Active (${(latest.mood || 'active').toUpperCase()})`;
+          document.getElementById('expCaption').textContent = `✨ "${latest.name || 'Wearer Story'}" • ${(latest.mood || 'active').toUpperCase()}`;
 
           const butterfly3D = document.getElementById('butterflyText3D');
           const tree3D = document.getElementById('treeText3D');
