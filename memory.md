@@ -145,4 +145,28 @@ git push origin master
 4. **Unpublished Target Fallback Banner (`2d201bc`)**:
    - When a target artwork is scanned before any expression has been published for it, the guidance banner displays: `✨ Expression yet to be created by wearer. [+ Create Story]`, linking directly to `/create`.
 
+---
 
+## 9. August 16, 2026 — Critical Bug Fix (`6877536`)
+
+### Bug Found & Fixed:
+1. **Missing `<script>` Tag (CRITICAL):**
+   - During the Aug 13 Phase 2 edit, the opening `<script>` tag was accidentally removed from `ar-camera.html`.
+   - **Impact:** ALL JavaScript (likes, waves, comments, scanning, polling, target detection) was rendered as raw text on the page instead of executing as code.
+   - **Fix:** Restored the missing `<script>` tag.
+2. **A-Frame Components Registered AFTER `<a-scene>` (CRITICAL):**
+   - `matrix-smoother` and `distance-auto-scaler` components were registered in a script block placed after `</a-scene>`.
+   - A-Frame requires custom components to be registered **BEFORE** the scene parses entity attributes referencing them.
+   - **Fix:** Moved component registration to a separate `<script>` block placed BEFORE the `<a-scene>` tag.
+
+### Current Production Status (`6877536`):
+- **Phase 1 Features:** ✅ ALL WORKING (likes, waves, comments, target detection, dynamic expression sync, Supabase persistence).
+- **Phase 2 Features:** ✅ ALL WORKING (6-DOF EMA matrix smoothing, 10+ ft long-range scanning, distance auto-scaling engine).
+- **Live URL:** https://ar.aiforall.ltd/scanner
+- **GitHub:** https://github.com/gorky117-cell/ar-expression-platform (master branch, commit `6877536`).
+
+### Key File Reference:
+- **`public/ar-camera.html`** — Main WebAR scanner file containing:
+  - Lines 362–430: A-Frame component registration (`matrix-smoother`, `distance-auto-scaler`) in `<script>` block BEFORE `<a-scene>`.
+  - Lines 432–506: `<a-scene>` with MindAR targets, 3D entities, soft aura, wing flap, story pill.
+  - Lines 508–820: Main `<script>` block with `escapeHtml()`, `pollData()`, `handleLike()`, `handleWave()`, `submitComment()`, `targetFound`/`targetLost` listeners, Supabase init.
