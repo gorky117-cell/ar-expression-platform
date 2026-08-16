@@ -147,26 +147,22 @@ git push origin master
 
 ---
 
-## 9. August 16, 2026 — Critical Bug Fix (`6877536`)
+## 9. August 16, 2026 — Critical Fixes & Live Demo Verification (`6877536` & `ced51f8`)
 
-### Bug Found & Fixed:
-1. **Missing `<script>` Tag (CRITICAL):**
-   - During the Aug 13 Phase 2 edit, the opening `<script>` tag was accidentally removed from `ar-camera.html`.
-   - **Impact:** ALL JavaScript (likes, waves, comments, scanning, polling, target detection) was rendered as raw text on the page instead of executing as code.
-   - **Fix:** Restored the missing `<script>` tag.
-2. **A-Frame Components Registered AFTER `<a-scene>` (CRITICAL):**
-   - `matrix-smoother` and `distance-auto-scaler` components were registered in a script block placed after `</a-scene>`.
-   - A-Frame requires custom components to be registered **BEFORE** the scene parses entity attributes referencing them.
-   - **Fix:** Moved component registration to a separate `<script>` block placed BEFORE the `<a-scene>` tag.
+### Bugs Found & Fixed:
+1. **Missing `<script>` Tag (`6877536`):**
+   - Restored missing `<script>` tag in `ar-camera.html` that had caused JavaScript to render as plain text.
+2. **A-Frame Component Registration Order (`6877536`):**
+   - Moved custom component registration (`matrix-smoother`, `distance-auto-scaler`) into a dedicated `<script>` block BEFORE the `<a-scene>` tag so A-Frame parses them properly.
+3. **Three.js Object3D Method Signature Fix (`ced51f8`):**
+   - Fixed `TypeError: this.el.getWorldPosition is not a function` by calling `this.el.object3D.getWorldPosition(targetWorldPos)` with safety null-checks.
 
-### Current Production Status (`6877536`):
-- **Phase 1 Features:** ✅ ALL WORKING (likes, waves, comments, target detection, dynamic expression sync, Supabase persistence).
-- **Phase 2 Features:** ✅ ALL WORKING (6-DOF EMA matrix smoothing, 10+ ft long-range scanning, distance auto-scaling engine).
-- **Live URL:** https://ar.aiforall.ltd/scanner
-- **GitHub:** https://github.com/gorky117-cell/ar-expression-platform (master branch, commit `6877536`).
+### Live Browser Demo Test Results (Expression ID: 21):
+- ✅ **Expression Creation:** Created and published *"Phase 2 Live Self-Demo"* (ID 21, Mood: `inspired`).
+- ✅ **Universal Scanner:** Loaded with `INSPIRED` badge and active target tracking.
+- ✅ **Zero Console Errors:** Verified no script crashes, TypeErrors, or A-Frame component failures.
+- ✅ **Real-Time Reactions:** Tested Like (❤️) and Wave (👋) — both incremented smoothly.
+- ✅ **Comments Posting:** Tested comments modal — posted comment by `ViewerAgentTester` and rendered live.
+- ✅ **Database Persistence:** Checked `https://ar.aiforall.ltd/expression/21` — Likes (2), Waves (2), and comment permanently persisted in Supabase.
+- ✅ **Live Video Recording:** `demo_test_phase2_1786884953427.webp` & `demo_verify_fix_1786885377841.webp`.
 
-### Key File Reference:
-- **`public/ar-camera.html`** — Main WebAR scanner file containing:
-  - Lines 362–430: A-Frame component registration (`matrix-smoother`, `distance-auto-scaler`) in `<script>` block BEFORE `<a-scene>`.
-  - Lines 432–506: `<a-scene>` with MindAR targets, 3D entities, soft aura, wing flap, story pill.
-  - Lines 508–820: Main `<script>` block with `escapeHtml()`, `pollData()`, `handleLike()`, `handleWave()`, `submitComment()`, `targetFound`/`targetLost` listeners, Supabase init.
