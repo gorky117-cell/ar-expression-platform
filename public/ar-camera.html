@@ -374,7 +374,7 @@
       },
       tick: function() {
         const el = this.el;
-        if (!el.object3D.visible) {
+        if (!el || !el.object3D || !el.object3D.visible) {
           this.initialized = false;
           return;
         }
@@ -404,14 +404,14 @@
       },
       tick: function() {
         const sceneEl = this.el.sceneEl;
-        if (!sceneEl || !sceneEl.camera) return;
+        if (!sceneEl || !sceneEl.camera || !this.el.object3D) return;
         const cameraObj = sceneEl.camera;
 
         const cameraWorldPos = new THREE.Vector3();
         cameraObj.getWorldPosition(cameraWorldPos);
 
         const targetWorldPos = new THREE.Vector3();
-        this.el.getWorldPosition(targetWorldPos);
+        this.el.object3D.getWorldPosition(targetWorldPos);
 
         const distMeters = cameraWorldPos.distanceTo(targetWorldPos);
         const distFeet = distMeters * 3.28084;
@@ -422,7 +422,7 @@
 
         // Apply auto-scale to child elements
         const pillEl = this.el.querySelector('[id*="PillBorder3D"]')?.parentElement;
-        if (pillEl) {
+        if (pillEl && pillEl.object3D) {
           pillEl.object3D.scale.set(clampedScale, clampedScale, clampedScale);
         }
       }
