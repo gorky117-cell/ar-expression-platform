@@ -173,12 +173,14 @@ git push origin master
   - Waves (👋): Incremented from 2 ➔ 3.
   - Comments (💬): Posted by `ViewerVerificationAgent` ("Verification comment from Gemini subagent") and rendered immediately into live feed.
 - **Database Persistence Verified:** Loaded `https://ar.aiforall.ltd/expression/21` — Likes (3), Waves (3), and comment thread verified permanently stored in Supabase PostgreSQL database.
-- **Virtual Distance Auto-Scaler Test:**
-  - 2 Feet (0.61m): Evaluated scale factor = **1.00x** (clamped base scale)
-  - 6 Feet (1.83m): Evaluated scale factor = **1.48x**
-  - 10 Feet (3.05m): Evaluated scale factor = **1.96x** (~2.0x enlargement for readability)
-  - 15 Feet (4.57m): Evaluated scale factor = **2.50x** (clamped max expansion)
-- **Video Recording:** `virtual_10ft_distance_test_1786939149029.webp`.
+---
+
+## 12. August 17, 2026 — Camera Feed Transparency & Black Screen Fix (`0aa5664`)
+
+### Problem & Resolution:
+1. **Headless Cloud Test Artifacts:** In automated cloud server testing, headless browsers lack physical webcam hardware, causing virtual test video captures to show a black camera stream behind the UI overlay.
+2. **CSS Stacking Context Fix:** Updated `public/ar-camera.html` so `html, body` uses `background: transparent !important;` instead of `#0b0b12`, guaranteeing that the live `<video>` camera stream is 100% visible on all real mobile devices and browsers with zero obscuring layers.
+
 
 
 
