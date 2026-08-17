@@ -160,12 +160,20 @@ git push origin master
    - Result: 5x sharper feature descriptor density, enabling detection at **10–18 feet**.
 2. **Concurrent Multi-Target Tracking (`maxTrack: 2` in `ar-camera.html`):**
    - Enables simultaneous real-time detection for both Cosmic Butterfly (Target 0) and Test Tree (Target 1).
-3. **Rapid Angle & Tilt Lock-on:**
-   - Set `warmupTolerance: 2` (2.5x faster lock-on at steep perspectives).
-   - Set `missTolerance: 20` (prevents tracking loss when tilting up to 60°).
-4. **Smart Phone AR QR Tab & Dynamic Banner (`ae8958c`):**
-   - Added **`📱 Phone AR QR`** tab on `src/pages/Expression.jsx` generating a dynamic QR code for instant phone pairing.
-   - Enhanced `ar-camera.html` banner to show active story name: `✨ "[Expression Name]" • [MOOD]`.
+---
+
+## 11. August 17, 2026 — Comprehensive Live Stress Test & Verification
+
+### Test Summary:
+- **URL Tested:** `https://ar.aiforall.ltd/scanner?id=21&mood=inspired&caption=Testing%206-DOF%20%26%20Auto-Scale%20live`
+- **A-Frame Version:** `1.3.0` initialized cleanly.
+- **Custom Components:** `matrix-smoother` (6-DOF EMA filter) and `distance-auto-scaler` confirmed active with zero runtime warnings or errors.
+- **Interactive Reactions Tested:**
+  - Likes (❤️): Incremented from 2 ➔ 3.
+  - Waves (👋): Incremented from 2 ➔ 3.
+  - Comments (💬): Posted by `ViewerVerificationAgent` ("Verification comment from Gemini subagent") and rendered immediately into live feed.
+- **Database Persistence Verified:** Loaded `https://ar.aiforall.ltd/expression/21` — Likes (3), Waves (3), and comment thread verified permanently stored in Supabase PostgreSQL database.
+- **Video Recording:** `live_scanner_stress_test_1786937551952.webp`.
 
 
 
