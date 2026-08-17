@@ -175,11 +175,21 @@ git push origin master
 - **Database Persistence Verified:** Loaded `https://ar.aiforall.ltd/expression/21` — Likes (3), Waves (3), and comment thread verified permanently stored in Supabase PostgreSQL database.
 ---
 
-## 12. August 17, 2026 — Camera Feed Transparency & Black Screen Fix (`0aa5664`)
+## 13. August 17, 2026 — Revised End-to-End Live Demo Test (Expression #22)
 
-### Problem & Resolution:
-1. **Headless Cloud Test Artifacts:** In automated cloud server testing, headless browsers lack physical webcam hardware, causing virtual test video captures to show a black camera stream behind the UI overlay.
-2. **CSS Stacking Context Fix:** Updated `public/ar-camera.html` so `html, body` uses `background: transparent !important;` instead of `#0b0b12`, guaranteeing that the live `<video>` camera stream is 100% visible on all real mobile devices and browsers with zero obscuring layers.
+### Test Flow & Verified Results:
+1. **Expression Creation:** Created and published *"WearWave Revised Test"* (`ID: 22`, Mood: `inspired`, Caption: *"Living AR on streetwear fabric"*).
+2. **Instant Phone QR Pairing:** Verified `📱 Phone AR QR` tab on expression page renders dynamic QR code linking directly to `/scanner?id=22`.
+3. **WebAR Camera Scanner:**
+   - Active story title badge: `✨ "WearWave Revised Test" • INSPIRED`.
+   - Console logs: **0 errors**.
+   - Transparent camera background active.
+4. **Real-Time Reactions:**
+   - Likes (❤️): Incremented from 0 ➔ 1.
+   - Waves (👋): Incremented from 0 ➔ 1.
+   - In-camera Comments (💬): Posted by `ViewerTester` (*"Revised test comment live!"*).
+5. **Database Persistence Verified:** Loaded `https://ar.aiforall.ltd/expression/22` — confirmed Likes (1), Waves (1), and comment thread permanently stored in Supabase PostgreSQL.
+6. **Local Disk Cleanup:** Test recording moved to `D:\ar-expression-platform\scratch\test-recordings\revised_demo_test_live_1786953388231.webp` (0 MB on C: drive, 0 MB on Railway).
 
 
 
