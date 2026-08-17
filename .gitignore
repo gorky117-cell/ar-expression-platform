@@ -4,3 +4,11 @@ dist
 *.log
 .env
 .env.local
+*.webp
+*.mp4
+*.webm
+*.mov
+*.avi
+artifacts/
+recordings/
+
