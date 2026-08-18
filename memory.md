@@ -188,8 +188,27 @@ git push origin master
    - Likes (❤️): Incremented from 0 ➔ 1.
    - Waves (👋): Incremented from 0 ➔ 1.
    - In-camera Comments (💬): Posted by `ViewerTester` (*"Revised test comment live!"*).
-5. **Database Persistence Verified:** Loaded `https://ar.aiforall.ltd/expression/22` — confirmed Likes (1), Waves (1), and comment thread permanently stored in Supabase PostgreSQL.
-6. **Local Disk Cleanup:** Test recording moved to `D:\ar-expression-platform\scratch\test-recordings\revised_demo_test_live_1786953388231.webp` (0 MB on C: drive, 0 MB on Railway).
+---
+
+## 14. August 18, 2026 — Clean Feed Deduplication, In-Place Story Editing & Production Verification (`8533fa6`)
+
+### Accomplished & Verified:
+1. **Feed Deduplication & Clean 2-Card View:**
+   - Soft-deleted 20 intermediate test records in Supabase (`is_live: false`).
+   - Standardized the 2 primary physical streetwear garments:
+     1. **Cosmic Butterfly** (`ID: 22`, Mood: `inspired`, Caption: *"Flying high in cosmic AR"*)
+     2. **Tree of Life** (`ID: 19`, Mood: `calm`, Caption: *"Deep roots in forest AR"*)
+   - Updated `getExpressions()` to filter `.neq('is_live', false)`. Verified production feed displays only these 2 clean cards.
+2. **In-Place Story Editing (`✏️ Edit Story`):**
+   - Added inline edit drawer on `Expression.jsx` allowing the creator to change title, mood, and caption live without creating duplicate feed entries.
+   - Preserves all accumulated likes, greetings, and comment history.
+3. **Expression Deletion (`🗑️ Delete`):**
+   - Added delete button with confirmation modal that soft-deletes the expression and returns to the clean feed.
+4. **Smart Garment Update Mode (`Create.jsx`):**
+   - When selecting an artwork on `/create`, automatically detects active existing garment and defaults to **"🔄 Update Active Story"** (in-place update) with option to switch to **"+ Create New Entry"**.
+5. **Local Disk Space Maintained:**
+   - 3 new test recordings (22.08 MB) moved to `D:\ar-expression-platform\scratch\test-recordings\`.
+
 
 
 
