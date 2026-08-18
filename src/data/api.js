@@ -39,7 +39,11 @@ function rowToExpression(row, reactions = []) {
 export async function getExpressions() {
   const defaultList = store.getExpressions()
   if (!supabase) return Promise.resolve(defaultList)
-  const { data: rows, error } = await supabase.from('expressions').select('*').order('created_at', { ascending: false })
+  const { data: rows, error } = await supabase
+    .from('expressions')
+    .select('*')
+    .neq('is_live', false)
+    .order('created_at', { ascending: false })
   if (error || !rows) return Promise.resolve(defaultList)
   const ids = rows.map((r) => r.id)
   const { data: reactions } = ids.length
@@ -51,15 +55,7 @@ export async function getExpressions() {
     return acc
   }, {})
   
-  const fetched = rows
-    .map((row) => rowToExpression(row, byExpr[row.id] || []))
-  
-  // Ensure Cosmic Butterfly card is always present at top of list
-  const cosmicItem = defaultList.find((item) => item.id === 'cosmic-butterfly')
-  if (cosmicItem && !fetched.some((f) => f.id === 'cosmic-butterfly')) {
-    fetched.unshift(cosmicItem)
-  }
-  
+  const fetched = rows.map((row) => rowToExpression(row, byExpr[row.id] || []))
   return fetched
 }
 
@@ -184,11 +180,33 @@ export async function addComment(id, text, author) {
 export async function updateExpression(id, patch) {
   if (!supabase) return Promise.resolve(store.updateExpression(id, patch))
   const upd = {}
+  if (patch.name != null) upd.name = patch.name
   if (patch.mood != null) upd.mood = patch.mood
-  if (patch.caption != null) upd.caption = patch.caption
+  if (patch.caption !== undefined) upd.caption = patch.caption
+  if (patch.overlayImage != null) upd.overlay_image = patch.overlayImage
+  if (patch.isLive !== undefined) upd.is_live = patch.isLive
   const { error } = await supabase.from('expressions').update(upd).eq('id', id)
   if (error) return Promise.resolve(null)
   return getExpression(id)
+}
+
+export async function deleteExpression(id) {
+  if (!supabase) return Promise.resolve(true)
+  // Set is_live = false in database
+  const { error } = await supabase.from('expressions').update({ is_live: false }).eq('id', id)
+  return !error
+}
+
+export async function getActiveExpressionByOverlay(overlayPath) {
+  if (!supabase) return null
+  const { data: rows } = await supabase
+    .from('expressions')
+    .select('*')
+    .neq('is_live', false)
+    .ilike('overlay_image', `%${overlayPath.includes('butterfly') ? 'butterfly' : 'tree'}%`)
+    .order('created_at', { ascending: false })
+    .limit(1)
+  return rows && rows.length ? rows[0] : null
 }
 
 export const MOODS = store.MOODS

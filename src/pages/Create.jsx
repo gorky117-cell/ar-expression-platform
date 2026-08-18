@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { addExpression, MOODS } from '../data/api'
+import { addExpression, updateExpression, getActiveExpressionByOverlay, MOODS } from '../data/api'
 
 // 2 Official Artworks with Detailed Mood Behavior Descriptions
 const SYSTEM_OVERLAYS = [
@@ -38,6 +38,23 @@ export default function Create() {
   const [mood, setMood] = useState('inspired')
   const [hoveredState, setHoveredState] = useState(null) // { overlay, mood }
   const [submitting, setSubmitting] = useState(false)
+  const [existingExpr, setExistingExpr] = useState(null)
+  const [publishMode, setPublishMode] = useState('update') // 'update' | 'new'
+
+  useEffect(() => {
+    getActiveExpressionByOverlay(selectedOverlay.path).then((found) => {
+      if (found) {
+        setExistingExpr(found)
+        setName(found.name || selectedOverlay.label)
+        setMood(found.mood || selectedOverlay.defaultMood)
+        setCaption(found.caption || '')
+        setPublishMode('update')
+      } else {
+        setExistingExpr(null)
+        setPublishMode('new')
+      }
+    })
+  }, [selectedOverlay])
 
   const activeOverlay = hoveredState?.overlay || selectedOverlay
   const activeMood = hoveredState?.mood || mood
@@ -48,14 +65,24 @@ export default function Create() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      const expr = await addExpression({
-        name: name || 'My Expression',
-        mood,
-        caption: caption.trim() || undefined,
-        triggerImage: '/markers/hiro.png',
-        overlayImage: selectedOverlay.path,
-      })
-      navigate(`/expression/${expr.id}`)
+      if (publishMode === 'update' && existingExpr) {
+        const updated = await updateExpression(existingExpr.id, {
+          name: name.trim() || selectedOverlay.label,
+          mood,
+          caption: caption.trim() || undefined,
+          overlayImage: selectedOverlay.path,
+        })
+        navigate(`/expression/${existingExpr.id}`)
+      } else {
+        const expr = await addExpression({
+          name: name || selectedOverlay.label,
+          mood,
+          caption: caption.trim() || undefined,
+          triggerImage: '/markers/hiro.png',
+          overlayImage: selectedOverlay.path,
+        })
+        navigate(`/expression/${expr.id}`)
+      }
     } finally {
       setSubmitting(false)
     }
@@ -338,8 +365,71 @@ export default function Create() {
           </div>
         </div>
 
+        {/* Smart Garment Update vs New Expression Mode */}
+        {existingExpr && (
+          <div
+            style={{
+              background: 'rgba(124, 92, 255, 0.08)',
+              border: '1px solid rgba(124, 92, 255, 0.25)',
+              borderRadius: '16px',
+              padding: '1rem 1.25rem',
+              marginBottom: '1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <span style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 700 }}>
+                👕 Active Shirt Detected: {existingExpr.name}
+              </span>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => setPublishMode('update')}
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    border: publishMode === 'update' ? '1px solid #7c5cff' : '1px solid rgba(255,255,255,0.1)',
+                    background: publishMode === 'update' ? '#7c5cff' : 'transparent',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  🔄 Update Active Story
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPublishMode('new')}
+                  style={{
+                    padding: '4px 12px',
+                    borderRadius: '9999px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    border: publishMode === 'new' ? '1px solid #7c5cff' : '1px solid rgba(255,255,255,0.1)',
+                    background: publishMode === 'new' ? '#7c5cff' : 'transparent',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  + Create New Entry
+                </button>
+              </div>
+            </div>
+            <p style={{ margin: 0, fontSize: '0.78rem', color: '#a0a0b8' }}>
+              {publishMode === 'update' 
+                ? 'Updates the living mood & story on your physical shirt in-place without adding duplicate cards to the feed.'
+                : 'Publishes a separate new card on your public feed.'}
+            </p>
+          </div>
+        )}
+
         <button type="submit" className="btn-primary" style={btnStyle} disabled={submitting}>
-          {submitting ? 'Creating…' : 'Publish Expression'}
+          {submitting 
+            ? 'Saving…' 
+            : (publishMode === 'update' && existingExpr ? '✓ Update Active Story' : 'Publish Expression')}
         </button>
       </form>
     </div>
