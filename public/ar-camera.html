@@ -23,6 +23,8 @@
 
   <!-- Include local MindAR + A-Frame bundle to prevent CORS worker blocks -->
   <script src="/js/mindar-image-aframe.prod.js"></script>
+  <!-- WearWave 3D Holographic Models Engine -->
+  <script src="/js/ar-models-3d.js"></script>
   <!-- Supabase Client for real-time social reactions -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -445,13 +447,18 @@
       <!-- 1. Seamless Soft Radial Gradient Aura Glow (Matching preview 1-to-1) -->
       <a-plane id="butterflyAura3D" position="0 0 0.005" width="1.6" height="1.6" material="shader: flat; src: #softAuraTex; color: #00f0ff; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- 2. Center Butterfly Body & 3D Flapping Wings -->
-      <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
-      <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <a-plane position="-0.19 0 0" width="0.40" height="0.75" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
-      </a-entity>
-      <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
-        <a-plane position="0.19 0 0" width="0.40" height="0.75" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
+      <!-- 2. WearWave 3D Holographic Model (Cosmic Butterfly / Sailboat / Dragon / Birds) -->
+      <a-entity id="butterfly3DModelContainer" wearwave-3d-model="type: butterfly; color: #00f0ff; scale: 1.0" position="0 0 0.06"></a-entity>
+
+      <!-- Center Butterfly Body & Wings (Legacy Anchor Visual) -->
+      <a-entity id="bfLegacy2D" visible="false">
+        <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #butterflyTex; transparent: true; opacity: 0.95"></a-plane>
+        <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
+          <a-plane position="-0.19 0 0" width="0.40" height="0.75" material="shader: flat; src: #leftWingTex; transparent: true; opacity: 0.95"></a-plane>
+        </a-entity>
+        <a-entity position="0 0 0.05" animation="property: rotation; from: 0 0 0; to: 0 -40 0; dir: alternate; dur: 600; loop: true; easing: easeInOutSine">
+          <a-plane position="0.19 0 0" width="0.40" height="0.75" material="shader: flat; src: #rightWingTex; transparent: true; opacity: 0.95"></a-plane>
+        </a-entity>
       </a-entity>
 
       <!-- 3. Dripping & Drifting Particles -->
@@ -476,8 +483,13 @@
       <!-- 1. Seamless Soft Radial Gradient Aura Glow -->
       <a-plane id="treeAura3D" position="0 0 0.005" width="1.6" height="1.6" material="shader: flat; src: #softAuraTex; color: #10b981; transparent: true; opacity: 0.85" animation="property: scale; from: 0.88 0.88 1; to: 1.25 1.25 1; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"></a-plane>
 
-      <!-- 2. Swaying Tree Artwork -->
-      <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -2; to: 0 0 2; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+      <!-- 2. WearWave 3D Holographic Model (Spirit Birds / Sailboat / Dragon / Butterfly) -->
+      <a-entity id="tree3DModelContainer" wearwave-3d-model="type: birds; color: #10b981; scale: 1.0" position="0 0 0.06"></a-entity>
+
+      <!-- Swaying Tree Artwork (Legacy Anchor Visual) -->
+      <a-entity id="treeLegacy2D" visible="false">
+        <a-plane position="0 0 0.02" width="0.75" height="0.75" material="shader: flat; src: #treeTex; transparent: true; opacity: 0.95" animation="property: rotation; from: 0 0 -2; to: 0 0 2; dir: alternate; dur: 2000; loop: true; easing: easeInOutSine"></a-plane>
+      </a-entity>
 
       <!-- 3. Dripping & Drifting Particles -->
       <a-text id="treeParticle1" value="🍃" position="-0.45 0.35 0.08" align="center" width="1.8" animation="property: position; from: -0.45 0.45 0.08; to: -0.45 0.15 0.08; dir: alternate; dur: 2400; loop: true; easing: easeInOutSine"></a-text>
@@ -520,6 +532,22 @@
       const urlMood = urlParams.get('mood');
       const urlId = urlParams.get('id');
       const urlOverlay = decodeURIComponent(urlParams.get('overlay') || '');
+      const urlModel = urlParams.get('model');
+
+      function applyActive3DModel(mType, mColor) {
+        if (!mType) return;
+        ['butterfly3DModelContainer', 'tree3DModelContainer'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.setAttribute('wearwave-3d-model', 'type', mType);
+            if (mColor) el.setAttribute('wearwave-3d-model', 'color', mColor);
+          }
+        });
+      }
+
+      if (urlModel) {
+        applyActive3DModel(urlModel);
+      }
 
       if (urlId) {
         urlExpressionId = parseInt(urlId, 10) || urlId;
@@ -736,6 +764,24 @@
             const el = document.getElementById(id);
             if (el) el.textContent = particleChar;
           });
+
+          // Sync 3D Model if specified in expression metadata or query
+          let chosenModel = urlModel;
+          if (!chosenModel && latest.overlay_image && latest.overlay_image.includes('#model=')) {
+            chosenModel = latest.overlay_image.split('#model=')[1].split('&')[0];
+          } else if (!chosenModel && latest.caption && latest.caption.includes('[model:')) {
+            chosenModel = latest.caption.split('[model:')[1].split(']')[0];
+          }
+          if (chosenModel) {
+            applyActive3DModel(chosenModel, moodColor);
+          } else {
+            ['butterfly3DModelContainer', 'tree3DModelContainer'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el && el.components && el.components['wearwave-3d-model']) {
+                el.components['wearwave-3d-model'].setMoodColor(moodColor);
+              }
+            });
+          }
         }
 
         const reactionExprId = urlExpressionId || activeExpressionId;

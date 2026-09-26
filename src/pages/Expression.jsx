@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getExpression, likeExpression, sendGreeting, addComment, updateExpression, deleteExpression, MOODS } from '../data/api'
+import { MODELS_3D } from '../components/arModels'
+
+function getExpressionModel(expr) {
+  if (expr?.overlayImage && expr.overlayImage.includes('#model=')) {
+    return expr.overlayImage.split('#model=')[1].split('&')[0]
+  }
+  if (expr?.caption && expr.caption.includes('[model:')) {
+    return expr.caption.split('[model:')[1].split(']')[0]
+  }
+  return (expr?.overlayImage && expr.overlayImage.includes('tree')) ? 'birds' : 'butterfly'
+}
 
 export default function Expression() {
   const { id } = useParams()
@@ -16,6 +27,7 @@ export default function Expression() {
   const [isEditing, setIsEditing] = useState(false)
   const [editName, setEditName] = useState('')
   const [editMood, setEditMood] = useState('inspired')
+  const [editModel, setEditModel] = useState('butterfly')
   const [editCaption, setEditCaption] = useState('')
   const [savingEdit, setSavingEdit] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -28,6 +40,7 @@ export default function Expression() {
           setExpr(e)
           setEditName(e.name || '')
           setEditMood(e.mood || 'inspired')
+          setEditModel(getExpressionModel(e))
           setEditCaption(e.caption || '')
           setLoading(false)
         }
@@ -57,11 +70,13 @@ export default function Expression() {
   const handleSaveEdit = async (e) => {
     e.preventDefault()
     setSavingEdit(true)
+    const baseOverlay = (expr.overlayImage || '/overlays/cosmic-butterfly.svg').split('#')[0]
     try {
       await updateExpression(id, {
         name: editName.trim() || expr.name,
         mood: editMood,
         caption: editCaption.trim() || null,
+        overlayImage: `${baseOverlay}#model=${editModel}`,
       })
       setIsEditing(false)
       refresh()
@@ -127,84 +142,104 @@ export default function Expression() {
           marginBottom: '2rem',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-              {expr.name}
-            </h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.25rem' }}>
-              <span
-                style={{
-                  display: 'inline-block',
-                  background: 'rgba(124, 92, 255, 0.12)',
-                  border: '1px solid rgba(124, 92, 255, 0.3)',
-                  color: '#cabeff',
-                  padding: '2px 8px',
-                  borderRadius: '9999px',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                }}
-              >
-                {expr.mood}
-              </span>
-              {expr.caption && (
-                <span style={{ color: '#8888a0', fontSize: '0.85rem', fontStyle: 'italic' }}>
-                  "{expr.caption}"
-                </span>
-              )}
+        {(() => {
+          const activeModel = getExpressionModel(expr)
+          const modelObj = MODELS_3D.find(m => m.id === activeModel) || MODELS_3D[0]
+          return (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+                  {expr.name}
+                </h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0.25rem', flexWrap: 'wrap' }}>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      background: 'rgba(124, 92, 255, 0.12)',
+                      border: '1px solid rgba(124, 92, 255, 0.3)',
+                      color: '#cabeff',
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {expr.mood}
+                  </span>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      background: 'rgba(0, 240, 255, 0.12)',
+                      border: '1px solid rgba(0, 240, 255, 0.3)',
+                      color: '#00f0ff',
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {modelObj.emoji} {modelObj.name}
+                  </span>
+                  {expr.caption && (
+                    <span style={{ color: '#8888a0', fontSize: '0.85rem', fontStyle: 'italic' }}>
+                      "{expr.caption}"
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  style={{
+                    padding: '0.6rem 1rem',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#fff',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {isEditing ? '✕ Cancel' : '✏️ Edit Story'}
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  style={{
+                    padding: '0.6rem 0.75rem',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.25)',
+                    color: '#f87171',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                  }}
+                  title="Delete Expression"
+                >
+                  🗑️
+                </button>
+                <a
+                  href={`/scanner?id=${id}&model=${activeModel}&caption=${encodeURIComponent(expr.caption || '')}&mood=${expr.mood}&overlay=${encodeURIComponent(expr.overlayImage || '')}`}
+                  className="btn-primary"
+                  style={{
+                    padding: '0.6rem 1.25rem',
+                    background: '#7c5cff',
+                    color: '#fff',
+                    borderRadius: '9999px',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    boxShadow: '0 4px 16px rgba(124, 92, 255, 0.25)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  📷 Launch AR
+                </a>
+              </div>
             </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              style={{
-                padding: '0.6rem 1rem',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#fff',
-                borderRadius: '9999px',
-                fontWeight: 600,
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-              }}
-            >
-              {isEditing ? '✕ Cancel' : '✏️ Edit Story'}
-            </button>
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              style={{
-                padding: '0.6rem 0.75rem',
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                color: '#f87171',
-                borderRadius: '9999px',
-                fontWeight: 600,
-                fontSize: '0.8rem',
-                cursor: 'pointer',
-              }}
-              title="Delete Expression"
-            >
-              🗑️
-            </button>
-            <a
-              href={`/scanner?id=${id}&caption=${encodeURIComponent(expr.caption || '')}&mood=${expr.mood}&overlay=${encodeURIComponent(expr.overlayImage || '')}`}
-              className="btn-primary"
-              style={{
-                padding: '0.6rem 1.25rem',
-                background: '#7c5cff',
-                color: '#fff',
-                borderRadius: '9999px',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                boxShadow: '0 4px 16px rgba(124, 92, 255, 0.25)',
-                textDecoration: 'none',
-              }}
-            >
-              📷 Launch AR
-            </a>
-          </div>
-        </div>
+          )
+        })()}
 
         {/* Inline Edit Form */}
         {isEditing && (
@@ -230,6 +265,30 @@ export default function Expression() {
                 style={inputStyle}
                 placeholder="e.g. Cosmic Butterfly"
               />
+            </div>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#8888a0', marginBottom: '4px' }}>3D Holographic Model</label>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {MODELS_3D.map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => setEditModel(m.id)}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      border: editModel === m.id ? '1px solid #00f0ff' : '1px solid rgba(255,255,255,0.1)',
+                      background: editModel === m.id ? 'rgba(0,240,255,0.2)' : 'rgba(255,255,255,0.04)',
+                      color: editModel === m.id ? '#00f0ff' : '#8888a0',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {m.emoji} {m.name}
+                  </button>
+                ))}
+              </div>
             </div>
             <div style={{ marginBottom: '0.75rem' }}>
               <label style={{ display: 'block', fontSize: '0.8rem', color: '#8888a0', marginBottom: '4px' }}>Wearer Mood</label>
@@ -427,7 +486,7 @@ export default function Expression() {
             {viewMode === 'qr' ? (
               <div style={{ textAlign: 'center' }}>
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`https://ar.aiforall.ltd/scanner?id=${id}&mood=${expr.mood}&caption=${encodeURIComponent(expr.caption || '')}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`https://ar.aiforall.ltd/scanner?id=${id}&model=${getExpressionModel(expr)}&mood=${expr.mood}&caption=${encodeURIComponent(expr.caption || '')}`)}`}
                   alt="Scan QR code with phone"
                   style={{
                     width: 200,

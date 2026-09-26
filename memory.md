@@ -136,6 +136,7 @@
 | **`53ebb13`** | Aug 18, 2026 | `scripts/` | Added `move-test-videos.cjs` disk space cleanup script to move test media from C: to D: drive. |
 | **`8533fa6`** | Aug 18, 2026 | `api.js` / `UI` | De-duplicated feed to 2 clean cards, added `✏️ Edit Story` and `🗑️ Delete` on Expression page, and garment update mode on Create page. |
 | **`eb5ae55`** | Aug 18, 2026 | `memory.md` | Logged clean feed verification and in-place story editing. |
+| **`Phase2-M1`**| Sep 25, 2026 | `3D Engine` | Implemented 4 real 3D holographic models (🦋 3D Cosmic Butterfly, ⛵ 3D Cyber Sailboat, 🐉 3D Low-Poly Dragon, 🦅 3D Spirit Birds) with Three.js orbit preview on `/create`, model switcher on `/expression/:id`, QR code URL binding, and live WebAR rendering in `ar-camera.html`. |
 
 ---
 
@@ -154,15 +155,16 @@
 2. **August 17 Distance Test:** Mathematically validated distance auto-scaler scaling across 2ft ($1.00\text{x}$), 6ft ($1.48\text{x}$), 10ft ($1.96\text{x}$), and 15ft ($2.50\text{x}$).
 3. **August 17 Revised End-to-End Test (Expression #22):** Verified creation, Phone AR QR pairing, transparent camera feed, and persistent social memory thread.
 4. **August 18 Clean Feed Verification:** Confirmed production feed displays exactly 2 clean official cards (Cosmic Butterfly and Tree of Life) with in-place story editing and deletion capabilities.
+5. **September 25 3D Engine Build:** Verified Vite production build (`dist/index.html`, `dist/assets/`) compiling cleanly with Three.js 3D model engine and interactive orbit canvas.
 
 ---
 
 ## 9. Future Roadmap & Next Milestones
 
-### Phase 2 (Remaining Milestones — 100% $0 Cost on Railway)
-- [ ] **Dynamic 3D AR Motion & GLTF Model Selection:** Add 3D GLTF models on `/create` (e.g. ⛵ *3D Sailing Boat*, 🐉 *3D Cyber Dragon*, 🦅 *3D Flying Birds*, 🦋 *3D Cosmic Butterfly*) with live 3D preview, rendering over physical prints in WebAR scanner.
-- [ ] **3D Flight Paths & Off-Print Animation:** Figure-8 butterfly flight path and bluebirds taking flight from tree branches into physical room space.
-- [ ] **Room-Locking Spatial Anchor Fallback:** Retain 3D overlay anchor in physical room space for 3–5 seconds when camera temporarily turns away.
+### Phase 2 (3D Holographic Expansion)
+- [x] **Milestone 2.9 (Completed): Dynamic 3D Models:** Integrated the 4 real 3D models (🦋 *3D Cosmic Butterfly*, ⛵ *3D Cyber Sailboat*, 🐉 *3D Low-Poly Dragon*, 🦅 *3D Spirit Birds*) with interactive 3D WebGL orbit canvas on `/create`, model switcher on `/expression/:id`, and live A-Frame WebAR camera rendering.
+- [ ] **Milestone 2.10: 3D Flight Paths & Off-Print Animation:** Figure-8 butterfly flight path and bluebirds taking flight from tree branches into physical room space.
+- [ ] **Milestone 2.11: Room-Locking Spatial Anchor Fallback:** Retain 3D overlay anchor in physical room space for 3–5 seconds when camera temporarily turns away.
 
 ### Phase 3 (V3 Advanced Generative Models)
 - [ ] **Voice-Driven Generative AI Art Synthesis:** On-the-fly artwork synthesis driven by wearer voice prompts.

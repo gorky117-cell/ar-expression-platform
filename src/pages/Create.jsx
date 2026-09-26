@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { addExpression, updateExpression, getActiveExpressionByOverlay, MOODS } from '../data/api'
+import Model3DPreview from '../components/Model3DPreview'
+import { MODELS_3D } from '../components/arModels'
+
+const MOOD_HEX = {
+  inspired: '#00f0ff',
+  calm: '#10b981',
+  happy: '#f59e0b',
+  playful: '#ec4899',
+  peaceful: '#6366f1',
+}
 
 // 2 Official Artworks with Detailed Mood Behavior Descriptions
 const SYSTEM_OVERLAYS = [
@@ -35,6 +45,7 @@ export default function Create() {
   const [name, setName] = useState('')
   const [caption, setCaption] = useState('')
   const [selectedOverlay, setSelectedOverlay] = useState(SYSTEM_OVERLAYS[0])
+  const [selectedModel, setSelectedModel] = useState(MODELS_3D[0])
   const [mood, setMood] = useState('inspired')
   const [hoveredState, setHoveredState] = useState(null) // { overlay, mood }
   const [submitting, setSubmitting] = useState(false)
@@ -42,12 +53,26 @@ export default function Create() {
   const [publishMode, setPublishMode] = useState('update') // 'update' | 'new'
 
   useEffect(() => {
+    // Default model to butterfly for Cosmic Butterfly, birds for Test Tree
+    if (selectedOverlay.label === 'Test Tree') {
+      const birdModel = MODELS_3D.find(m => m.id === 'birds')
+      if (birdModel) setSelectedModel(birdModel)
+    } else {
+      const bfModel = MODELS_3D.find(m => m.id === 'butterfly')
+      if (bfModel) setSelectedModel(bfModel)
+    }
+
     getActiveExpressionByOverlay(selectedOverlay.path).then((found) => {
       if (found) {
         setExistingExpr(found)
         setName(found.name || selectedOverlay.label)
         setMood(found.mood || selectedOverlay.defaultMood)
         setCaption(found.caption || '')
+        if (found.overlay_image && found.overlay_image.includes('#model=')) {
+          const mId = found.overlay_image.split('#model=')[1].split('&')[0]
+          const mObj = MODELS_3D.find(m => m.id === mId)
+          if (mObj) setSelectedModel(mObj)
+        }
         setPublishMode('update')
       } else {
         setExistingExpr(null)
@@ -60,17 +85,19 @@ export default function Create() {
   const activeMood = hoveredState?.mood || mood
   const activeBehavior = activeOverlay.moodBehaviors[activeMood] || activeOverlay.moodBehaviors.calm
   const isHoveredPreview = !!hoveredState
+  const activeMoodHex = MOOD_HEX[activeMood] || '#00f0ff'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitting(true)
+    const overlayWithModel = `${selectedOverlay.path}#model=${selectedModel.id}`
     try {
       if (publishMode === 'update' && existingExpr) {
-        const updated = await updateExpression(existingExpr.id, {
+        await updateExpression(existingExpr.id, {
           name: name.trim() || selectedOverlay.label,
           mood,
           caption: caption.trim() || undefined,
-          overlayImage: selectedOverlay.path,
+          overlayImage: overlayWithModel,
         })
         navigate(`/expression/${existingExpr.id}`)
       } else {
@@ -79,7 +106,7 @@ export default function Create() {
           mood,
           caption: caption.trim() || undefined,
           triggerImage: '/markers/hiro.png',
-          overlayImage: selectedOverlay.path,
+          overlayImage: overlayWithModel,
         })
         navigate(`/expression/${expr.id}`)
       }
@@ -258,6 +285,46 @@ export default function Create() {
             })}
           </div>
 
+          {/* Choose 3D Holographic Model Selection */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <span style={{ display: 'block', marginBottom: 8, fontSize: '0.85rem', fontWeight: 600, color: '#c9c4d8' }}>
+              Choose 3D Holographic AR Model
+            </span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.6rem' }}>
+              {MODELS_3D.map((m) => {
+                const isMActive = selectedModel.id === m.id
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => setSelectedModel(m)}
+                    style={{
+                      background: isMActive ? 'rgba(124, 92, 255, 0.22)' : 'rgba(255, 255, 255, 0.04)',
+                      border: isMActive ? '2px solid #7c5cff' : '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: 14,
+                      padding: '10px 6px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 4,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      transform: isMActive ? 'scale(1.02)' : 'scale(1)',
+                    }}
+                  >
+                    <span style={{ fontSize: '1.5rem' }}>{m.emoji}</span>
+                    <span style={{ fontSize: '0.78rem', fontWeight: 700, color: isMActive ? '#fff' : '#c0bcd0' }}>
+                      {m.name}
+                    </span>
+                    <span style={{ fontSize: '0.65rem', color: '#8888a0', textAlign: 'center', lineHeight: 1.2 }}>
+                      {m.tagline}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           {/* Interactive 3D AR Visual Preview Box */}
           <div style={{
             background: isHoveredPreview 
@@ -271,7 +338,7 @@ export default function Create() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: isHoveredPreview ? '#00f0ff' : '#7c5cff' }}>
-                🔮 LIVE AR VISUAL PREVIEW {isHoveredPreview ? '(HOVER PREVIEW)' : ''}
+                🔮 INTERACTIVE 3D AR PREVIEW {isHoveredPreview ? '(HOVER)' : ''}
               </span>
               <span style={{
                 background: isHoveredPreview ? 'rgba(0, 240, 255, 0.2)' : 'rgba(124, 92, 255, 0.2)',
@@ -281,77 +348,75 @@ export default function Create() {
                 fontSize: '0.72rem',
                 fontWeight: 700,
               }}>
-                {activeOverlay.label} ({activeMood})
+                {selectedModel.name} • {activeMood.toUpperCase()}
               </span>
             </div>
 
-            {/* LIVE ANIMATED GRAPHIC CANVAS PREVIEW BOX */}
+            {/* LIVE 3D WEBGL GRAPHIC CANVAS PREVIEW BOX */}
             <div style={{
               position: 'relative',
               width: '100%',
-              height: 170,
-              borderRadius: 12,
-              backgroundColor: '#0a0a10',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              height: 220,
+              borderRadius: 14,
+              backgroundColor: '#0a0a12',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               overflow: 'hidden',
               marginBottom: '1rem',
             }}>
               {/* Dynamic Mood Particles Floating Over Artwork */}
-              <div style={{ position: 'absolute', top: '15%', left: '20%', fontSize: '1.1rem', animation: 'particleUp 2.2s infinite ease-in-out', zIndex: 1 }}>
+              <div style={{ position: 'absolute', top: '15%', left: '12%', fontSize: '1.1rem', animation: 'particleUp 2.2s infinite ease-in-out', zIndex: 1, pointerEvents: 'none' }}>
                 {activeBehavior.particle}
               </div>
-              <div style={{ position: 'absolute', top: '25%', right: '25%', fontSize: '1.2rem', animation: 'particleUp 1.8s infinite ease-in-out 0.4s', zIndex: 1 }}>
+              <div style={{ position: 'absolute', top: '25%', right: '14%', fontSize: '1.2rem', animation: 'particleUp 1.8s infinite ease-in-out 0.4s', zIndex: 1, pointerEvents: 'none' }}>
                 {activeBehavior.particle}
               </div>
-              <div style={{ position: 'absolute', bottom: '20%', left: '30%', fontSize: '1rem', animation: 'particleDown 2.5s infinite ease-in-out 0.8s', zIndex: 1 }}>
+              <div style={{ position: 'absolute', bottom: '20%', left: '20%', fontSize: '1rem', animation: 'particleDown 2.5s infinite ease-in-out 0.8s', zIndex: 1, pointerEvents: 'none' }}>
                 {activeBehavior.particle}
               </div>
 
-              {/* Pulsing Aura Ring Behind Artwork */}
+              {/* Pulsing Aura Glow Ring Behind Model */}
               <div style={{
                 position: 'absolute',
-                width: 110,
-                height: 110,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 140,
+                height: 140,
                 borderRadius: '50%',
                 background: activeBehavior.aura,
-                filter: 'blur(22px)',
-                animation: 'floatText 2.5s infinite ease-in-out',
+                filter: 'blur(30px)',
+                pointerEvents: 'none',
+                zIndex: 0,
               }} />
 
-              {/* Animated Artwork Graphic Preview */}
-              <img
-                src={activeOverlay.path}
-                alt="AR Preview"
-                style={{
-                  width: 90,
-                  height: 90,
-                  objectFit: 'contain',
-                  position: 'relative',
-                  zIndex: 2,
-                  animation: activeOverlay.label === 'Cosmic Butterfly' 
-                    ? 'butterflyFlap 1.2s infinite ease-in-out' 
-                    : 'treeSway 3s infinite ease-in-out',
-                }}
-              />
+              {/* Real-time 3D Holographic Model Viewer (Orbit/Touch enabled) */}
+              <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 165 }}>
+                <Model3DPreview modelId={selectedModel.id} moodColor={activeMoodHex} height={165} />
+              </div>
 
               {/* Live Floating 3D Caption Story Badge */}
               <div style={{
-                position: 'relative',
+                position: 'absolute',
+                bottom: 8,
+                left: '50%',
+                transform: 'translateX(-50%)',
                 zIndex: 3,
-                marginTop: 8,
+                width: '88%',
+                maxWidth: 320,
                 padding: '4px 12px',
                 borderRadius: 999,
                 background: 'rgba(0, 0, 0, 0.85)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 color: '#fff',
-                fontSize: '0.75rem',
+                fontSize: '0.74rem',
                 fontWeight: 600,
+                textAlign: 'center',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
                 animation: 'floatText 2s infinite ease-in-out',
+                pointerEvents: 'none',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}>
                 💬 &ldquo;{caption || 'Your 3D AR story floats here'}&rdquo;
               </div>
@@ -359,7 +424,7 @@ export default function Create() {
 
             {/* Detailed Description */}
             <div style={{ fontSize: '0.82rem', color: '#d0cce0', lineHeight: 1.6 }}>
-              <p style={{ margin: '0 0 4px 0' }}>✨ <strong>3D Motion:</strong> {activeBehavior.motion}</p>
+              <p style={{ margin: '0 0 4px 0' }}>✨ <strong>3D Model:</strong> {selectedModel.emoji} {selectedModel.name} — {selectedModel.desc}</p>
               <p style={{ margin: 0 }}>🎨 <strong>Ambient Aura:</strong> {activeBehavior.auraDesc}</p>
             </div>
           </div>
