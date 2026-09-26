@@ -90,6 +90,30 @@
 * Set `html, body { background: transparent !important; }` in `public/ar-camera.html`.
 * Guarantees the live `<video>` stream is 100% visible on all mobile devices and webviews with zero obscuring dark background layers.
 
+### F. 3D Holographic Models Engine (Milestone 2.9 — `73c0dc9`)
+* **Dedicated 3D Engine Architecture:** Built 4 real procedural 3D models with depth, lighting, and physics:
+  1. 🦋 **3D Cosmic Butterfly (`butterfly`):**
+     - 3D faceted metallic thorax & abdomen, head with glowing eyes, antennae with luminous tip orbs.
+     - Dual articulated wing pivots with forewing & hindwing geometry and neon glowing vein line segments.
+     - Real-time wing flap oscillation: $\text{flap} = \sin(7.5 \cdot t) \times 0.75\text{ rad}$, dynamic hover bobbing, and stardust particle field.
+  2. ⛵ **3D Cyber Sailboat (`sailboat`):**
+     - Low-poly faceted cyber yacht hull with pointed bow, transom, and carbon fiber mast/boom.
+     - Glowing neon waterline ribbon on port & starboard with dual luminous sails (mainsail & jib).
+     - Hydrodynamic pitch ($\sin(2.2 \cdot t) \times 0.09$), heel/roll ($\cos(1.7 \cdot t) \times 0.12$), and wave heave over expanding neon wave rings.
+  3. 🐉 **3D Low-Poly Dragon (`dragon`):**
+     - Faceted wyvern head with backward-swept crystalline horns, piercing neon eyes, and 6-segment serpentine spine.
+     - Broad articulated wings flapping in flight with serpentine spine undulation ($\sin(4.0 \cdot t - 0.6 \cdot i) \times 0.035$) in a gliding 3D loop.
+  4. 🦅 **3D Spirit Birds (`birds`):**
+     - Flock of 3 sculpted spirit birds (1 Alpha lead bird + 2 Wingmen) with aerodynamic bodies, beaks, swept wings, and fan tails.
+     - Flocking orbital flight path around anchor center ($r = 0.32\text{m}$, speed $1.6\text{ rad/s}$) with $9\text{ Hz}$ wing flaps and banking turns.
+* **Interactive 3D WebGL Orbit Canvas (`src/components/Model3DPreview.jsx`):**
+  - Embedded in Creator Studio (`/create`) with 360° mouse & touch drag rotation, soft mood aura background, and floating live caption pill.
+* **WebAR A-Frame Integration (`public/js/ar-models-3d.js`):**
+  - Native `wearwave-3d-model` A-Frame component rendering directly in `public/ar-camera.html`.
+  - Dynamic mood color syncing across all emissive materials and neon veins.
+* **Zero Regression / 100% Backward Compatibility:**
+  - Preserved 1080p stream, 6-DOF matrix smoother, auto-scaler, and feed deduplication.
+
 ---
 
 ## 5. Creator, Feed & Social Architecture
@@ -109,8 +133,8 @@
   - **`+ Create New Entry`**: Publishes a separate custom expression.
 
 ### D. Instant Phone AR QR Pairing (`📱 Phone AR QR`)
-* Expression pages include a dedicated QR code tab that generates a dynamic pairing URL (`/scanner?id={id}&...`).
-* Viewers scan the QR code with their phone camera to instantly launch the AR scanner paired directly to that specific garment and expression.
+* Expression pages include a dedicated QR code tab that generates a dynamic pairing URL (`/scanner?id={id}&model={model}&...`).
+* Viewers scan the QR code with their phone camera to instantly launch the AR scanner paired directly to that specific garment, expression, and 3D model.
 
 ### E. Social Reactions & Supabase Persistence
 * Likes (❤️), Waves (👋), and in-camera Comments (💬) are written directly to the Supabase `reactions` table and reflect immediately in the live feed.
@@ -136,7 +160,8 @@
 | **`53ebb13`** | Aug 18, 2026 | `scripts/` | Added `move-test-videos.cjs` disk space cleanup script to move test media from C: to D: drive. |
 | **`8533fa6`** | Aug 18, 2026 | `api.js` / `UI` | De-duplicated feed to 2 clean cards, added `✏️ Edit Story` and `🗑️ Delete` on Expression page, and garment update mode on Create page. |
 | **`eb5ae55`** | Aug 18, 2026 | `memory.md` | Logged clean feed verification and in-place story editing. |
-| **`Phase2-M1`**| Sep 25, 2026 | `3D Engine` | Implemented 4 real 3D holographic models (🦋 3D Cosmic Butterfly, ⛵ 3D Cyber Sailboat, 🐉 3D Low-Poly Dragon, 🦅 3D Spirit Birds) with Three.js orbit preview on `/create`, model switcher on `/expression/:id`, QR code URL binding, and live WebAR rendering in `ar-camera.html`. |
+| **`19d5fdf`** | Aug 18, 2026 | `COMMERCIAL` | Added WearWave Commercial Platform Blueprint covering B2B2C licensing, Garment Claim Keys, and Unit Economics. |
+| **`73c0dc9`** | Sep 26, 2026 | `3D Engine` | Implemented 4 real 3D holographic models (🦋 3D Cosmic Butterfly, ⛵ 3D Cyber Sailboat, 🐉 3D Low-Poly Dragon, 🦅 3D Spirit Birds) with Three.js orbit preview on `/create`, model switcher on `/expression/:id`, QR code URL binding, and live WebAR rendering in `ar-camera.html`. |
 
 ---
 
