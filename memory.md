@@ -162,6 +162,7 @@
 | **`eb5ae55`** | Aug 18, 2026 | `memory.md` | Logged clean feed verification and in-place story editing. |
 | **`19d5fdf`** | Aug 18, 2026 | `COMMERCIAL` | Added WearWave Commercial Platform Blueprint covering B2B2C licensing, Garment Claim Keys, and Unit Economics. |
 | **`73c0dc9`** | Sep 26, 2026 | `3D Engine` | Implemented 4 real 3D holographic models (🦋 3D Cosmic Butterfly, ⛵ 3D Cyber Sailboat, 🐉 3D Low-Poly Dragon, 🦅 3D Spirit Birds) with Three.js orbit preview on `/create`, model switcher on `/expression/:id`, QR code URL binding, and live WebAR rendering in `ar-camera.html`. |
+| **`d838e55`** | Sep 27, 2026 | `Create.jsx` | Restored physical garment artwork print (Tree of Life & Cosmic Butterfly) as visual anchor behind 3D holographic models in `/create` preview canvas, maintaining 1-to-1 fidelity with physical t-shirt print. |
 
 ---
 
@@ -181,6 +182,7 @@
 3. **August 17 Revised End-to-End Test (Expression #22):** Verified creation, Phone AR QR pairing, transparent camera feed, and persistent social memory thread.
 4. **August 18 Clean Feed Verification:** Confirmed production feed displays exactly 2 clean official cards (Cosmic Butterfly and Tree of Life) with in-place story editing and deletion capabilities.
 5. **September 25 3D Engine Build:** Verified Vite production build (`dist/index.html`, `dist/assets/`) compiling cleanly with Three.js 3D model engine and interactive orbit canvas.
+6. **September 27 Visual Anchor Verification:** Confirmed that selecting Test Tree or Cosmic Butterfly renders the exact physical artwork on the preview canvas with 3D models (birds, butterfly, boat, dragon) floating directly above it.
 
 ---
 
