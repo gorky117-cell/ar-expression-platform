@@ -374,24 +374,53 @@ export default function Create() {
                 {activeBehavior.particle}
               </div>
 
-              {/* Pulsing Aura Glow Ring Behind Model */}
+              {/* Pulsing Aura Glow Ring Behind Artwork */}
               <div style={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: 140,
-                height: 140,
+                width: 150,
+                height: 150,
                 borderRadius: '50%',
                 background: activeBehavior.aura,
-                filter: 'blur(30px)',
+                filter: 'blur(32px)',
                 pointerEvents: 'none',
                 zIndex: 0,
               }} />
 
-              {/* Real-time 3D Holographic Model Viewer (Orbit/Touch enabled) */}
-              <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 165 }}>
-                <Model3DPreview modelId={selectedModel.id} moodColor={activeMoodHex} height={165} />
+              {/* The Exact Physical Garment Artwork Print (Tree of Life or Cosmic Butterfly) */}
+              <div style={{
+                position: 'absolute',
+                top: '48%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: activeOverlay.label === 'Test Tree' ? 140 : 130,
+                height: activeOverlay.label === 'Test Tree' ? 140 : 130,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+                zIndex: 1,
+              }}>
+                <img
+                  src={activeOverlay.path}
+                  alt={activeOverlay.label}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 6px 20px rgba(0,0,0,0.85))',
+                    animation: activeOverlay.label === 'Cosmic Butterfly' && selectedModel.id === 'butterfly'
+                      ? 'butterflyFlap 1.2s infinite ease-in-out'
+                      : 'treeSway 3.5s infinite ease-in-out',
+                  }}
+                />
+              </div>
+
+              {/* Real-time 3D Holographic Model Viewer (Orbit/Touch enabled) floating over the physical artwork! */}
+              <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 180 }}>
+                <Model3DPreview modelId={selectedModel.id} moodColor={activeMoodHex} height={180} />
               </div>
 
               {/* Live Floating 3D Caption Story Badge */}

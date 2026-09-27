@@ -20,6 +20,7 @@ export default function Model3DPreview({ modelId = 'butterfly', moodColor = '#00
     camera.position.set(0, 0, 1.4)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setClearColor(0x000000, 0)
     renderer.setSize(width, currentHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
