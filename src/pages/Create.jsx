@@ -462,28 +462,19 @@ export default function Create() {
               top: '48%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: selectedOverlay.label === 'Test Tree' ? 140 : 130,
-              height: selectedOverlay.label === 'Test Tree' ? 140 : 130,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: selectedOverlay.label === 'Test Tree' ? 150 : 135,
+              height: selectedOverlay.label === 'Test Tree' ? 150 : 135,
+              backgroundImage: `url(${selectedOverlay.path})`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              filter: 'drop-shadow(0 6px 24px rgba(0,0,0,0.9))',
+              animation: selectedOverlay.label === 'Cosmic Butterfly' && selectedModel.id === 'butterfly'
+                ? 'butterflyFlap 1.2s infinite ease-in-out'
+                : 'treeSway 3.5s infinite ease-in-out',
               pointerEvents: 'none',
               zIndex: 1,
-            }}>
-              <img
-                src={selectedOverlay.path}
-                alt={selectedOverlay.label}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 6px 20px rgba(0,0,0,0.85))',
-                  animation: selectedOverlay.label === 'Cosmic Butterfly' && selectedModel.id === 'butterfly'
-                    ? 'butterflyFlap 1.2s infinite ease-in-out'
-                    : 'treeSway 3.5s infinite ease-in-out',
-                }}
-              />
-            </div>
+            }} />
 
             {/* Real-time 3D Holographic Model Viewer (Orbit/Touch enabled) floating over the physical artwork! */}
             <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 180 }}>
