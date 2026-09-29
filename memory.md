@@ -164,6 +164,7 @@
 | **`73c0dc9`** | Sep 26, 2026 | `3D Engine` | Implemented 4 real 3D holographic models (🦋 3D Cosmic Butterfly, ⛵ 3D Cyber Sailboat, 🐉 3D Low-Poly Dragon, 🦅 3D Spirit Birds) with Three.js orbit preview on `/create`, model switcher on `/expression/:id`, QR code URL binding, and live WebAR rendering in `ar-camera.html`. |
 | **`d838e55`** | Sep 27, 2026 | `Create.jsx` | Restored physical garment artwork print (Tree of Life & Cosmic Butterfly) as visual anchor behind 3D holographic models in `/create` preview canvas, maintaining 1-to-1 fidelity with physical t-shirt print. |
 | **`25e9a89`** | Sep 29, 2026 | `Create.jsx` / `Expression.jsx` | Implemented unified "1-Tap Living Vibe" UX: removed duplicate mood buttons from individual garment cards and removed disconnected 3D model box; created a single 5-vibe row (`🌿 Calm`, `⚡ Happy`, `🎨 Playful`, `🌌 Inspired`, `🧘 Peaceful`) that automatically pairs the matching 3D hologram (birds for Tree, butterfly for Butterfly), glowing aura, and particle dynamics, with optional 3D avatar customizer for power users. |
+| **`cc39a92`** | Sep 29, 2026 | `Create.jsx` | Fixed physical print rendering in preview canvas to use CSS backgroundImage substrate instead of <img> tag, ensuring the Tree of Life physical print is always 100% visible behind the 3D Spirit Birds with zero broken image placeholders. |
 
 ---
 
