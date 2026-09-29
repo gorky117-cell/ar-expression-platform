@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getExpression, likeExpression, sendGreeting, addComment, updateExpression, deleteExpression, MOODS } from '../data/api'
 import { MODELS_3D } from '../components/arModels'
+import { VIBES } from './Create'
 
 function getExpressionModel(expr) {
   if (expr?.overlayImage && expr.overlayImage.includes('#model=')) {
@@ -28,6 +29,8 @@ export default function Expression() {
   const [editName, setEditName] = useState('')
   const [editMood, setEditMood] = useState('inspired')
   const [editModel, setEditModel] = useState('butterfly')
+  const [showEditModelPicker, setShowEditModelPicker] = useState(false)
+  const [customModelActive, setCustomModelActive] = useState(false)
   const [editCaption, setEditCaption] = useState('')
   const [savingEdit, setSavingEdit] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -266,53 +269,119 @@ export default function Expression() {
                 placeholder="e.g. Cosmic Butterfly"
               />
             </div>
-            <div style={{ marginBottom: '0.75rem' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#8888a0', marginBottom: '4px' }}>3D Holographic Model</label>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {MODELS_3D.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => setEditModel(m.id)}
-                    style={{
-                      padding: '4px 10px',
-                      borderRadius: '9999px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      border: editModel === m.id ? '1px solid #00f0ff' : '1px solid rgba(255,255,255,0.1)',
-                      background: editModel === m.id ? 'rgba(0,240,255,0.2)' : 'rgba(255,255,255,0.04)',
-                      color: editModel === m.id ? '#00f0ff' : '#8888a0',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {m.emoji} {m.name}
-                  </button>
-                ))}
+            {/* 1-TAP LIVING VIBE SELECTOR */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <label style={{ fontSize: '0.82rem', color: '#c0bcd0', fontWeight: 700 }}>1-Tap Living Vibe</label>
+                <span style={{ fontSize: '0.72rem', color: '#7c5cff', textTransform: 'uppercase', fontWeight: 700 }}>
+                  ● {editMood}
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px' }}>
+                {VIBES.map((v) => {
+                  const isActive = editMood === v.id
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => {
+                        setEditMood(v.id)
+                        if (!customModelActive) {
+                          const baseIsTree = (expr?.overlayImage || '').includes('tree')
+                          setEditModel(baseIsTree ? 'birds' : 'butterfly')
+                        }
+                      }}
+                      style={{
+                        padding: '8px 2px',
+                        borderRadius: '12px',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        border: isActive ? `2px solid ${v.color}` : '1px solid rgba(255,255,255,0.08)',
+                        background: isActive ? `linear-gradient(135deg, ${v.color}25 0%, rgba(20, 20, 30, 0.9) 100%)` : 'rgba(255,255,255,0.03)',
+                        color: isActive ? '#fff' : '#8888a0',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 3,
+                        transition: 'all 0.15s ease',
+                        boxShadow: isActive ? `0 4px 14px ${v.color}35` : 'none',
+                      }}
+                    >
+                      <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{v.emoji}</span>
+                      <span>{v.label}</span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
-            <div style={{ marginBottom: '0.75rem' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#8888a0', marginBottom: '4px' }}>Wearer Mood</label>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {MOODS.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => setEditMood(m.id)}
-                    style={{
-                      padding: '4px 10px',
-                      borderRadius: '9999px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      border: editMood === m.id ? '1px solid #7c5cff' : '1px solid rgba(255,255,255,0.1)',
-                      background: editMood === m.id ? 'rgba(124,92,255,0.25)' : 'rgba(255,255,255,0.04)',
-                      color: editMood === m.id ? '#fff' : '#8888a0',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {m.label}
-                  </button>
-                ))}
+
+            {/* OPTIONAL 3D AVATAR CUSTOMIZER */}
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <span style={{ fontSize: '0.76rem', color: '#8888a0' }}>
+                  Active 3D Avatar: <strong style={{ color: '#cabeff' }}>{MODELS_3D.find(m => m.id === editModel)?.name || editModel}</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowEditModelPicker(!showEditModelPicker)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#7c5cff',
+                    fontSize: '0.72rem',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    padding: 0,
+                  }}
+                >
+                  {showEditModelPicker ? '✕ Hide Avatars' : '✨ Customize Avatar (Optional)'}
+                </button>
               </div>
+
+              {showEditModelPicker && (
+                <div style={{
+                  padding: '8px',
+                  background: 'rgba(20, 20, 30, 0.8)',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
+                  gap: '6px',
+                  marginTop: '6px',
+                }}>
+                  {MODELS_3D.map((m) => {
+                    const isMActive = editModel === m.id
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => {
+                          setEditModel(m.id)
+                          setCustomModelActive(true)
+                        }}
+                        style={{
+                          padding: '6px 2px',
+                          borderRadius: '8px',
+                          fontSize: '0.7rem',
+                          fontWeight: 600,
+                          border: isMActive ? '1px solid #7c5cff' : '1px solid rgba(255,255,255,0.06)',
+                          background: isMActive ? 'rgba(124,92,255,0.25)' : 'rgba(255,255,255,0.02)',
+                          color: isMActive ? '#fff' : '#8888a0',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}
+                      >
+                        <span>{m.emoji}</span>
+                        <span>{m.name.replace('3D ', '')}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
             <div style={{ marginBottom: '1rem' }}>
               <label style={{ display: 'block', fontSize: '0.8rem', color: '#8888a0', marginBottom: '4px' }}>Caption / Story</label>
