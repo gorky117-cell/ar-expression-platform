@@ -459,11 +459,11 @@ export default function Create() {
             {/* The Physical Garment Artwork Print Substrate */}
             <div style={{
               position: 'absolute',
-              top: '48%',
+              top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: selectedOverlay.label === 'Test Tree' ? 150 : 135,
-              height: selectedOverlay.label === 'Test Tree' ? 150 : 135,
+              width: selectedOverlay.label === 'Test Tree' ? 145 : 135,
+              height: selectedOverlay.label === 'Test Tree' ? 145 : 135,
               backgroundImage: `url(${selectedOverlay.path})`,
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
@@ -477,8 +477,8 @@ export default function Create() {
             }} />
 
             {/* Real-time 3D Holographic Model Viewer (Orbit/Touch enabled) floating over the physical artwork! */}
-            <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 180 }}>
-              <Model3DPreview modelId={selectedModel.id} moodColor={activeMoodHex} height={180} />
+            <div style={{ position: 'relative', zIndex: 2, width: '100%', height: 220 }}>
+              <Model3DPreview modelId={selectedModel.id} moodColor={activeMoodHex} height={220} />
             </div>
 
             {/* Live Floating 3D Caption Story Badge */}
